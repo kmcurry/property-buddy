@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "express": "^4.15.3"
+  },
+  "name": "property-buddy",
+  "version": "1.0.0",
+  "description": "finds and presents useful data about a location",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kevin Curry",
+  "license": "ISC"
+}

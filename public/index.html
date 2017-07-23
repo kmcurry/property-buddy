@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script src="https://d3js.org/d3-collection.v1.min.js"></script>
+<script src="https://d3js.org/d3-dispatch.v1.min.js"></script>
+<script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+<script src="https://d3js.org/d3-request.v1.min.js"></script>
+<script src="https://d3js.org/d3-array.v1.min.js"></script>
+<script src="https://d3js.org/d3-geo.v1.min.js"></script>
+<script>
+
+d3.request("http://gis-vbgov.opendata.arcgis.com/datasets/3088488c6c284f3981d61b9efe9c1d04_3.geojson")
+    .mimeType("application/json")
+    .response(function(xhr) { return JSON.parse(xhr.responseText); })
+    .get(function(data) {
+
+      console.log(data);
+
+      var inside = [-76.033581, 36.836617];
+      var outside = [-76.119616,36.847179];
+
+      if (d3.geoContains(data.features[0],inside)) {
+        d3.select("body").append("span")
+            .text("Hello, world! You are in zone: " + data.features[0].properties.ZONE_);
+      } else {
+        d3.select("body").append("span")
+            .text("Goodbye, world!");
+      }
+
+
+    });
+
+</script>
