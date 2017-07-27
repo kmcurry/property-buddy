@@ -1,66 +1,82 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
+<html>
+
+<head>
+  <title>Property Buddy</title>
+  <meta charset="utf-8">
+  <style type="text/css">
+  body {
+    font-family: sans-serif;
+    font-size: 2em;
+    text-align: center;
+  }
+
+  #msg {
+    font-size: 3em;
+  }
+  </style>
+</head>
 
 <body>
-  <script src="//d3js.org/d3.v3.min.js"></script>
-  <script src="//d3js.org/d3-collection.v1.min.js"></script>
-  <script src="//d3js.org/d3-dispatch.v1.min.js"></script>
-  <script src="//d3js.org/d3-dsv.v1.min.js"></script>
-  <script src="//d3js.org/d3-request.v1.min.js"></script>
-  <script src="//d3js.org/d3-array.v1.min.js"></script>
-  <script src="//d3js.org/d3-geo.v1.min.js"></script>
-  <script src="bower_components/jquery/dist/jquery.min.js"></script>
-  <script>
-    function checkAICUZ(position) {
+  <div id="msg"></div>
+</body>
 
-      console.log("Checking AICUZ for position:");
-      console.log(position);
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script src="//d3js.org/d3-collection.v1.min.js"></script>
+<script src="//d3js.org/d3-dispatch.v1.min.js"></script>
+<script src="//d3js.org/d3-dsv.v1.min.js"></script>
+<script src="//d3js.org/d3-request.v1.min.js"></script>
+<script src="//d3js.org/d3-array.v1.min.js"></script>
+<script src="//d3js.org/d3-geo.v1.min.js"></script>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script>
+  function checkAICUZ(position) {
 
-      d3.request("http://gis-vbgov.opendata.arcgis.com/datasets/3088488c6c284f3981d61b9efe9c1d04_3.geojson")
-        .mimeType("application/json")
-        .response(function(xhr) {
-          return JSON.parse(xhr.responseText);
-        })
-        .get(function(data) {
+    console.log("Checking AICUZ for position:");
+    console.log(position);
 
-          console.log(data);
+    d3.request("http://gis-vbgov.opendata.arcgis.com/datasets/3088488c6c284f3981d61b9efe9c1d04_3.geojson")
+      .mimeType("application/json")
+      .response(function(xhr) {
+        return JSON.parse(xhr.responseText);
+      })
+      .get(function(data) {
 
-          var ll = [position.coords.longitude, position.coords.latitude];
+        console.log(data);
 
-          var msg = "You are in AICUZ zone: ";
+        var ll = [position.coords.longitude, position.coords.latitude];
 
-          if (d3.geoContains(data.features[0], ll)) {
-            d3.select("body").append("span")
-              .text(msg + data.features[0].properties.ZONE_);
-          } else if (d3.geoContains(data.features[1], ll)) {
-            d3.select("body").append("span")
-              .text(msg + data.features[1].properties.ZONE_);
-          } else if (d3.geoContains(data.features[2], ll)) {
-            d3.select("body").append("span")
-              .text(msg + data.features[2].properties.ZONE_);
-          } else if (d3.geoContains(data.features[3], ll)) {
-            d3.select("body").append("span")
-              .text(msg + data.features[3].properties.ZONE_);
-          } else {
-            d3.select("body").append("span")
-              .text("You are not in any AICUZ Noise Zone.");
-          }
+        var msg = "<p>You are in Virginia Beach AICUZ Noise Zone:</p>";
 
+        if (d3.geoContains(data.features[0], ll)) {
+          msg += "<p>" + data.features[0].properties.ZONE_ + "</p>";
+        } else if (d3.geoContains(data.features[1], ll)) {
+          msg += "<p>" + data.features[1].properties.ZONE_  + "</p>";
+        } else if (d3.geoContains(data.features[2], ll)) {
+          msg += "<p>" + data.features[2].properties.ZONE_ + "</p>";
+        } else if (d3.geoContains(data.features[3], ll)) {
+          msg += "<p>" + data.features[3].properties.ZONE_ + "</p>";
+        } else {
+          msg = "You are not in any Virginia Beach AICUZ Noise Zone.";
+        }
 
-        });
+        d3.select("#msg").html(msg);
+
+      });
+  }
+
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(checkAICUZ);
+    } else {
+      d3.select("body").append("span")
+        .text("Geolocation is not supported by this browser.");
     }
+  }
 
-    function getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(checkAICUZ);
-      } else {
-        d3.select("body").append("span")
-          .text("Geolocation is not supported by this browser.");
-      }
-    }
+  $(document).ready(function() {
+    getLocation();
+  })
+</script>
 
-    $(document).ready(function() {
-      getLocation();
-    })
-
-  </script>
+</html>
