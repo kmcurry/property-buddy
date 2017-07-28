@@ -35,34 +35,31 @@
     console.log("Checking AICUZ for position:");
     console.log(position);
 
-    d3.request("http://gis-vbgov.opendata.arcgis.com/datasets/3088488c6c284f3981d61b9efe9c1d04_3.geojson")
-      .mimeType("application/json")
-      .response(function(xhr) {
-        return JSON.parse(xhr.responseText);
-      })
-      .get(function(data) {
+    var ll = [position.coords.longitude, position.coords.latitude];
+    //var ll = [-76.195987, 36.893076]; // NFK
 
-        console.log(data);
+    d3.json("geojson/Norfolk.geo.json", function(error, mapData) {
+      console.log("Checking " + ll + " in NFK");
+      var features = mapData.features[0];
+      if (d3.geoContains(features, ll)) {
+        console.log("Location is NFK");
+        checkAICUZ_NFK(ll);
+      } else {
+        console.log("Location is not in NFK")
+      }
+    });
 
-        var ll = [position.coords.longitude, position.coords.latitude];
+    d3.json("geojson/VirginiaBeach.geo.json", function(error, mapData) {
+      console.log("Checking " + ll + " in VB");
+      var features = mapData.features[0];
+      if (d3.geoContains(features, ll)) {
+        console.log("Location is VB");
+        checkAICUZ_VB(ll);
+      } else {
+        console.log("Location is not in VB")
+      }
+    });
 
-        var msg = "<p>You are in Virginia Beach AICUZ Noise Zone:</p>";
-
-        if (d3.geoContains(data.features[0], ll)) {
-          msg += "<p>" + data.features[0].properties.ZONE_ + "</p>";
-        } else if (d3.geoContains(data.features[1], ll)) {
-          msg += "<p>" + data.features[1].properties.ZONE_  + "</p>";
-        } else if (d3.geoContains(data.features[2], ll)) {
-          msg += "<p>" + data.features[2].properties.ZONE_ + "</p>";
-        } else if (d3.geoContains(data.features[3], ll)) {
-          msg += "<p>" + data.features[3].properties.ZONE_ + "</p>";
-        } else {
-          msg = "You are not in any Virginia Beach AICUZ Noise Zone.";
-        }
-
-        d3.select("#msg").html(msg);
-
-      });
   }
 
   function getLocation() {
@@ -72,6 +69,71 @@
       d3.select("body").append("span")
         .text("Geolocation is not supported by this browser.");
     }
+  }
+
+  function checkAICUZ_NFK(ll) {
+    d3.request("http://data-orf.opendata.arcgis.com/datasets/c8de1a1f81e14eacbe381ae342318031_8.geojson")
+      .mimeType("application/json")
+      .response(function(xhr) {
+        return JSON.parse(xhr.responseText);
+      })
+      .get(function(data) {
+
+        var msg = "<p>You are in Norfolk AICUZ Noise Zone:</p>";
+
+        msg += checkFeaturesForZone(data.features, ll, "NFK");
+
+
+        d3.select("#msg").html(msg);
+
+      });
+  }
+
+  function checkAICUZ_VB(ll) {
+    d3.request("http://gis-vbgov.opendata.arcgis.com/datasets/3088488c6c284f3981d61b9efe9c1d04_3.geojson")
+      .mimeType("application/json")
+      .response(function(xhr) {
+        return JSON.parse(xhr.responseText);
+      })
+      .get(function(data) {
+
+        var msg = "<p>You are in Virginia Beach AICUZ Noise Zone:</p>";
+
+        msg += checkFeaturesForZone(data.features, ll, "VB");
+
+        d3.select("#msg").html(msg);
+
+      });
+  }
+
+  function checkFeaturesForZone(features, ll, city) {
+    var msg = "";
+    $(features).each(function() {
+      var f = $(this);
+      if (f && f[0]) {
+        if (d3.geoContains(f[0], ll)) {
+          switch (city) {
+            case "NFK": {
+              msg += "<p>" + f[0].properties.NOISE_LEV_ + "</p>";
+
+            }
+            break;
+            case "VB": {
+              msg += "<p>" + f[0].properties.ZONE_ + "</p>";
+
+            }
+            break;
+            default: {
+
+            }
+
+          }
+          return;
+        }
+      }
+
+    })
+    return msg;
   }
 
   $(document).ready(function() {
