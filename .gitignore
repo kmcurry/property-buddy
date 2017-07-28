@@ -1,2 +1,3 @@
 node_modules
-public/bower_compoents
+public/bower_components
+.DS_Store
