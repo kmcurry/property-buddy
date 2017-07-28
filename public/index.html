@@ -72,7 +72,7 @@
   }
 
   function checkAICUZ_NFK(ll) {
-    d3.request("http://data-orf.opendata.arcgis.com/datasets/c8de1a1f81e14eacbe381ae342318031_8.geojson")
+    d3.request("https://data-orf.opendata.arcgis.com/datasets/c8de1a1f81e14eacbe381ae342318031_8.geojson")
       .mimeType("application/json")
       .response(function(xhr) {
         return JSON.parse(xhr.responseText);
@@ -90,7 +90,7 @@
   }
 
   function checkAICUZ_VB(ll) {
-    d3.request("http://gis-vbgov.opendata.arcgis.com/datasets/3088488c6c284f3981d61b9efe9c1d04_3.geojson")
+    d3.request("https://gis-vbgov.opendata.arcgis.com/datasets/3088488c6c284f3981d61b9efe9c1d04_3.geojson")
       .mimeType("application/json")
       .response(function(xhr) {
         return JSON.parse(xhr.responseText);
