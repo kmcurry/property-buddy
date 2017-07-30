@@ -5,20 +5,117 @@
   <title>Property Buddy</title>
   <meta charset="utf-8">
   <style type="text/css">
-  body {
-    font-family: sans-serif;
-    font-size: 2em;
-    text-align: center;
-  }
+    body {
+      font-family: sans-serif;
+      font-size: 1.5em;
+      text-align: center;
+    }
 
-  #msg {
-    font-size: 3em;
-  }
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    li {
+      float: left;
+      width: 80px;
+    }
+
+    #msg {
+      font-size: 3em;
+    }
+
+    .no-zone {
+      background-color: #00ff00;
+    }
+
+    ._50 {
+      background-color: #55ff00;
+      color: white;
+    }
+
+    ._55 {
+      background-color: #80ff00;
+      color: white;
+    }
+
+    ._60 {
+      background-color: #aaff00;
+      color: white;
+    }
+
+    ._65 {
+      background-color: #d5ff00;
+      color: white;
+    }
+
+    ._70 {
+      background-color: #ffff00;
+      color: white;
+    }
+
+    ._75 {
+      background-color: #ffd500;
+      color: white;
+    }
+
+    ._80 {
+      background-color: #ff5500;
+      color: white;
+    }
+
+    ._85 {
+      background-color: #ff0000;
+      color: white;
+    }
+
+    .scheme {
+      display: inline-block;
+      max-width: 100%;
+      padding: 0;
+      text-align: center;
+    }
   </style>
 </head>
 
 <body>
-  <div id="msg"><p>Searching...</p></div>
+  <div class="scheme">
+    <ul>
+      <li style="background-color:#00ff00;">
+        0
+      </li>
+
+      <li style="background-color:#55ff00;">
+        50
+      </li>
+      <li style="background-color:#80ff00;">
+        55
+      </li>
+      <li style="background-color:#aaff00;">
+        60
+      </li>
+      <li style="background-color:#d5ff00;">
+        65
+      </li>
+      <li style="background-color:#ffff00;">
+        70
+      </li>
+      <li style="background-color:#ffd500;">
+        75
+      </li>
+      <li style="background-color:#ff5500;">
+        80
+      </li>
+      <li style="background-color:#ff0000;">
+        85
+      </li>
+    </ul>
+  </div>
+  <div id="msg">
+    <p>Searching...</p>
+  </div>
 </body>
 
 <script src="//d3js.org/d3.v3.min.js"></script>
@@ -108,24 +205,30 @@
 
   function checkFeaturesForZone(features, ll, city) {
     var msg = "";
+    var lvl = 0;
     $(features).each(function() {
       var f = $(this);
       if (f && f[0]) {
         if (d3.geoContains(f[0], ll)) {
           switch (city) {
-            case "NFK": {
-              msg += "<p>" + f[0].properties.NOISE_LEV_ + "</p>";
+            case "NFK":
+              {
+                lvl = parseInt(f[0].properties.NOISE_LEV_);
+                msg += "<p>" + lvl + "</p>";
 
-            }
-            break;
-            case "VB": {
-              msg += "<p>" + f[0].properties.ZONE_ + "</p>";
+              }
+              break;
+            case "VB":
+              {
+                lvl = parseInt(f[0].properties.ZONE_);
+                msg += "<p>" + lvl + "</p>";
 
-            }
-            break;
-            default: {
-              msg += "<p>You are NOT in any AICUZ Noise Zone</p>";
-            }
+              }
+              break;
+            default:
+              {
+                msg += "<p>You are NOT in any AICUZ Noise Zone</p>";
+              }
 
           }
           return;
@@ -133,6 +236,43 @@
       }
 
     })
+    switch (lvl) {
+      case 55:
+        {
+
+        }
+        break;
+      case 60:
+        {
+
+        }
+        break;
+      case 65:
+        {
+          d3.select("#msg").classed("_65", true);
+        }
+        break;
+      case 70:
+        {
+
+        }
+        break;
+      case 75:
+        {
+
+        }
+        break;
+      case 80:
+        {
+
+        }
+        break;
+      case 85:
+        {
+
+        }
+        break;
+    }
     return msg;
   }
 
