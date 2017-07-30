@@ -163,6 +163,7 @@
       if (d3.geoContains(features, ll)) {
         console.log("Location is VB");
         checkAICUZ_VB(ll);
+        //checkFloodZone_VB(ll);
       } else {
         console.log("Location is not in VB")
       }
@@ -189,7 +190,7 @@
 
         var msg = "<p class='preamble'>You are in Norfolk AICUZ Noise Zone:</p>";
 
-        msg += checkFeaturesForZone(data.features, ll, "NFK");
+        msg += checkFeaturesForNoiseLevel(data.features, ll, "NFK");
 
 
         d3.select("#msg").html(msg);
@@ -207,14 +208,31 @@
 
         var msg = "<p class='preamble'>You are in Virginia Beach AICUZ Noise Zone:</p>";
 
-        msg += checkFeaturesForZone(data.features, ll, "VB");
+        msg += checkFeaturesForNoiseLevel(data.features, ll, "VB");
 
         d3.select("#msg").html(msg);
 
       });
   }
 
-  function checkFeaturesForZone(features, ll, city) {
+  function checkFloodZone_VB(ll) {
+    d3.request("https://gis-vbgov.opendata.arcgis.com/datasets/3088488c6c284f3981d61b9efe9c1d04_3.geojson")
+      .mimeType("application/json")
+      .response(function(xhr) {
+        return JSON.parse(xhr.responseText);
+      })
+      .get(function(data) {
+
+        var msg = "<p class='preamble'>You are in Virginia Beach Flood Zone:</p>";
+
+        msg += checkFeaturesForFloodZone(data.features, ll, "VB");
+
+        d3.select("#msg").html(msg);
+
+      });
+  }
+
+  function checkFeaturesForNoiseLevel(features, ll, city) {
     var msg = "";
     var lvl = 0;
     $(features).each(function() {
@@ -248,14 +266,19 @@
 
     })
     switch (lvl) {
+      case 50:
+        {
+          d3.select("#msg").classed("_50", true);
+        }
+        break;
       case 55:
         {
-
+          d3.select("#msg").classed("_55", true);
         }
         break;
       case 60:
         {
-
+          d3.select("#msg").classed("_60", true);
         }
         break;
       case 65:
@@ -265,22 +288,22 @@
         break;
       case 70:
         {
-
+          d3.select("#msg").classed("_70", true);
         }
         break;
       case 75:
         {
-
+          d3.select("#msg").classed("_75", true);
         }
         break;
       case 80:
         {
-
+          d3.select("#msg").classed("_80", true);
         }
         break;
       case 85:
         {
-
+          d3.select("#msg").classed("_85", true);
         }
         break;
     }
