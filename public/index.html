@@ -7,8 +7,9 @@
   <style type="text/css">
     body {
       font-family: sans-serif;
-      font-size: 1.5em;
+      font-size: 48px !important;
       text-align: center;
+      color: #383838;
     }
 
     ul {
@@ -20,18 +21,14 @@
 
     li {
       float: left;
-      font-size: 1.75em;
-      width: 100px;
+      font-size: 48px;
+      width: 105px;
     }
 
-    #msg {
-      font-size: 3em;
-      /*-webkit-text-stroke: 2px gray;*/
-    }
-
-    .level {
-      font-size: 4em;
-      margin-top: 0px;
+    .aicuz,
+    .flood {
+      font-size: 96px;
+      margin: 0px;
     }
 
     .preamble {
@@ -45,87 +42,97 @@
 
     ._50 {
       background-color: #55ff00;
-      color: Gray
     }
 
     ._55 {
       background-color: #80ff00;
-      color: Gray
     }
 
     ._60 {
       background-color: #aaff00;
-      color: Gray
     }
 
     ._65 {
       background-color: #d5ff00;
-      color: Gray
     }
 
     ._70 {
       background-color: #ffff00;
-      color: Gray
     }
 
     ._75 {
       background-color: #ffd500;
-      color: Gray
     }
 
     ._80 {
       background-color: #ff5500;
-      color: Gray
     }
 
     ._85 {
       background-color: #ff0000;
-      color: Gray
     }
 
     .scheme {
       display: inline-block;
+      width: 100%;
       max-width: 100%;
       padding: 0;
       text-align: center;
     }
   </style>
+  <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css"></link>
 </head>
 
 <body>
-  <div class="scheme">
-    <ul>
-      <li style="background-color:#00ff00;">
-        0
-      </li>
-      <li style="background-color:#55ff00;">
-        50
-      </li>
-      <li style="background-color:#80ff00;">
-        55
-      </li>
-      <li style="background-color:#aaff00;">
-        60
-      </li>
-      <li style="background-color:#d5ff00;">
-        65
-      </li>
-      <li style="background-color:#ffff00;">
-        70
-      </li>
-      <li style="background-color:#ffd500;">
-        75
-      </li>
-      <li style="background-color:#ff5500;">
-        80
-      </li>
-      <li style="background-color:#ff0000;">
-        85
-      </li>
-    </ul>
-  </div>
-  <div id="msg">
-    <p>Searching...</p>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-1 col-md-1 col-lg-1">
+      </div>
+      <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10">
+        <div id="location">
+          <p>Searching Location...</p>
+        </div>
+        <div id="aicuz">
+          <p>AICUZ...</p>
+        </div>
+        <div class="scheme">
+          <ul>
+            <li style="background-color:#00ff00;">
+              0
+            </li>
+            <li style="background-color:#55ff00;">
+              50
+            </li>
+            <li style="background-color:#80ff00;">
+              55
+            </li>
+            <li style="background-color:#aaff00;">
+              60
+            </li>
+            <li style="background-color:#d5ff00;">
+              65
+            </li>
+            <li style="background-color:#ffff00;">
+              70
+            </li>
+            <li style="background-color:#ffd500;">
+              75
+            </li>
+            <li style="background-color:#ff5500;">
+              80
+            </li>
+            <li style="background-color:#ff0000;">
+              85
+            </li>
+          </ul>
+        </div>
+        <div id="flood">
+          <p>Flood Zone...</p>
+        </div>
+      </div>
+      <div class="col-sm-1 col-md-1 col-lg-1">
+      </div>
+    </div>
   </div>
 </body>
 
@@ -137,10 +144,11 @@
 <script src="//d3js.org/d3-array.v1.min.js"></script>
 <script src="//d3js.org/d3-geo.v1.min.js"></script>
 <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script>
   function checkAICUZ(position) {
 
-    console.log("Checking AICUZ for position:");
+    console.log("Checking features for position:");
     console.log(position);
 
     var ll = [position.coords.longitude, position.coords.latitude];
@@ -162,8 +170,10 @@
       var features = mapData.features[0];
       if (d3.geoContains(features, ll)) {
         console.log("Location is VB");
+        var msg = "<p>You are in Virginia Beach</p>";
+        d3.select("#location").html(msg);
         checkAICUZ_VB(ll);
-        //checkFloodZone_VB(ll);
+        checkFloodZone_VB(ll);
       } else {
         console.log("Location is not in VB")
       }
@@ -188,12 +198,11 @@
       })
       .get(function(data) {
 
-        var msg = "<p class='preamble'>You are in Norfolk AICUZ Noise Zone:</p>";
+        var msg = "<p class='preamble'>AICUZ Noise Zone:</p>";
 
-        msg += checkFeaturesForNoiseLevel(data.features, ll, "NFK");
+        msg += checkFeaturesForAICUZNoiseLevel(data.features, ll, "NFK");
 
-
-        d3.select("#msg").html(msg);
+        d3.select("#aicuz").html(msg);
 
       });
   }
@@ -206,33 +215,36 @@
       })
       .get(function(data) {
 
-        var msg = "<p class='preamble'>You are in Virginia Beach AICUZ Noise Zone:</p>";
+        var msg = "<p class='preamble'>AICUZ Noise Zone</p>";
 
-        msg += checkFeaturesForNoiseLevel(data.features, ll, "VB");
+        msg += checkFeaturesForAICUZNoiseLevel(data.features, ll, "VB");
 
-        d3.select("#msg").html(msg);
+        d3.select("#aicuz").html(msg);
 
       });
   }
 
+  // TODO: update from 2009 to 2015. Something wrong with the 2015 API
   function checkFloodZone_VB(ll) {
-    d3.request("https://gis-vbgov.opendata.arcgis.com/datasets/3088488c6c284f3981d61b9efe9c1d04_3.geojson")
+    d3.request("https://gis-vbgov.opendata.arcgis.com/datasets/380ebd14bb214b758ea2d50b11dfe73b_2.geojson")
       .mimeType("application/json")
       .response(function(xhr) {
         return JSON.parse(xhr.responseText);
       })
       .get(function(data) {
 
-        var msg = "<p class='preamble'>You are in Virginia Beach Flood Zone:</p>";
+        console.log("Checking features for Flood Zone");
+
+        var msg = "<p class='preamble'>Flood Zone (2009)</p>";
 
         msg += checkFeaturesForFloodZone(data.features, ll, "VB");
 
-        d3.select("#msg").html(msg);
+        d3.select("#flood").html(msg);
 
       });
   }
 
-  function checkFeaturesForNoiseLevel(features, ll, city) {
+  function checkFeaturesForAICUZNoiseLevel(features, ll, city) {
     var msg = "";
     var lvl = 0;
     $(features).each(function() {
@@ -243,14 +255,14 @@
             case "NFK":
               {
                 lvl = parseInt(f[0].properties.NOISE_LEV_);
-                msg += "<p class='level'>" + lvl + "</p>";
+                msg += "<p class='aicuz'>" + lvl + "</p>";
 
               }
               break;
             case "VB":
               {
                 lvl = parseInt(f[0].properties.ZONE_);
-                msg += "<p class='level'>" + lvl + "</p>";
+                msg += "<p class='aicuz'>" + lvl + "</p>";
 
               }
               break;
@@ -264,49 +276,68 @@
         }
       }
 
-    })
+    });
+
     switch (lvl) {
       case 50:
         {
-          d3.select("#msg").classed("_50", true);
+          d3.select("#aicuz").classed("_50", true);
         }
         break;
       case 55:
         {
-          d3.select("#msg").classed("_55", true);
+          d3.select("#aicuz").classed("_55", true);
         }
         break;
       case 60:
         {
-          d3.select("#msg").classed("_60", true);
+          d3.select("#aicuz").classed("_60", true);
         }
         break;
       case 65:
         {
-          d3.select("#msg").classed("_65", true);
+          d3.select("#aicuz").classed("_65", true);
         }
         break;
       case 70:
         {
-          d3.select("#msg").classed("_70", true);
+          d3.select("#aicuz").classed("_70", true);
         }
         break;
       case 75:
         {
-          d3.select("#msg").classed("_75", true);
+          d3.select("#aicuz").classed("_75", true);
         }
         break;
       case 80:
         {
-          d3.select("#msg").classed("_80", true);
+          d3.select("#aicuz").classed("_80", true);
         }
         break;
       case 85:
         {
-          d3.select("#msg").classed("_85", true);
+          d3.select("#aicuz").classed("_85", true);
         }
         break;
     }
+
+    return msg;
+  }
+
+  function checkFeaturesForFloodZone(features, ll, city) {
+    var msg = "";
+    var lvl = 0;
+    $(features).each(function() {
+      var f = $(this);
+      if (f && f[0]) {
+        if (d3.geoContains(f[0], ll)) {
+          var fz = f[0].properties.FLD_ZONE;
+          console.log(fz);
+          msg += "<p class='flood'>" + fz + "</p>";
+          return;
+        }
+      }
+    });
     return msg;
   }
 
