@@ -20,12 +20,23 @@
 
     li {
       float: left;
-      width: 80px;
+      font-size: 1.75em;
+      width: 100px;
     }
 
     #msg {
       font-size: 3em;
       /*-webkit-text-stroke: 2px gray;*/
+    }
+
+    .level {
+      font-size: 4em;
+      margin-top: 0px;
+    }
+
+    .preamble {
+      margin-top: 20px;
+      margin-bottom: 0px;
     }
 
     .no-zone {
@@ -87,7 +98,6 @@
       <li style="background-color:#00ff00;">
         0
       </li>
-
       <li style="background-color:#55ff00;">
         50
       </li>
@@ -177,7 +187,7 @@
       })
       .get(function(data) {
 
-        var msg = "<p>You are in Norfolk AICUZ Noise Zone:</p>";
+        var msg = "<p class='preamble'>You are in Norfolk AICUZ Noise Zone:</p>";
 
         msg += checkFeaturesForZone(data.features, ll, "NFK");
 
@@ -195,7 +205,7 @@
       })
       .get(function(data) {
 
-        var msg = "<p>You are in Virginia Beach AICUZ Noise Zone:</p>";
+        var msg = "<p class='preamble'>You are in Virginia Beach AICUZ Noise Zone:</p>";
 
         msg += checkFeaturesForZone(data.features, ll, "VB");
 
@@ -215,14 +225,14 @@
             case "NFK":
               {
                 lvl = parseInt(f[0].properties.NOISE_LEV_);
-                msg += "<p>" + lvl + "</p>";
+                msg += "<p class='level'>" + lvl + "</p>";
 
               }
               break;
             case "VB":
               {
                 lvl = parseInt(f[0].properties.ZONE_);
-                msg += "<p>" + lvl + "</p>";
+                msg += "<p class='level'>" + lvl + "</p>";
 
               }
               break;
