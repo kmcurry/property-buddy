@@ -5,6 +5,7 @@
   "main": "app.js",
   "devDependencies": {},
   "dependencies": {
+    "bower": "latest",
     "express": "^4.15.3"
   },
   "scripts": {
