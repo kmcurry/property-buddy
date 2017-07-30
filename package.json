@@ -8,6 +8,7 @@
     "express": "^4.15.3"
   },
   "scripts": {
+    "postinstall": "bower install",
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
