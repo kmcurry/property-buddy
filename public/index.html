@@ -12,19 +12,6 @@
       color: #383838;
     }
 
-    ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-    }
-
-    li {
-      float: left;
-      font-size: 48px;
-      width: 105px;
-    }
-
     .aicuz,
     .flood {
       font-size: 96px;
@@ -72,30 +59,7 @@
       background-color: #ff0000;
     }
 
-    .scheme {
-      display: inline-block;
-      width: 100%;
-      max-width: 100%;
-      padding: 0;
-      text-align: center;
-    }
 
-    @media only screen and (min-width:320px) {
-      body {
-        font-size: 64px !important;
-
-      }
-      .li {
-        width: 105px !important;
-      }
-      .row {
-        margin-left: -130px !important;
-        margin-right: -130px !important;
-      }
-      #aicuz {
-        width: 99.5% !important;
-      }
-    }
   </style>
   <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css"></link>
 </head>
@@ -112,36 +76,39 @@
         <div id="aicuz">
           <p>AICUZ...</p>
         </div>
-        <div class="scheme">
-          <ul>
-            <li style="background-color:#00ff00;">
-              0
-            </li>
-            <li style="background-color:#55ff00;">
-              50
-            </li>
-            <li style="background-color:#80ff00;">
-              55
-            </li>
-            <li style="background-color:#aaff00;">
-              60
-            </li>
-            <li style="background-color:#d5ff00;">
-              65
-            </li>
-            <li style="background-color:#ffff00;">
-              70
-            </li>
-            <li style="background-color:#ffd500;">
-              75
-            </li>
-            <li style="background-color:#ff5500;">
-              80
-            </li>
-            <li style="background-color:#ff0000;">
-              85
-            </li>
-          </ul>
+        <div class="row container">
+          <div class="col-sm-1 col-md-1 col-lg-1">
+          </div>
+          <div class="col-sm-1 col-md-1 col-lg-1">
+          </div>
+          <div class="col-xs-3 col-sm-1 col-md-1 col-lg-1 _50">
+            50
+          </div>
+          <div class="col-xs-3 col-sm-1 col-md-1 col-lg-1 _55">
+            55
+          </div>
+          <div class="col-xs-3 col-sm-1 col-md-1 col-lg-1 _60">
+            60
+          </div>
+          <div class="col-xs-3 col-sm-1 col-md-1 col-lg-1 _65">
+            65
+          </div>
+          <div class="col-xs-3 col-sm-1 col-md-1 col-lg-1 _70">
+            70
+          </div>
+          <div class="col-xs-3 col-sm-1 col-md-1 col-lg-1 _75">
+            75
+          </div>
+          <div class="col-xs-3 col-sm-1 col-md-1 col-lg-1 _80">
+            80
+          </div>
+          <div class="col-xs-3 col-sm-1 col-md-1 col-lg-1 _85">
+            85
+          </div>
+          <div class="col-sm-1 col-md-1 col-lg-1">
+          </div>
+          <div class="col-sm-1 col-md-1 col-lg-1">
+          </div>
         </div>
         <div id="flood">
           <p>Flood Zone...</p>
