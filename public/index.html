@@ -79,8 +79,6 @@
         <div class="row container">
           <div class="col-md-1 col-lg-1">
           </div>
-          <div class="col-md-1 col-lg-1">
-          </div>
           <div class="col-xs-3 col-sm-3 col-md-1 col-lg-1 _50">
             50
           </div>
@@ -104,8 +102,6 @@
           </div>
           <div class="col-xs-3 col-sm-3 col-md-1 col-lg-1 _85">
             85
-          </div>
-          <div class="col-md-1 col-lg-1">
           </div>
           <div class="col-md-1 col-lg-1">
           </div>
@@ -185,6 +181,10 @@
         var msg = "<p class='preamble'>AICUZ Noise Zone:</p>";
 
         msg += checkFeaturesForAICUZNoiseLevel(data.features, ll, "NFK");
+
+        if (msg == "") {
+          msg += "<p>You are not in any AICUZ Noise Zone.</p>"
+        }
 
         d3.select("#aicuz").html(msg);
 
