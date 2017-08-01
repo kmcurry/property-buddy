@@ -180,7 +180,7 @@ function getSchools(url, ll, type) {
     })
     .get(function(data) {
 
-      var msg = "<p class='preamble'>" + type + " Schools within 3 miles</p>";
+      var msg = "<p class='preamble'>" + type + "</p>";
 
       var z = getSchoolsForFeatures(data.features, ll);
 

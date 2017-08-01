@@ -6,14 +6,21 @@ head
   style.
     body {
       font-family: sans-serif;
-      font-size: 36px !important;
+      font-size: 48px !important;
       text-align: center;
       color: #383838;
     }
 
     .aicuz,
     .flood {
-      font-size: 96px;
+      font-size: 80px;
+      margin: 0px;
+    }
+    
+    #Elementary,
+    #Middle,
+    #High {
+      font-size: 36px !important;
       margin: 0px;
     }
 
@@ -89,23 +96,17 @@ body
           div(class="col-xs-3 col-sm-3 col-md-1 col-lg-1 _85")
             t 85
           div(class="col-md-2 col-lg-2")
-        div(id="flood")
+        div(id="flood" class="row")
           p Flood Zone...
-        div(class="row")
-          div(class="col-md-2 col-lg-2")
-          div(id="Elementary" class="col-xs-12 col-sm-12 col-md-8 col-lg-8")
-            p Elementary Schools...
-          div(class="col-md-2 col-lg-2")
-        div(class="row")
-          div(class="col-md-2 col-lg-2")
-          div(id="Middle" class="col-xs-12 col-sm-12 col-md-8 col-lg-8")
-            p Middle Schools...
-          div(class="col-md-2 col-lg-2")
-        div(class="row")
-          div(class="col-md-2 col-lg-2")
-          div(id="High" class="col-xs-12 col-sm-12 col-md-8 col-lg-8")
-            p High Schools...
-          div(class="col-md-2 col-lg-2")
+        div
+          p Schools within 3 miles
+        div(id="schools" class="row")
+          div(id="Elementary" class="col-xs-4 col-sm-4 col-md-4 col-lg-4")
+            p Elementary...
+          div(id="Middle" class="col-xs-4 col-sm-4 col-md-4 col-lg-4")
+            p Middle...
+          div(id="High" class="col-xs-4 col-sm-4 col-md-4 col-lg-4")
+            p High...
       div(class="col-md-1 col-lg-1")
       div(id="invisibleMap")
       input(type="hidden" id="config" value=""+config)
