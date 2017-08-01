@@ -75,7 +75,7 @@ function checkFloodZone(url, ll) {
     }).intersects(LL).run(function(error, floodZones){
       var msg = "<p class='preamble'>Flood Zone (2015)</p>";
 
-      msg += checkFeaturesForFloodZone(floodZones.features, ll, "VB");
+      msg += checkFeaturesForFloodZone(floodZones.features, ll);
 
       d3.select("#flood").html(msg);
 
@@ -153,7 +153,7 @@ function checkFeaturesForAICUZNoiseLevel(features, ll) {
   return msg;
 }
 
-function checkFeaturesForFloodZone(features, ll, city) {
+function checkFeaturesForFloodZone(features, ll) {
   var msg = "";
   var lvl = 0;
   $(features).each(function() {
