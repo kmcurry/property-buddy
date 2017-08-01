@@ -157,14 +157,13 @@ function checkFeaturesForAICUZNoiseLevel(features, ll) {
 }
 
 function checkFeaturesForFloodZone(features, ll) {
-  var msg = "";
-  var lvl = 0;
+  var msg = "<p class='flood'>You are not in any flood zone</p>";;
   $(features).each(function() {
     var f = $(this);
     if (f && f[0]) {
       if (d3.geoContains(f[0], ll)) {
         var fz = f[0].properties.FLD_ZONE;
-        msg += "<p class='flood'>" + fz + "</p>";
+        msg = "<p class='flood'>" + fz + "</p>";
         return;
       }
     }
