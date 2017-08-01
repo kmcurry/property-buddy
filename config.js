@@ -5,7 +5,7 @@ config.VirginiaBeach = {};
 
 config.Norfolk.boundary = "https://data-orf.opendata.arcgis.com/datasets/5fcd6cdbd5a84e0fae5db8c35465ad54_2.geojson";
 config.Norfolk.AICUZ = "https://data-orf.opendata.arcgis.com/datasets/c8de1a1f81e14eacbe381ae342318031_8.geojson";
-config.Norfolk.FIRM = "";
+config.Norfolk.FIRM = "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/1";
 config.Norfolk.libraries = "";
 config.Norfolk.parks = "";
 config.Norfolk.schools = {
