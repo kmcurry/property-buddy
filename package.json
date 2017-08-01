@@ -2,11 +2,14 @@
   "name": "property-buddy",
   "version": "1.0.0",
   "description": "finds and presents useful data about a location",
+  "repository": "https://github.com/kmcurry/property-buddy.git",
   "main": "app.js",
   "devDependencies": {},
   "dependencies": {
+    "angular-template": "^2.0.13",
     "bower": "latest",
-    "express": "^4.15.3"
+    "express": "^4.15.3",
+    "pug": "^2.0.0-rc.2"
   },
   "scripts": {
     "postinstall": "bower install",
