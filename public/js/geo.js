@@ -31,6 +31,9 @@ function getFeaturesForLocation(position) {
       d3.select("#location").html(msg);
       checkAICUZ(config.VirginiaBeach.AICUZ, ll);
       checkFloodZone(config.VirginiaBeach.FIRM, ll);
+      getSchools(config.VirginiaBeach.schools.elementary, ll, "Elementary");
+      getSchools(config.VirginiaBeach.schools.middle, ll, "Middle");
+      getSchools(config.VirginiaBeach.schools.high, ll, "High");
     } else {
       console.log("Location is not in VB")
     }
@@ -166,6 +169,44 @@ function checkFeaturesForFloodZone(features, ll) {
       }
     }
   });
+  return msg;
+}
+
+function getSchools(url, ll, type) {
+  d3.request(url)
+    .mimeType("application/json")
+    .response(function(xhr) {
+      return JSON.parse(xhr.responseText);
+    })
+    .get(function(data) {
+
+      var msg = "<p class='preamble'>" + type + " Schools within 3 miles</p>";
+
+      var z = getSchoolsForFeatures(data.features, ll);
+
+      msg += z;
+
+      d3.select("#"+type).html(msg);
+
+    });
+}
+
+function getSchoolsForFeatures(features, ll) {
+  var msg = "";
+  var count = 0;
+  $(features).each(function() {
+    var f = $(this);
+    //console.log(f[0]);
+    if (f && f[0]) {
+      var dist = d3.geoDistance(f[0].geometry.coordinates, ll);
+      var max = 3/3959
+      if (dist < max) {
+        ++count;
+      }
+    }
+  });
+  msg += "<p>" + count + "</p>";
+
   return msg;
 }
 
