@@ -6,12 +6,13 @@ config.VirginiaBeach = {};
 config.Norfolk.boundary = "https://data-orf.opendata.arcgis.com/datasets/5fcd6cdbd5a84e0fae5db8c35465ad54_2.geojson";
 config.Norfolk.AICUZ = "https://data-orf.opendata.arcgis.com/datasets/c8de1a1f81e14eacbe381ae342318031_8.geojson";
 config.Norfolk.FIRM = "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/1";
-config.Norfolk.libraries = "";
-config.Norfolk.parks = "";
+config.Norfolk.libraries = "http://data-orf.opendata.arcgis.com/datasets/0c8de8e20bba46a283bb1062f276fe33_4.geojson";
+config.Norfolk.parks = "http://data-orf.opendata.arcgis.com/datasets/fcaa90ef89de4e17bb2b958915d88ab3_1.geojson";
+// TODO: handle diff btwn NFK & VB
 config.Norfolk.schools = {
-  elementary: "",
-  middle: "",
-  high: ""
+  elementary: "http://data-orf.opendata.arcgis.com/datasets/0c8de8e20bba46a283bb1062f276fe33_0.geojson",
+  middle: "http://data-orf.opendata.arcgis.com/datasets/0c8de8e20bba46a283bb1062f276fe33_0.geojson",
+  high: "http://data-orf.opendata.arcgis.com/datasets/0c8de8e20bba46a283bb1062f276fe33_0.geojson"
 }
 
 config.VirginiaBeach.boundary = "https://gis-vbgov.opendata.arcgis.com/datasets/909c0188a44341a5aa6d39951ce8f984_19.geojson";
