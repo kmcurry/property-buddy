@@ -167,7 +167,7 @@ function checkFeaturesForFloodZone(features, ll) {
         switch (fz) {
           case "X": {
             msg += "<div class='alert-success'><p class=''>LOW to MODERATE risk</p>";
-            msg += "<p class=''>Flood insurance is NOT REQUIRED.</p></div>"
+            msg += "<p class=''>Flood insurance is NOT REQUIRED.</p></div>";
           }
           break;
           case "A":
@@ -175,8 +175,12 @@ function checkFeaturesForFloodZone(features, ll) {
           case "AH":
           case "AO":
           case "AR": {
-            msg += "<div class='alert-warning'><p class=''>HIGH risk</p>"
-            msg += "<p class=''>Flood insurance IS REQUIRED.</p></div>"
+            msg += "<div class='alert-warning'><p class=''>HIGH risk</p>";
+            msg += "<p class=''>Flood insurance IS REQUIRED.</p></div>";
+          }
+          break;
+          default: {
+            msg += "<div class=''><p class=''>Your flood zone could not be determined</p></div>";
           }
           break;
         }
