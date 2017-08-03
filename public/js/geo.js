@@ -20,6 +20,7 @@ function getFeaturesForLocation(position) {
       getParks(config.Norfolk.parks, ll);
       getClosestLibrary(config.Norfolk.libraries, ll);
       getClosestHydrant(config.Norfolk.hydrants, ll);
+      getClosestRecCenter(config.Norfolk.recCenters, ll);
     } else {
       console.log("Location is not in NFK")
     }
@@ -40,6 +41,7 @@ function getFeaturesForLocation(position) {
       getParks(config.VirginiaBeach.parks, ll);
       getClosestLibrary(config.VirginiaBeach.libraries, ll);
       getClosestHydrant(config.VirginiaBeach.hydrants, ll);
+      getClosestRecCenter(config.VirginiaBeach.recCenters, ll);
     } else {
       console.log("Location is not in VB")
     }
@@ -109,6 +111,25 @@ function getClosestLibrary(url, ll) {
       msg += z;
 
       d3.select("#libraries").html(msg);
+
+    });
+}
+
+function getClosestRecCenter(url, ll) {
+  d3.request(url)
+    .mimeType("application/json")
+    .response(function(xhr) {
+      return JSON.parse(xhr.responseText);
+    })
+    .get(function(data) {
+
+      var msg = "<p class='preamble'>Closest Recreation Center</p>";
+
+      var z = getClosestItem(data.features, ll);
+
+      msg += z;
+
+      d3.select("#recCenters").html(msg);
 
     });
 }
