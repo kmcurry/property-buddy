@@ -25,4 +25,6 @@ config.VirginiaBeach.schools = {
   high: "https://gis-vbgov.opendata.arcgis.com/datasets/4ee34e8a8aea431ea329743a71c2fd61_3.geojson"
 }
 
+config.VirginiaBeach.recCenters = "http://gis-vbgov.opendata.arcgis.com/datasets/4ee34e8a8aea431ea329743a71c2fd61_4.geojson";
+
 module.exports = config;
