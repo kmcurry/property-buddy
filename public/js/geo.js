@@ -16,7 +16,7 @@ function getFeaturesForLocation(position) {
       var msg = "<p>You are in Norfolk</p>";
       d3.select("#location").html(msg);
       checkAICUZ(config.Norfolk.AICUZ, ll, "NFK");
-      checkFloodZone_NFK(ll);
+      checkFloodZone(config.Norfolk.FIRM, ll);
     } else {
       console.log("Location is not in NFK")
     }
