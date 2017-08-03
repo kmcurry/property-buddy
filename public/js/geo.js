@@ -58,7 +58,7 @@ function checkAICUZ(url, ll) {
     })
     .get(function(data) {
 
-      var msg = "<p class='preamble'>AICUZ Noise Zone:</p>";
+      var msg = "<p class='preamble'>AICUZ Noise Level</p>";
 
       var z = checkFeaturesForAICUZNoiseLevel(data.features, ll);
 
@@ -76,7 +76,7 @@ function checkFloodZone(url, ll) {
     L.esri.query({
       url: url
     }).intersects(LL).run(function(error, floodZones){
-      var msg = "<p class='preamble'>Flood Zone (2015)</p>";
+      var msg = "<p class='preamble'>Flood Zone</p>";
 
       msg += checkFeaturesForFloodZone(floodZones.features, ll);
 
