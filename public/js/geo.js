@@ -306,10 +306,10 @@ function checkFeaturesForFloodZone(features, ll) {
     if (f && f[0]) {
       if (d3.geoContains(f[0], ll)) {
         var fz = f[0].properties.FLD_ZONE;
-        msg = "<p class='p-lg'>" + fz + "</p>";
+        msg = "<p class=''>" + fz + "</p>";
         switch (fz) {
           case "X": {
-            msg += "<div class=''><p class=''>Flood insurance is</p><p>NOT REQUIRED.</p></div>";
+            msg += "<div class=''><p class=''>Flood insurance is</p><p>NOT REQUIRED</p></div>";
           }
           break;
           case "A":
@@ -317,7 +317,7 @@ function checkFeaturesForFloodZone(features, ll) {
           case "AH":
           case "AO":
           case "AR": {
-            msg += "<div class='alert-warning'><p class=''>Flood insurance</p><p>IS REQUIRED.</p></div>";
+            msg += "<div class='alert-warning'><p class=''>Flood insurance</p><p>IS REQUIRED</p></div>";
           }
           break;
           default: {
