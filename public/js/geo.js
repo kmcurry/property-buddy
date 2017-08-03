@@ -180,7 +180,12 @@ function checkFeaturesForFloodZone(features, ll) {
           }
           break;
           default: {
-            msg += "<div class=''><p class=''>Your flood zone could not be determined</p></div>";
+            if (fz.indexOf("0.2") !== -1) {
+              msg = "<p class='p-sm'>" + fz + "</p>";
+              msg += "<div class='alert-success'><p class=''>Flood insurance is NOT REQUIRED.</p></div>"
+            } else {
+              msg += "<div class=''><p class=''>Your flood zone could not be determined</p></div>";
+            }
           }
           break;
         }
