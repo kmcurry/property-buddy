@@ -104,7 +104,7 @@ function checkFeaturesForAICUZNoiseLevel(features, ll) {
     }
   });
 
-  msg += "<p class='aicuz'>" + lvl + "</p>";
+  msg += "<p class='p-lg'>" + lvl + "</p>";
 
 
   switch (lvl) {
@@ -163,7 +163,24 @@ function checkFeaturesForFloodZone(features, ll) {
     if (f && f[0]) {
       if (d3.geoContains(f[0], ll)) {
         var fz = f[0].properties.FLD_ZONE;
-        msg = "<p class='flood'>" + fz + "</p>";
+        msg = "<p class='p-lg'>" + fz + "</p>";
+        switch (fz) {
+          case "X": {
+            msg += "<div class='alert-success'><p class=''>LOW to MODERATE risk</p>";
+            msg += "<p class=''>Flood insurance is NOT REQUIRED.</p></div>"
+          }
+          break;
+          case "A":
+          case "AE":
+          case "AH":
+          case "AO":
+          case "AR": {
+            msg += "<div class='alert-warning'><p class=''>HIGH risk</p>"
+            msg += "<p class=''>Flood insurance IS REQUIRED.</p></div>"
+          }
+          break;
+        }
+
         return;
       }
     }
