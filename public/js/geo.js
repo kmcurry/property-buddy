@@ -15,9 +15,11 @@ function getFeaturesForLocation(position) {
       console.log("Location is NFK");
       var msg = "<p>You are in Norfolk</p>";
       d3.select("#location").html(msg);
-      checkAICUZ(config.Norfolk.AICUZ, ll, "NFK");
-      checkFloodZone(config.Norfolk.FIRM, ll);
+      getAICUZ(config.Norfolk.AICUZ, ll, "NFK");
+      getFloodZone(config.Norfolk.FIRM, ll);
       getParks(config.Norfolk.parks, ll);
+      getClosestLibrary(config.Norfolk.libraries, ll);
+      getClosestHydrant(config.Norfolk.hydrants, ll);
     } else {
       console.log("Location is not in NFK")
     }
@@ -30,12 +32,14 @@ function getFeaturesForLocation(position) {
       console.log("Location is VB");
       var msg = "<p>You are in Virginia Beach</p>";
       d3.select("#location").html(msg);
-      checkAICUZ(config.VirginiaBeach.AICUZ, ll);
-      checkFloodZone(config.VirginiaBeach.FIRM, ll);
+      getAICUZ(config.VirginiaBeach.AICUZ, ll);
+      getFloodZone(config.VirginiaBeach.FIRM, ll);
       getSchools(config.VirginiaBeach.schools.elementary, ll, "Elementary");
       getSchools(config.VirginiaBeach.schools.middle, ll, "Middle");
       getSchools(config.VirginiaBeach.schools.high, ll, "High");
       getParks(config.VirginiaBeach.parks, ll);
+      getClosestLibrary(config.VirginiaBeach.libraries, ll);
+      getClosestHydrant(config.VirginiaBeach.hydrants, ll);
     } else {
       console.log("Location is not in VB")
     }
@@ -52,7 +56,7 @@ function getLocation() {
   }
 }
 
-function checkAICUZ(url, ll) {
+function getAICUZ(url, ll) {
   d3.request(url)
     .mimeType("application/json")
     .response(function(xhr) {
@@ -71,8 +75,46 @@ function checkAICUZ(url, ll) {
     });
 }
 
+function getClosestHydrant(url, ll) {
+  d3.request(url)
+    .mimeType("application/json")
+    .response(function(xhr) {
+      return JSON.parse(xhr.responseText);
+    })
+    .get(function(data) {
+
+      var msg = "<p class='preamble'>Closest Public Fire Hydrant</p>";
+
+      var z = getClosestItem(data.features, ll);
+
+      msg += z;
+
+      d3.select("#hydrants").html(msg);
+
+    });
+}
+
+function getClosestLibrary(url, ll) {
+  d3.request(url)
+    .mimeType("application/json")
+    .response(function(xhr) {
+      return JSON.parse(xhr.responseText);
+    })
+    .get(function(data) {
+
+      var msg = "<p class='preamble'>Closest Library</p>";
+
+      var z = getClosestItem(data.features, ll);
+
+      msg += z;
+
+      d3.select("#libraries").html(msg);
+
+    });
+}
+
 // TODO: update from 2009 to 2015. Something wrong with the 2015 API
-function checkFloodZone(url, ll) {
+function getFloodZone(url, ll) {
   var LL = L.latLng(ll[1],ll[0]);
   // use location to find out which census block they are inside.
     L.esri.query({
@@ -85,6 +127,84 @@ function checkFloodZone(url, ll) {
       d3.select("#flood").html(msg);
 
     });
+}
+
+function getParks(url, ll) {
+  d3.request(url)
+    .mimeType("application/json")
+    .response(function(xhr) {
+      return JSON.parse(xhr.responseText);
+    })
+    .get(function(data) {
+
+      var msg = "<p>Parks within 3 miles</p>";
+
+      var z = getItemsForFeatures(data.features, ll, 3);
+
+      msg += z;
+
+      d3.select("#parks").html(msg);
+
+    });
+}
+
+function getSchools(url, ll, type) {
+  d3.request(url)
+    .mimeType("application/json")
+    .response(function(xhr) {
+      return JSON.parse(xhr.responseText);
+    })
+    .get(function(data) {
+
+      var msg = "<p class='preamble'>" + type + "</p>";
+
+      var z = getItemsForFeatures(data.features, ll, 3);
+
+      msg += z;
+
+      d3.select("#"+type).html(msg);
+
+    });
+}
+
+function getClosestItem(features, ll) {
+  var msg = "";
+  var closest = 99;
+  $(features).each(function() {
+    var f = $(this);
+    //console.log(f[0]);
+    if (f && f[0]) {
+      var dist = d3.geoDistance(f[0].geometry.coordinates, ll);
+      if (dist < closest) {
+        closest = dist;
+      }
+    }
+  });
+  closest = parseFloat(closest)*3959;
+  closest = closest.toFixed(2);
+
+  msg += "<p>" + closest + " miles </p>";
+
+  return msg;
+}
+
+function getItemsForFeatures(features, ll, d) {
+  var msg = "";
+  var count = 0;
+  $(features).each(function() {
+    var f = $(this);
+    //console.log(f[0]);
+    if (f && f[0]) {
+      var dist = d3.geoDistance(f[0].geometry.coordinates, ll);
+      var max = d/3959;
+      if (dist < max) {
+        ++count;
+      }
+    }
+  });
+  msg += "<p>" + count + "</p>";
+
+  return msg;
 }
 
 function checkFeaturesForAICUZNoiseLevel(features, ll) {
@@ -168,8 +288,7 @@ function checkFeaturesForFloodZone(features, ll) {
         msg = "<p class='p-lg'>" + fz + "</p>";
         switch (fz) {
           case "X": {
-            msg += "<div class='alert-success'><p class=''>LOW to MODERATE risk</p>";
-            msg += "<p class=''>Flood insurance is NOT REQUIRED.</p></div>";
+            msg += "<div class=''><p class=''>Flood insurance is</p><p>NOT REQUIRED.</p></div>";
           }
           break;
           case "A":
@@ -177,8 +296,7 @@ function checkFeaturesForFloodZone(features, ll) {
           case "AH":
           case "AO":
           case "AR": {
-            msg += "<div class='alert-warning'><p class=''>HIGH risk</p>";
-            msg += "<p class=''>Flood insurance IS REQUIRED.</p></div>";
+            msg += "<div class='alert-warning'><p class=''>Flood insurance</p><p>IS REQUIRED.</p></div>";
           }
           break;
           default: {
@@ -196,63 +314,6 @@ function checkFeaturesForFloodZone(features, ll) {
       }
     }
   });
-  return msg;
-}
-
-function getParks(url, ll) {
-  d3.request(url)
-    .mimeType("application/json")
-    .response(function(xhr) {
-      return JSON.parse(xhr.responseText);
-    })
-    .get(function(data) {
-
-      var msg = "<p>Parks within 3 miles</p>";
-
-      var z = getItemsForFeatures(data.features, ll, 3);
-
-      msg += z;
-
-      d3.select("#parks").html(msg);
-
-    });
-}
-
-function getSchools(url, ll, type) {
-  d3.request(url)
-    .mimeType("application/json")
-    .response(function(xhr) {
-      return JSON.parse(xhr.responseText);
-    })
-    .get(function(data) {
-
-      var msg = "<p class='preamble'>" + type + "</p>";
-
-      var z = getItemsForFeatures(data.features, ll, 3);
-
-      msg += z;
-
-      d3.select("#"+type).html(msg);
-
-    });
-}
-
-function getItemsForFeatures(features, ll, d) {
-  var msg = "";
-  var count = 0;
-  $(features).each(function() {
-    var f = $(this);
-    //console.log(f[0]);
-    if (f && f[0]) {
-      var dist = d3.geoDistance(f[0].geometry.coordinates, ll);
-      var max = d/3959;
-      if (dist < max) {
-        ++count;
-      }
-    }
-  });
-  msg += "<p>" + count + "</p>";
-
   return msg;
 }
 
