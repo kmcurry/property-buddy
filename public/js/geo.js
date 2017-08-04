@@ -13,7 +13,7 @@ function getFeaturesForLocation(position) {
     var features = mapData.features[0];
     if (d3.geoContains(features, ll)) {
       console.log("Location is NFK");
-      var msg = "<p>You are in Norfolk</p>";
+      var msg = "<p class='p-sm'>You are in Norfolk</p>";
       d3.select("#location").html(msg);
       getAICUZ(config.Norfolk.AICUZ, ll, "NFK");
       getFloodZone(config.Norfolk.FIRM, ll);
@@ -31,7 +31,7 @@ function getFeaturesForLocation(position) {
     var features = mapData.features[0];
     if (d3.geoContains(features, ll)) {
       console.log("Location is VB");
-      var msg = "<p>You are in Virginia Beach</p>";
+      var msg = "<p class='p-sm'>You are in Virginia Beach</p>";
       d3.select("#location").html(msg);
       getAICUZ(config.VirginiaBeach.AICUZ, ll);
       getFloodZone(config.VirginiaBeach.FIRM, ll);
