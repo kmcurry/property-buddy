@@ -5,8 +5,8 @@ function getFeaturesForLocation(position) {
   console.log("Checking features for position:");
   console.log(position);
 
+  // LON LAT unless locally manipulated b/c D3 is LON LAT
   var ll = [position.coords.longitude, position.coords.latitude];
-  //var ll = [-76.195987, 36.893076]; // NFK
 
   d3.json(config.Norfolk.boundary, function(error, mapData) {
     console.log("Checking " + ll + " in NFK");
@@ -42,6 +42,7 @@ function getFeaturesForLocation(position) {
       getClosestLibrary(config.VirginiaBeach.libraries, ll);
       getClosestHydrant(config.VirginiaBeach.hydrants, ll);
       getClosestRecCenter(config.VirginiaBeach.recCenters, ll);
+      getAverageEMSResponseTime(config.VirginiaBeach.EMSCalls, ll, 3);
     } else {
       console.log("Location is not in VB")
     }
@@ -75,6 +76,32 @@ function getAICUZ(url, ll) {
       d3.select("#aicuz").html(msg);
 
     });
+}
+
+function getAverageEMSResponseTime(url, ll, d) {
+
+  d = d * 1609.35;
+
+  url += "?$where=within_circle(location_1," + ll[1] + "," + ll[0] + "," + d + ")"
+
+  d3.request(url)
+    .mimeType("application/json")
+    .response(function(xhr) {
+      return JSON.parse(xhr.responseText);
+    })
+    .get(function(data) {
+
+      var msg = "<p class='preamble'>Average EMS Response Time</p>";
+
+      var z = getAverageTime(data, ll);
+      //var z = "<p>" + data.length + "</p>";
+
+      msg += z;
+
+      d3.select("#ems").html(msg);
+
+    });
+
 }
 
 function getClosestHydrant(url, ll) {
@@ -186,6 +213,30 @@ function getSchools(url, ll, type) {
       d3.select("#"+type).html(msg);
 
     });
+}
+
+function getAverageTime(data) {
+  var msg = "";
+  var avg = 0;
+  $(data).each(function() {
+    var d = $(this);
+    if (d && d[0]) {
+      d = d[0];
+      var callTime = new Date(d.call_date_and_time);
+      var onSceneTime = new Date(d.on_scene_date_and_time);
+      var duration = onSceneTime.getTime() - callTime.getTime();
+      if (!isNaN(duration)) {
+        avg += duration;
+      }
+    }
+  });
+
+  avg = (avg/data.length)/1000/60;
+  avg = avg.toFixed(2);
+
+  msg += "<p>" + avg + " minutes</p>";
+
+  return msg;
 }
 
 function getClosestItem(features, ll) {
