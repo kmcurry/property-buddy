@@ -31,6 +31,7 @@ config.VirginiaBeach.schools = {
 };
 
 config.VirginiaBeach.EMSCalls = "https://data.vbgov.com/resource/q2jp-nt6m.json";
+config.VirginiaBeach.PoliceCalls = "https://data.vbgov.com/resource/rqn2-9am9.json";
 
 
 module.exports = config;

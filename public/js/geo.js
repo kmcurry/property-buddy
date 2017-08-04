@@ -42,7 +42,8 @@ function getFeaturesForLocation(position) {
       getClosestLibrary(config.VirginiaBeach.libraries, ll);
       getClosestHydrant(config.VirginiaBeach.hydrants, ll);
       getClosestRecCenter(config.VirginiaBeach.recCenters, ll);
-      getAverageEMSResponseTime(config.VirginiaBeach.EMSCalls, ll, 3);
+      getAverageResponseTime(config.VirginiaBeach.EMSCalls, ll, 3, "EMS");
+      getAverageResponseTime(config.VirginiaBeach.PoliceCalls, ll, 3, "Police");
     } else {
       console.log("Location is not in VB")
     }
@@ -78,7 +79,7 @@ function getAICUZ(url, ll) {
     });
 }
 
-function getAverageEMSResponseTime(url, ll, d) {
+function getAverageResponseTime(url, ll, d, type) {
 
   d = d * 1609.35;
 
@@ -91,14 +92,14 @@ function getAverageEMSResponseTime(url, ll, d) {
     })
     .get(function(data) {
 
-      var msg = "<p class='preamble'>Average EMS Response Time</p>";
+      var msg = "<p class='preamble'>Average " + type + " Response Time</p>";
 
       var z = getAverageTime(data, ll);
       //var z = "<p>" + data.length + "</p>";
 
       msg += z;
 
-      d3.select("#ems").html(msg);
+      d3.select("#"+type).html(msg);
 
     });
 
@@ -222,10 +223,18 @@ function getAverageTime(data) {
     var d = $(this);
     if (d && d[0]) {
       d = d[0];
-      var callTime = new Date(d.call_date_and_time);
-      var onSceneTime = new Date(d.on_scene_date_and_time);
+      var callTime = 0;
+      var onSceneTime = 0;
+      if (d.call_date_and_time) {
+        callTime = new Date(d.call_date_and_time);
+        onSceneTime = new Date(d.on_scene_date_and_time);
+      } else {
+        callTime = new Date(d.call_date_time);
+        onSceneTime = new Date(d.on_scene_date_time);
+      }
+
       var duration = onSceneTime.getTime() - callTime.getTime();
-      if (!isNaN(duration)) {
+      if (!isNaN(duration) && duration > 0) {
         avg += duration;
       }
     }
