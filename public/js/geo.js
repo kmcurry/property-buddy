@@ -388,6 +388,7 @@ function checkFeaturesForFloodZone(features, ll) {
       if (d3.geoContains(f[0], ll)) {
         var fz = f[0].properties.FLD_ZONE;
         msg = "<p class=''>" + fz + "</p>";
+        console.log(fz);
         switch (fz) {
           case "X": {
             msg += "<div class=''><p class=''>Flood insurance is</p><p>NOT REQUIRED</p></div>";
