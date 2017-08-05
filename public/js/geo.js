@@ -22,6 +22,7 @@ function getFeaturesForLocation(position) {
       getClosestLibrary(config.Norfolk.libraries, ll);
       getClosestHydrant(config.Norfolk.hydrants, ll);
       getClosestRecCenter(config.Norfolk.recCenters, ll);
+      //getClosestNeighborhood(config.Norfolk.neighborhoods, ll);
     } else {
       console.log("Location is not in NFK")
     }
@@ -46,6 +47,7 @@ function getFeaturesForLocation(position) {
       getClosestRecCenter(config.VirginiaBeach.recCenters, ll);
       getAverageResponseTime(config.VirginiaBeach.EMSCalls, ll, 1, "EMS");
       getAverageResponseTime(config.VirginiaBeach.PoliceCalls, ll, 1, "Police");
+      getClosestNeighborhood(config.VirginiaBeach.neighborhoods, ll);
     } else {
       console.log("Location is not in VB")
     }
@@ -117,9 +119,9 @@ function getClosestHydrant(url, ll) {
 
       var msg = "<p class='preamble'>Closest Public Fire Hydrant</p>";
 
-      var z = getClosestItem(data.features, ll);
+      var closest = getClosestItem(data.features, ll);
 
-      msg += z;
+      msg += "<p>" + closest.distance + " miles </p>";
 
       d3.select("#hydrants").html(msg);
 
@@ -136,9 +138,9 @@ function getClosestLibrary(url, ll) {
 
       var msg = "<p class='preamble'>Closest Library</p>";
 
-      var z = getClosestItem(data.features, ll);
+      var closest = getClosestItem(data.features, ll);
 
-      msg += z;
+      msg += "<p>" + closest.distance + " miles </p>";
 
       d3.select("#libraries").html(msg);
 
@@ -155,11 +157,30 @@ function getClosestPark(url, ll) {
 
       var msg = "<p class='preamble'>Closest Park</p>";
 
-      var z = getClosestItem(data.features, ll);
+      var closest = getClosestItem(data.features, ll);
 
-      msg += z;
+      msg += "<p>" + closest.distance + " miles </p>";
 
       d3.select("#parks-closest").html(msg);
+
+    });
+}
+
+function getClosestNeighborhood(url, ll) {
+  d3.request(url)
+    .mimeType("application/json")
+    .response(function(xhr) {
+      return JSON.parse(xhr.responseText);
+    })
+    .get(function(data) {
+
+      var msg = "<p class='preamble'>Closest Neighborhod</p>";
+
+      var closest = getClosestItem(data.features, ll);
+
+      msg += "<p>" + closest.item[0].properties.NAME + " </p>";
+
+      d3.select("#neighborhoods").html(msg);
 
     });
 }
@@ -174,9 +195,9 @@ function getClosestRecCenter(url, ll) {
 
       var msg = "<p class='preamble'>Closest Recreation Center</p>";
 
-      var z = getClosestItem(data.features, ll);
+      var closest = getClosestItem(data.features, ll);
 
-      msg += z;
+      msg += "<p>" + closest.distance + " miles </p>";
 
       d3.select("#recCenters").html(msg);
 
@@ -271,23 +292,25 @@ function getAverageTime(data) {
 
 function getClosestItem(features, ll) {
   var msg = "";
-  var closest = 99;
+  var closest = {
+    item: null,
+    distance: 9999
+  };
   $(features).each(function() {
     var f = $(this);
     //console.log(f[0]);
     if (f && f[0]) {
       var dist = d3.geoDistance(f[0].geometry.coordinates, ll);
-      if (dist < closest) {
-        closest = dist;
+      if (dist < closest.distance) {
+        closest.distance = dist;
+        closest.item = f;
       }
     }
   });
-  closest = parseFloat(closest)*3959;
-  closest = closest.toFixed(2);
+  closest.distance = parseFloat(closest.distance)*3959;
+  closest.distance = closest.distance.toFixed(2);
 
-  msg += "<p>" + closest + " miles </p>";
-
-  return msg;
+  return closest;
 }
 
 function getItemsForFeatures(features, ll, d) {
