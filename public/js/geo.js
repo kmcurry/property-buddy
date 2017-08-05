@@ -18,6 +18,7 @@ function getFeaturesForLocation(position) {
       getAICUZ(config.Norfolk.AICUZ, ll, "NFK");
       getFloodZone(config.Norfolk.FIRM, ll);
       getParks(config.Norfolk.parks, ll);
+      getClosestPark(config.Norfolk.parks, ll);
       getClosestLibrary(config.Norfolk.libraries, ll);
       getClosestHydrant(config.Norfolk.hydrants, ll);
       getClosestRecCenter(config.Norfolk.recCenters, ll);
@@ -39,11 +40,12 @@ function getFeaturesForLocation(position) {
       getSchools(config.VirginiaBeach.schools.middle, ll, "Middle");
       getSchools(config.VirginiaBeach.schools.high, ll, "High");
       getParks(config.VirginiaBeach.parks, ll);
+      getClosestPark(config.VirginiaBeach.parks, ll);
       getClosestLibrary(config.VirginiaBeach.libraries, ll);
       getClosestHydrant(config.VirginiaBeach.hydrants, ll);
       getClosestRecCenter(config.VirginiaBeach.recCenters, ll);
-      getAverageResponseTime(config.VirginiaBeach.EMSCalls, ll, 3, "EMS");
-      getAverageResponseTime(config.VirginiaBeach.PoliceCalls, ll, 3, "Police");
+      getAverageResponseTime(config.VirginiaBeach.EMSCalls, ll, 1, "EMS");
+      getAverageResponseTime(config.VirginiaBeach.PoliceCalls, ll, 1, "Police");
     } else {
       console.log("Location is not in VB")
     }
@@ -92,7 +94,7 @@ function getAverageResponseTime(url, ll, d, type) {
     })
     .get(function(data) {
 
-      var msg = "<p class='preamble'>Average " + type + " Response Time</p>";
+      var msg = "<p class='preamble'>" + type + " 1 Mile Avg Response Time</p>";
 
       var z = getAverageTime(data, ll);
       //var z = "<p>" + data.length + "</p>";
@@ -139,6 +141,25 @@ function getClosestLibrary(url, ll) {
       msg += z;
 
       d3.select("#libraries").html(msg);
+
+    });
+}
+
+function getClosestPark(url, ll) {
+  d3.request(url)
+    .mimeType("application/json")
+    .response(function(xhr) {
+      return JSON.parse(xhr.responseText);
+    })
+    .get(function(data) {
+
+      var msg = "<p class='preamble'>Closest Park</p>";
+
+      var z = getClosestItem(data.features, ll);
+
+      msg += z;
+
+      d3.select("#parks-closest").html(msg);
 
     });
 }
