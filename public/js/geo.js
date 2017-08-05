@@ -94,7 +94,7 @@ function getAverageResponseTime(url, ll, d, type) {
     })
     .get(function(data) {
 
-      var msg = "<p class='preamble'>" + type + " 1 Mile Avg Response Time</p>";
+      var msg = "<p class='preamble'>" + type + "</p><p>1 Mile Avg Response Time</p>";
 
       var z = getAverageTime(data, ll);
       //var z = "<p>" + data.length + "</p>";
