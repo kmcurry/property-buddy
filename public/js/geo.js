@@ -17,7 +17,7 @@ function getFeaturesForLocation(position) {
       d3.select("#location").html(msg);
       getAICUZ(config.Norfolk.AICUZ, ll, "NFK");
       getFloodZone(config.Norfolk.FIRM, ll);
-      getParks(config.Norfolk.parks, ll);
+      getParks(config.Norfolk.parks, ll, 1);
       getClosestPark(config.Norfolk.parks, ll);
       getClosestLibrary(config.Norfolk.libraries, ll);
       getClosestHydrant(config.Norfolk.hydrants, ll);
@@ -37,17 +37,20 @@ function getFeaturesForLocation(position) {
       d3.select("#location").html(msg);
       getAICUZ(config.VirginiaBeach.AICUZ, ll);
       getFloodZone(config.VirginiaBeach.FIRM, ll);
-      getSchools(config.VirginiaBeach.schools.elementary, ll, "Elementary");
-      getSchools(config.VirginiaBeach.schools.middle, ll, "Middle");
-      getSchools(config.VirginiaBeach.schools.high, ll, "High");
-      getParks(config.VirginiaBeach.parks, ll);
-      getClosestPark(config.VirginiaBeach.parks, ll);
-      getClosestLibrary(config.VirginiaBeach.libraries, ll);
-      getClosestHydrant(config.VirginiaBeach.hydrants, ll);
-      getClosestRecCenter(config.VirginiaBeach.recCenters, ll);
-      getAverageResponseTime(config.VirginiaBeach.EMSCalls, ll, 1, "EMS");
-      getAverageResponseTime(config.VirginiaBeach.PoliceCalls, ll, 1, "Police");
-      getClosestNeighborhood(config.VirginiaBeach.neighborhoods, ll);
+      getSchools(config.VirginiaBeach.schools.elementary, ll, 3, "Elementary");
+      getSchools(config.VirginiaBeach.schools.middle, ll, 3, "Middle");
+      getSchools(config.VirginiaBeach.schools.high, ll, 3, "High");
+      getParks(config.VirginiaBeach.parks, ll, 1);
+      getClosestThing(config.VirginiaBeach.parks, ll, "park");
+      getClosestThing(config.VirginiaBeach.libraries, ll, "library");
+      getClosestThing(config.VirginiaBeach.hydrants, ll, "hydrant");
+      getClosestThing(config.VirginiaBeach.recCenters, ll, "recCenter");
+      getNearbyNeighborhoods(config.VirginiaBeach.neighborhoods, ll, 1, "neighborhoods")
+      getAverageResponseTime(config.VirginiaBeach.EMSCalls, ll, .25, "ems");
+      getAverageResponseTime(config.VirginiaBeach.police.calls, ll, .25, "police");
+      getCountWithinDays(config.VirginiaBeach.police.incidents, ll, 1, 30, "police-incidents");
+      getCountWithinDays(config.VirginiaBeach.police.calls, ll, 1, 30, "police-calls");
+
     } else {
       console.log("Location is not in VB")
     }
@@ -96,110 +99,67 @@ function getAverageResponseTime(url, ll, d, type) {
     })
     .get(function(data) {
 
-      var msg = "<p class='preamble'>" + type + "</p><p>1 Mile Avg Response Time</p>";
+      console.log("Response records: " + data.length);
+
+      var msg = "<p>1/4 Mile Avg Response<a title='Based on " + data.length + " records' href=''>*</a></p>";
 
       var z = getAverageTime(data, ll);
       //var z = "<p>" + data.length + "</p>";
 
       msg += z;
 
+      d3.select("#"+type+"-response-avg").html(msg);
+
+    });
+
+}
+
+function getClosestThing(url, ll, thing) {
+  d3.request(url)
+    .mimeType("application/json")
+    .response(function(xhr) {
+      return JSON.parse(xhr.responseText);
+    })
+    .get(function(data) {
+
+      var closest = getClosestItem(data.features, ll);
+
+      var msg = "<p>" + closest.distance + " miles </p>";
+
+      d3.select("#closest-"+thing).html(msg);
+
+    });
+}
+
+function getCountWithinDays(url, ll, dist, days, type) {
+  dist = dist * 1609.35;
+
+  var checkDate = new Date();
+  checkDate = new Date(checkDate.setDate(checkDate.getDate()-days)).toISOString();
+  checkDate = checkDate.toString().substring(0, checkDate.lastIndexOf('Z'));
+
+  var dateField = "";
+  if (type.includes("calls")) {
+    dateField = "call_date_time";
+  }
+  if (type.includes("incidents")) {
+    dateField = "date_occured";
+  }
+
+  url += "?$where=within_circle(location_1," + ll[1] + "," + ll[0] + "," + dist + encodeURIComponent(") and " + dateField + " > '") + encodeURIComponent(checkDate) + encodeURIComponent("'");
+
+  d3.request(url)
+    .mimeType("application/json")
+    .response(function(xhr) {
+      return JSON.parse(xhr.responseText);
+    })
+    .get(function(data) {
+
+      var msg =  "<p>" + data.length + "</p>"
+
+      console.log(type + " " + data.length);
+
       d3.select("#"+type).html(msg);
-
-    });
-
-}
-
-function getClosestHydrant(url, ll) {
-  d3.request(url)
-    .mimeType("application/json")
-    .response(function(xhr) {
-      return JSON.parse(xhr.responseText);
-    })
-    .get(function(data) {
-
-      var msg = "<p class='preamble'>Closest Public Fire Hydrant</p>";
-
-      var closest = getClosestItem(data.features, ll);
-
-      msg += "<p>" + closest.distance + " miles </p>";
-
-      d3.select("#hydrants").html(msg);
-
-    });
-}
-
-function getClosestLibrary(url, ll) {
-  d3.request(url)
-    .mimeType("application/json")
-    .response(function(xhr) {
-      return JSON.parse(xhr.responseText);
-    })
-    .get(function(data) {
-
-      var msg = "<p class='preamble'>Closest Library</p>";
-
-      var closest = getClosestItem(data.features, ll);
-
-      msg += "<p>" + closest.distance + " miles </p>";
-
-      d3.select("#libraries").html(msg);
-
-    });
-}
-
-function getClosestPark(url, ll) {
-  d3.request(url)
-    .mimeType("application/json")
-    .response(function(xhr) {
-      return JSON.parse(xhr.responseText);
-    })
-    .get(function(data) {
-
-      var msg = "<p class='preamble'>Closest Park</p>";
-
-      var closest = getClosestItem(data.features, ll);
-
-      msg += "<p>" + closest.distance + " miles </p>";
-
-      d3.select("#parks-closest").html(msg);
-
-    });
-}
-
-function getClosestNeighborhood(url, ll) {
-  d3.request(url)
-    .mimeType("application/json")
-    .response(function(xhr) {
-      return JSON.parse(xhr.responseText);
-    })
-    .get(function(data) {
-
-      var msg = "<p class='preamble'>Closest Neighborhod</p>";
-
-      var closest = getClosestItem(data.features, ll);
-
-      msg += "<p>" + closest.item[0].properties.NAME + " </p>";
-
-      d3.select("#neighborhoods").html(msg);
-
-    });
-}
-
-function getClosestRecCenter(url, ll) {
-  d3.request(url)
-    .mimeType("application/json")
-    .response(function(xhr) {
-      return JSON.parse(xhr.responseText);
-    })
-    .get(function(data) {
-
-      var msg = "<p class='preamble'>Closest Recreation Center</p>";
-
-      var closest = getClosestItem(data.features, ll);
-
-      msg += "<p>" + closest.distance + " miles </p>";
-
-      d3.select("#recCenters").html(msg);
 
     });
 }
@@ -220,7 +180,7 @@ function getFloodZone(url, ll) {
     });
 }
 
-function getParks(url, ll) {
+function getNearbyNeighborhoods(url, ll, d) {
   d3.request(url)
     .mimeType("application/json")
     .response(function(xhr) {
@@ -228,18 +188,39 @@ function getParks(url, ll) {
     })
     .get(function(data) {
 
-      var msg = "<p>Parks within 3 miles</p>";
+      var items = getItemsForFeatures(data.features, ll, d);
 
-      var z = getItemsForFeatures(data.features, ll, 3);
+      var msg = "";
+      $(items).each(function() {
+        var item = $(this);
+        msg += "<p>" + item[0].properties.NAME + " </p>";
+      })
 
-      msg += z;
+      d3.select("#nearby-neighborhoods").html(msg);
+
+    });
+}
+
+function getParks(url, ll, dist) {
+  d3.request(url)
+    .mimeType("application/json")
+    .response(function(xhr) {
+      return JSON.parse(xhr.responseText);
+    })
+    .get(function(data) {
+
+      var msg = "<p>Parks within 1 mile</p>";
+
+      var items = getItemsForFeatures(data.features, ll, dist);
+
+      msg += items.length;
 
       d3.select("#parks").html(msg);
 
     });
 }
 
-function getSchools(url, ll, type) {
+function getSchools(url, ll, dist, type) {
   d3.request(url)
     .mimeType("application/json")
     .response(function(xhr) {
@@ -249,9 +230,9 @@ function getSchools(url, ll, type) {
 
       var msg = "<p class='preamble'>" + type + "</p>";
 
-      var z = getItemsForFeatures(data.features, ll, 3);
+      var items = getItemsForFeatures(data.features, ll, dist);
 
-      msg += z;
+      msg += items.length;
 
       d3.select("#"+type).html(msg);
 
@@ -315,21 +296,31 @@ function getClosestItem(features, ll) {
 
 function getItemsForFeatures(features, ll, d) {
   var msg = "";
-  var count = 0;
-  $(features).each(function() {
+  var items = $(features).filter(function() {
     var f = $(this);
     //console.log(f[0]);
     if (f && f[0]) {
       var dist = d3.geoDistance(f[0].geometry.coordinates, ll);
       var max = d/3959;
       if (dist < max) {
-        ++count;
+        return f[0];
       }
     }
   });
-  msg += "<p>" + count + "</p>";
 
-  return msg;
+  // Filter only duplicates when .NAME property is the same, example neighborhoods are duplicated by diff lat/lon
+  var flags = {};
+  items = items.filter(function() {
+    var item = $(this);
+    //console.log(item);
+    if (flags[item[0].properties.NAME]) {
+        return false;
+    }
+    flags[item[0].properties.NAME] = true;
+    return true;
+  });
+
+  return items;
 }
 
 function checkFeaturesForAICUZNoiseLevel(features, ll) {
@@ -411,7 +402,7 @@ function checkFeaturesForFloodZone(features, ll) {
       if (d3.geoContains(f[0], ll)) {
         var fz = f[0].properties.FLD_ZONE;
         msg = "<p class=''>" + fz + "</p>";
-        console.log(fz);
+        console.log("Flood Zone: " + fz);
         switch (fz) {
           case "X": {
             msg += "<div class=''><p class=''>Flood insurance is</p><p>NOT REQUIRED</p></div>";
