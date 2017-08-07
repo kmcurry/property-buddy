@@ -437,4 +437,5 @@ function checkFeaturesForFloodZone(features, ll) {
 $(document).ready(function() {
   config = JSON.parse($("#config").val());
   getLocation();
+  $(document).tooltip();
 })
