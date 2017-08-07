@@ -11,12 +11,6 @@ app.set('view engine', 'pug');
 app.set('views', path.resolve('public/views'));
 
 app.get('/', function (req, res) {
-  res.render('index', {
-    config: JSON.stringify(config)
-  });
-});
-
-app.get('/iconic', function (req, res) {
   res.render('iconic', {
     config: JSON.stringify(config)
   });

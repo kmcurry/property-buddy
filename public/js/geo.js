@@ -343,46 +343,46 @@ function checkFeaturesForAICUZNoiseLevel(features, ll) {
 
   switch (lvl) {
     case 0: {
-      d3.select("#aicuz").classed("_0", true);
+      d3.select(".aicuz").classed("_0", true);
     }
     case 50:
       {
-        d3.select("#aicuz").classed("_50", true);
+        d3.select(".aicuz").classed("_50", true);
       }
       break;
     case 55:
       {
-        d3.select("#aicuz").classed("_55", true);
+        d3.select(".aicuz").classed("_55", true);
       }
       break;
     case 60:
       {
-        d3.select("#aicuz").classed("_60", true);
+        d3.select(".aicuz").classed("_60", true);
       }
       break;
     case 65:
       {
-        d3.select("#aicuz").classed("_65", true);
+        d3.select(".aicuz").classed("_65", true);
       }
       break;
     case 70:
       {
-        d3.select("#aicuz").classed("_70", true);
+        d3.select(".aicuz").classed("_70", true);
       }
       break;
     case 75:
       {
-        d3.select("#aicuz").classed("_75", true);
+        d3.select(".aicuz").classed("_75", true);
       }
       break;
     case 80:
       {
-        d3.select("#aicuz").classed("_80", true);
+        d3.select(".aicuz").classed("_80", true);
       }
       break;
     case 85:
       {
-        d3.select("#aicuz").classed("_85", true);
+        d3.select(".aicuz").classed("_85", true);
       }
       break;
   }
