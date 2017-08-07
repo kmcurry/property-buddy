@@ -92,7 +92,7 @@ head
           font-size: 60px !important;
           text-align: center;
         }
-        ._0 {
+        #AICUZ0 {
           display: none;
         }
     }
@@ -112,7 +112,7 @@ body
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           div(id="aicuz") ...
       div(class="row")
-        div(class="col-md-4 col-lg-4 _0")
+        div(id="AICUZ0" class="col-md-4 col-lg-4 _0")
           t 0
         div(class="col-xs-3 col-sm-3 col-md-1 col-lg-1 _50")
           t 50
@@ -134,7 +134,7 @@ body
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           <span class="fa fa-life-ring" aria-hidden="true"></span> Flood Zone
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
-          div(id="flood") ...
+          div(id="flood") ...(this can take some time)
     div(name="safety" id="safety")
       div(class="row ems")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
@@ -197,6 +197,7 @@ body
   script(src="//d3js.org/d3-request.v1.min.js")
   script(src="//d3js.org/d3-array.v1.min.js")
   script(src="//d3js.org/d3-geo.v1.min.js")
+  script(src="/bower_components/D.js/lib/D.min.js")
   script(src="/bower_components/jquery/dist/jquery.min.js")
   script(src="/bower_components/bootstrap/dist/js/bootstrap.min.js")
   script(src="/bower_components/jquery-ui/jquery-ui.min.js")
