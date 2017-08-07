@@ -16,6 +16,12 @@ app.get('/', function (req, res) {
   });
 });
 
+app.get('/iconic', function (req, res) {
+  res.render('iconic', {
+    config: JSON.stringify(config)
+  });
+});
+
 app.listen(process.env.PORT || 3000, function () {
   console.log('Example app listening on port 3000!');
 });

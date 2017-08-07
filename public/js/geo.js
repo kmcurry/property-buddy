@@ -33,8 +33,8 @@ function getFeaturesForLocation(position) {
     var features = mapData.features[0];
     if (d3.geoContains(features, ll)) {
       console.log("Location is VB");
-      var msg = "<p class='p-sm'>You are in Virginia Beach</p>";
-      d3.select("#location").html(msg);
+      var msg = "Virginia Beach";
+      d3.select("#city").html(msg);
       getAICUZ(config.VirginiaBeach.AICUZ, ll);
       getFloodZone(config.VirginiaBeach.FIRM, ll);
       getSchools(config.VirginiaBeach.schools.elementary, ll, 3, "Elementary");
@@ -75,11 +75,7 @@ function getAICUZ(url, ll) {
     })
     .get(function(data) {
 
-      var msg = "<p class='preamble'>AICUZ Noise Level</p>";
-
-      var z = checkFeaturesForAICUZNoiseLevel(data.features, ll);
-
-      msg += z;
+      var msg = checkFeaturesForAICUZNoiseLevel(data.features, ll);
 
       d3.select("#aicuz").html(msg);
 
@@ -101,12 +97,10 @@ function getAverageResponseTime(url, ll, d, type) {
 
       console.log("Response records: " + data.length);
 
-      var msg = "<p>1/4 Mile Avg Response<a title='Based on " + data.length + " records' href=''>*</a></p>";
-
-      var z = getAverageTime(data, ll);
+      var msg = getAverageTime(data, ll);
       //var z = "<p>" + data.length + "</p>";
 
-      msg += z;
+      msg += "<a title='1/4 Mile Avg response time based on " + data.length + " records' href=''>*</a>";
 
       d3.select("#"+type+"-response-avg").html(msg);
 
@@ -124,7 +118,7 @@ function getClosestThing(url, ll, thing) {
 
       var closest = getClosestItem(data.features, ll);
 
-      var msg = "<p>" + closest.distance + " miles </p>";
+      var msg = closest.distance + " miles";
 
       d3.select("#closest-"+thing).html(msg);
 
@@ -155,7 +149,7 @@ function getCountWithinDays(url, ll, dist, days, type) {
     })
     .get(function(data) {
 
-      var msg =  "<p>" + data.length + "</p>"
+      var msg =  data.length;
 
       console.log(type + " " + data.length);
 
@@ -171,7 +165,8 @@ function getFloodZone(url, ll) {
     L.esri.query({
       url: url
     }).intersects(LL).run(function(error, floodZones){
-      var msg = "<p class='preamble'>Flood Zone</p>";
+
+      var msg = "Zone ";
 
       msg += checkFeaturesForFloodZone(floodZones.features, ll);
 
@@ -191,10 +186,13 @@ function getNearbyNeighborhoods(url, ll, d) {
       var items = getItemsForFeatures(data.features, ll, d);
 
       var msg = "";
-      $(items).each(function() {
+      $(items).each(function(i) {
         var item = $(this);
-        msg += "<p>" + item[0].properties.NAME + " </p>";
-      })
+        msg += item[0].properties.NAME;
+        if (i < items.length-1) {
+          msg += ", ";
+        }
+      });
 
       d3.select("#nearby-neighborhoods").html(msg);
 
@@ -209,11 +207,9 @@ function getParks(url, ll, dist) {
     })
     .get(function(data) {
 
-      var msg = "<p>Parks within 1 mile</p>";
-
       var items = getItemsForFeatures(data.features, ll, dist);
 
-      msg += items.length;
+      var msg = items.length;
 
       d3.select("#parks").html(msg);
 
@@ -266,7 +262,7 @@ function getAverageTime(data) {
   avg = (avg/data.length)/1000/60;
   avg = avg.toFixed(2);
 
-  msg += "<p>" + avg + " minutes</p>";
+  msg += avg + " minutes";
 
   return msg;
 }
@@ -342,7 +338,7 @@ function checkFeaturesForAICUZNoiseLevel(features, ll) {
     }
   });
 
-  msg += "<p class='p-lg'>" + lvl + "</p>";
+  msg += lvl;
 
 
   switch (lvl) {
@@ -395,17 +391,17 @@ function checkFeaturesForAICUZNoiseLevel(features, ll) {
 }
 
 function checkFeaturesForFloodZone(features, ll) {
-  var msg = "<p class='flood'>You are not in any flood zone</p>";;
+  var msg = "You are not in any flood zone";;
   $(features).each(function() {
     var f = $(this);
     if (f && f[0]) {
       if (d3.geoContains(f[0], ll)) {
         var fz = f[0].properties.FLD_ZONE;
-        msg = "<p class=''>" + fz + "</p>";
+        msg = fz;
         console.log("Flood Zone: " + fz);
         switch (fz) {
           case "X": {
-            msg += "<div class=''><p class=''>Flood insurance is</p><p>NOT REQUIRED</p></div>";
+            msg += " Insurance is NOT REQUIRED";
           }
           break;
           case "A":
@@ -413,15 +409,14 @@ function checkFeaturesForFloodZone(features, ll) {
           case "AH":
           case "AO":
           case "AR": {
-            msg += "<div class='alert-warning'><p class=''>Flood insurance</p><p>IS REQUIRED</p></div>";
+            msg += " Insurance IS REQUIRED";
           }
           break;
           default: {
             if (fz.indexOf("0.2") !== -1) {
-              msg = "<p class='p-sm'>" + fz + "</p>";
-              msg += "<div class=''><p class=''>Flood insurance is NOT REQUIRED.</p></div>"
+              msg += " Insurance is NOT REQUIRED"
             } else {
-              msg += "<div class=''><p class=''>Your flood zone could not be determined</p></div>";
+              msg += " Your flood zone could not be determined";
             }
           }
           break;
