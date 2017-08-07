@@ -168,9 +168,20 @@ function getFloodZone(url, ll) {
 
       var msg = "Zone ";
 
-      msg += checkFeaturesForFloodZone(floodZones.features, ll);
+      checkFeaturesForFloodZone(floodZones.features, ll).then(
+    		function(data) {
+          console.log(data);
+          msg += data;
+          d3.select("#flood").html(msg);
+        }
+    		,function(err) {
+          console.log(err);
+          d3.select("#flood").html(err.message);
+        }
+    	);
 
-      d3.select("#flood").html(msg);
+      d3.select("#flood").html("Still searching. (This is taking a bit longer than usual.)");
+      
 
     });
 }
@@ -391,8 +402,12 @@ function checkFeaturesForAICUZNoiseLevel(features, ll) {
 }
 
 function checkFeaturesForFloodZone(features, ll) {
-  var msg = "You are not in any flood zone";;
-  $(features).each(function() {
+
+  var deferred = D();
+
+  var msg = "";
+
+  $(features).each(function(i) {
     var f = $(this);
     if (f && f[0]) {
       if (d3.geoContains(f[0], ll)) {
@@ -422,11 +437,14 @@ function checkFeaturesForFloodZone(features, ll) {
           break;
         }
 
-        return;
+        deferred.resolve(msg);
+      } else if (i == features.length-1) {
+        deferred.resolve(msg);
       }
     }
   });
-  return msg;
+
+  return deferred.promise;
 }
 
 $(document).ready(function() {
