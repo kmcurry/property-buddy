@@ -181,7 +181,7 @@ function getFloodZone(url, ll) {
     	);
 
       d3.select("#flood").html("Still searching. (This is taking a bit longer than usual.)");
-      
+
 
     });
 }
