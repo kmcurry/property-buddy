@@ -8,7 +8,9 @@
   "dependencies": {
     "angular-template": "^2.0.13",
     "bower": "latest",
+    "chai": "^4.1.1",
     "express": "^4.15.3",
+    "lodash": "^4.17.4",
     "pug": "^2.0.0-rc.2"
   },
   "scripts": {
