@@ -32,7 +32,10 @@ config.VirginiaBeach.schools = {
   high: "https://gis-vbgov.opendata.arcgis.com/datasets/4ee34e8a8aea431ea329743a71c2fd61_3.geojson"
 };
 
-config.VirginiaBeach.EMSCalls = "https://data.vbgov.com/resource/q2jp-nt6m.json";
+config.VirginiaBeach.emergency = {
+  calls: "https://data.vbgov.com/resource/q2jp-nt6m.json"
+};
+
 config.VirginiaBeach.police = {
     calls: "https://data.vbgov.com/resource/rqn2-9am9.json",
     incidents: "https://data.vbgov.com/resource/r37t-tt64.json"
