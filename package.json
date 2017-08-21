@@ -7,6 +7,7 @@
   "devDependencies": {},
   "dependencies": {
     "angular-template": "^2.0.13",
+    "body-parser": "^1.17.2",
     "bower": "latest",
     "chai": "^4.1.1",
     "express": "^4.15.3",

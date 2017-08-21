@@ -1,12 +1,19 @@
 var config = {};
+var searchPosition = [];
 
 function getFeaturesForLocation(position) {
 
   console.log("Checking features for position:");
   console.log(position);
 
+  var ll = null;
+
   // LON LAT unless locally manipulated b/c D3 is LON LAT
-  var ll = [position.coords.longitude, position.coords.latitude];
+  if (position.coords) {
+    ll = [position.coords.longitude, position.coords.latitude];
+  } else {
+    ll = [position[1], position[0]];
+  }
 
   d3.json(config.Norfolk.boundary, function(error, mapData) {
     console.log("Checking " + ll + " in NFK");
@@ -58,15 +65,6 @@ function getFeaturesForLocation(position) {
 
 }
 
-function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(getFeaturesForLocation);
-  } else {
-    d3.select("body").append("span")
-      .text("Geolocation is not supported by this browser.");
-  }
-}
-
 function getAICUZ(url, ll) {
   d3.request(url)
     .mimeType("application/json")
@@ -102,7 +100,7 @@ function getAverageResponseTime(url, ll, d, type) {
 
       msg += "<a title='1/4 Mile Avg response time based on " + data.length + " records' href=''>*</a>";
 
-      d3.select("#"+type+"-response-avg").html(msg);
+      d3.select("#" + type + "-response-avg").html(msg);
 
     });
 
@@ -120,7 +118,7 @@ function getClosestThing(url, ll, thing) {
 
       var msg = closest.distance + " miles";
 
-      d3.select("#closest-"+thing).html(msg);
+      d3.select("#closest-" + thing).html(msg);
 
     });
 }
@@ -129,7 +127,7 @@ function getCountWithinDays(url, ll, dist, days, type) {
   dist = dist * 1609.35;
 
   var checkDate = new Date();
-  checkDate = new Date(checkDate.setDate(checkDate.getDate()-days)).toISOString();
+  checkDate = new Date(checkDate.setDate(checkDate.getDate() - days)).toISOString();
   checkDate = checkDate.toString().substring(0, checkDate.lastIndexOf('Z'));
 
   var dateField = "";
@@ -149,41 +147,41 @@ function getCountWithinDays(url, ll, dist, days, type) {
     })
     .get(function(data) {
 
-      var msg =  data.length;
+      var msg = data.length + " last " + days + " days";
 
       console.log(type + " " + data.length);
 
-      d3.select("#"+type).html(msg);
+      d3.select("#" + type).html(msg);
 
     });
 }
 
 // TODO: update from 2009 to 2015. Something wrong with the 2015 API
 function getFloodZone(url, ll) {
-  var LL = L.latLng(ll[1],ll[0]);
+  var LL = L.latLng(ll[1], ll[0]);
   // use location to find out which census block they are inside.
-    L.esri.query({
-      url: url
-    }).intersects(LL).run(function(error, floodZones){
+  L.esri.query({
+    url: url
+  }).intersects(LL).run(function(error, floodZones) {
 
-      var msg = "Zone ";
+    var msg = "Zone ";
 
-      checkFeaturesForFloodZone(floodZones.features, ll).then(
-    		function(data) {
-          console.log(data);
-          msg += data;
-          d3.select("#flood").html(msg);
-        }
-    		,function(err) {
-          console.log(err);
-          d3.select("#flood").html(err.message);
-        }
-    	);
+    checkFeaturesForFloodZone(floodZones.features, ll).then(
+      function(data) {
+        console.log(data);
+        msg += data;
+        d3.select("#flood").html(msg);
+      },
+      function(err) {
+        console.log(err);
+        d3.select("#flood").html(err.message);
+      }
+    );
 
-      d3.select("#flood").html("Still searching. (This is taking a bit longer than usual.)");
+    d3.select("#flood").html("Still searching. (This is taking a bit longer than usual.)");
 
 
-    });
+  });
 }
 
 function getNearbyNeighborhoods(url, ll, d) {
@@ -200,7 +198,7 @@ function getNearbyNeighborhoods(url, ll, d) {
       $(items).each(function(i) {
         var item = $(this);
         msg += item[0].properties.NAME;
-        if (i < items.length-1) {
+        if (i < items.length - 1) {
           msg += ", ";
         }
       });
@@ -241,7 +239,7 @@ function getSchools(url, ll, dist, type) {
 
       msg += items.length;
 
-      d3.select("#"+type).html(msg);
+      d3.select("#" + type).html(msg);
 
     });
 }
@@ -270,7 +268,7 @@ function getAverageTime(data) {
     }
   });
 
-  avg = (avg/data.length)/1000/60;
+  avg = (avg / data.length) / 1000 / 60;
   avg = avg.toFixed(2);
 
   msg += avg + " minutes";
@@ -295,7 +293,7 @@ function getClosestItem(features, ll) {
       }
     }
   });
-  closest.distance = parseFloat(closest.distance)*3959;
+  closest.distance = parseFloat(closest.distance) * 3959;
   closest.distance = closest.distance.toFixed(2);
 
   return closest;
@@ -308,7 +306,7 @@ function getItemsForFeatures(features, ll, d) {
     //console.log(f[0]);
     if (f && f[0]) {
       var dist = d3.geoDistance(f[0].geometry.coordinates, ll);
-      var max = d/3959;
+      var max = d / 3959;
       if (dist < max) {
         return f[0];
       }
@@ -321,7 +319,7 @@ function getItemsForFeatures(features, ll, d) {
     var item = $(this);
     //console.log(item);
     if (flags[item[0].properties.NAME]) {
-        return false;
+      return false;
     }
     flags[item[0].properties.NAME] = true;
     return true;
@@ -353,9 +351,10 @@ function checkFeaturesForAICUZNoiseLevel(features, ll) {
 
 
   switch (lvl) {
-    case 0: {
-      d3.select(".aicuz").classed("_0", true);
-    }
+    case 0:
+      {
+        d3.select(".aicuz").classed("_0", true);
+      }
     case 50:
       {
         d3.select(".aicuz").classed("_50", true);
@@ -415,30 +414,33 @@ function checkFeaturesForFloodZone(features, ll) {
         msg = fz;
         console.log("Flood Zone: " + fz);
         switch (fz) {
-          case "X": {
-            msg += " Insurance is NOT REQUIRED";
-          }
-          break;
+          case "X":
+            {
+              msg += " Insurance is NOT REQUIRED";
+            }
+            break;
           case "A":
           case "AE":
           case "AH":
           case "AO":
-          case "AR": {
-            msg += " Insurance IS REQUIRED";
-          }
-          break;
-          default: {
-            if (fz.indexOf("0.2") !== -1) {
-              msg += " Insurance is NOT REQUIRED"
-            } else {
-              msg += " Your flood zone could not be determined";
+          case "AR":
+            {
+              msg += " Insurance IS REQUIRED";
             }
-          }
-          break;
+            break;
+          default:
+            {
+              if (fz.indexOf("0.2") !== -1) {
+                msg += " Insurance is NOT REQUIRED"
+              } else {
+                msg += " Your flood zone could not be determined";
+              }
+            }
+            break;
         }
 
         deferred.resolve(msg);
-      } else if (i == features.length-1) {
+      } else if (i == features.length - 1) {
         deferred.resolve(msg);
       }
     }
@@ -448,7 +450,13 @@ function checkFeaturesForFloodZone(features, ll) {
 }
 
 $(document).ready(function() {
-  config = JSON.parse($("#config").val());
-  getLocation();
+  config = $("#config").val();
+  config = JSON.parse(config);
+  //console.log(config);
+  searchPosition = $("#searchPosition").val();
+  //console.log(searchPosition);
+  searchPosition = searchPosition.split(',');
+  console.log(searchPosition);
+  getFeaturesForLocation(searchPosition);
   $(document).tooltip();
 })
