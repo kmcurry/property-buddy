@@ -22,14 +22,14 @@ function getFeaturesForLocation(position) {
       console.log("Location is NFK");
       var msg = "<p class='p-sm'>You are in Norfolk</p>";
       d3.select("#location").html(msg);
-      getAICUZ(config.Norfolk.AICUZ, ll, "NFK");
+      getAICUZ(config.Norfolk.AICUZ, ll);
       getFloodZone(config.Norfolk.FIRM, ll);
       getParks(config.Norfolk.parks, ll, 1);
-      getClosestPark(config.Norfolk.parks, ll);
-      getClosestLibrary(config.Norfolk.libraries, ll);
-      getClosestHydrant(config.Norfolk.hydrants, ll);
-      getClosestRecCenter(config.Norfolk.recCenters, ll);
-      //getClosestNeighborhood(config.Norfolk.neighborhoods, ll);
+      getClosestThing(config.Norfolk.parks, ll, "park");
+      getClosestThing(config.Norfolk.libraries, ll, "library");
+      getClosestThing(config.Norfolk.hydrants, ll, "hydrant", "feet");
+      getClosestThing(config.Norfolk.recCenters, ll, "recCenter");
+      getNearbyNeighborhoods(config.Norfolk.neighborhoods, ll, 1, "neighborhoods")
     } else {
       console.log("Location is not in NFK")
     }
@@ -50,10 +50,10 @@ function getFeaturesForLocation(position) {
       getParks(config.VirginiaBeach.parks, ll, 1);
       getClosestThing(config.VirginiaBeach.parks, ll, "park");
       getClosestThing(config.VirginiaBeach.libraries, ll, "library");
-      getClosestThing(config.VirginiaBeach.hydrants, ll, "hydrant");
+      getClosestThing(config.VirginiaBeach.hydrants, ll, "hydrant", "feet");
       getClosestThing(config.VirginiaBeach.recCenters, ll, "recCenter");
       getNearbyNeighborhoods(config.VirginiaBeach.neighborhoods, ll, 1, "neighborhoods")
-      getAverageResponseTime(config.VirginiaBeach.EMSCalls, ll, .25, "ems");
+      getAverageResponseTime(config.VirginiaBeach.emergency.calls, ll, .25, "ems");
       getAverageResponseTime(config.VirginiaBeach.police.calls, ll, .25, "police");
       getCountWithinDays(config.VirginiaBeach.police.incidents, ll, 1, 30, "police-incidents");
       getCountWithinDays(config.VirginiaBeach.police.calls, ll, 1, 30, "police-calls");
@@ -106,7 +106,7 @@ function getAverageResponseTime(url, ll, d, type) {
 
 }
 
-function getClosestThing(url, ll, thing) {
+function getClosestThing(url, ll, thing, units) {
   d3.request(url)
     .mimeType("application/json")
     .response(function(xhr) {
@@ -116,7 +116,18 @@ function getClosestThing(url, ll, thing) {
 
       var closest = getClosestItem(data.features, ll);
 
-      var msg = closest.distance + " miles";
+      var msg = "";
+
+      switch (units) {
+        case "feet": {
+          msg = closest.distance * 5280 + " feet";
+        }
+        break;
+        default: {
+          msg = closest.distance + " miles";
+        }
+      }
+
 
       d3.select("#closest-" + thing).html(msg);
 
