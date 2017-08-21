@@ -14,7 +14,10 @@ head
     .p-lg {
       font-size: 56px;
     }
-body(style="margin-top:200px;")
+    .title {
+      font-size: 90px;
+    }
+body(style="margin-top:20px;")
   div(class="container")
     div(class="row")
       div(class="col-md-2 col-lg-2")
@@ -22,6 +25,7 @@ body(style="margin-top:200px;")
         form(id="form")
           div(id="locationField")
             center
+              h1(class="title") Property Buddy
               input(id="autocomplete" name="address" class="p-lg" placeholder="Enter any address" onFocus="geolocate()" type="text")
               button(type="submit" class="btn btn-lg btn-primary p-lg" style="margin-top:10px" onclick="go()") Submit
               p(class="p-lg") or
