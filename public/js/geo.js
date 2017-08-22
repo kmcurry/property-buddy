@@ -15,6 +15,8 @@ function getFeaturesForLocation(position) {
     ll = [position[1], position[0]];
   }
 
+  // TODO: Don't need to check the city again if form was used
+
   d3.json(config.Norfolk.boundary, function(error, mapData) {
     console.log("Checking " + ll + " in NFK");
     var features = mapData.features[0];
@@ -24,12 +26,19 @@ function getFeaturesForLocation(position) {
       d3.select("#location").html(msg);
       getAICUZ(config.Norfolk.AICUZ, ll);
       getFloodZone(config.Norfolk.FIRM, ll);
+      // getSchools(config.VirginiaBeach.schools.elementary, ll, 3, "Elementary");
+      // getSchools(config.VirginiaBeach.schools.middle, ll, 3, "Middle");
+      // getSchools(config.VirginiaBeach.schools.high, ll, 3, "High");
       getParks(config.Norfolk.parks, ll, 1);
       getClosestThing(config.Norfolk.parks, ll, "park");
       getClosestThing(config.Norfolk.libraries, ll, "library");
       getClosestThing(config.Norfolk.hydrants, ll, "hydrant", "feet");
       getClosestThing(config.Norfolk.recCenters, ll, "recCenter");
       getNearbyNeighborhoods(config.Norfolk.neighborhoods, ll, 1, "neighborhoods")
+      getAverageResponseTime(config.Norfolk.emergency.calls, ll, .25, "ems");
+      getAverageResponseTime(config.Norfolk.police.calls, ll, .25, "police");
+      getCountWithinDays(config.Norfolk.police.incidents, ll, 1, 30, "police-incidents");
+      getCountWithinDays(config.Norfolk.police.calls, ll, 1, 30, "police-calls");
     } else {
       console.log("Location is not in NFK")
     }
@@ -44,9 +53,9 @@ function getFeaturesForLocation(position) {
       d3.select("#city").html(msg);
       getAICUZ(config.VirginiaBeach.AICUZ, ll);
       getFloodZone(config.VirginiaBeach.FIRM, ll);
-      getSchools(config.VirginiaBeach.schools.elementary, ll, 3, "Elementary");
-      getSchools(config.VirginiaBeach.schools.middle, ll, 3, "Middle");
-      getSchools(config.VirginiaBeach.schools.high, ll, 3, "High");
+      // getSchools(config.VirginiaBeach.schools.elementary, ll, 3, "Elementary");
+      // getSchools(config.VirginiaBeach.schools.middle, ll, 3, "Middle");
+      // getSchools(config.VirginiaBeach.schools.high, ll, 3, "High");
       getParks(config.VirginiaBeach.parks, ll, 1);
       getClosestThing(config.VirginiaBeach.parks, ll, "park");
       getClosestThing(config.VirginiaBeach.libraries, ll, "library");
@@ -73,7 +82,12 @@ function getAICUZ(url, ll) {
     })
     .get(function(data) {
 
-      var msg = checkFeaturesForAICUZNoiseLevel(data.features, ll);
+      var msg = "";
+      if (data) {
+        msg = checkFeaturesForAICUZNoiseLevel(data.features, ll);
+      } else {
+          msg = "No data. Please refresh the page.";
+      }
 
       d3.select("#aicuz").html(msg);
 
@@ -107,6 +121,11 @@ function getAverageResponseTime(url, ll, d, type) {
 }
 
 function getClosestThing(url, ll, thing, units) {
+  if (!url) {
+    d3.select("#closest-" + thing).html("Needs data source");
+    return;
+  }
+
   d3.request(url)
     .mimeType("application/json")
     .response(function(xhr) {
@@ -120,7 +139,7 @@ function getClosestThing(url, ll, thing, units) {
 
       switch (units) {
         case "feet": {
-          msg = closest.distance * 5280 + " feet";
+          msg = parseInt(closest.distance * 5280) + " feet";
         }
         break;
         default: {
@@ -175,7 +194,7 @@ function getFloodZone(url, ll) {
     url: url
   }).intersects(LL).run(function(error, floodZones) {
 
-    var msg = "Zone ";
+    var msg = "";
 
     checkFeaturesForFloodZone(floodZones.features, ll).then(
       function(data) {
@@ -208,7 +227,14 @@ function getNearbyNeighborhoods(url, ll, d) {
       var msg = "";
       $(items).each(function(i) {
         var item = $(this);
-        msg += item[0].properties.NAME;
+        if (item[0].properties.NAME) {
+          msg += item[0].properties.NAME;
+        } else if (item[0].properties.name) {
+          msg += item[0].properties.name;
+        } else {
+          msg += "Could not locate name field."
+        }
+
         if (i < items.length - 1) {
           msg += ", ";
         }
@@ -467,7 +493,6 @@ $(document).ready(function() {
   searchPosition = $("#searchPosition").val();
   //console.log(searchPosition);
   searchPosition = searchPosition.split(',');
-  console.log(searchPosition);
   getFeaturesForLocation(searchPosition);
   $(document).tooltip();
 })

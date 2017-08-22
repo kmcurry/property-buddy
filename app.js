@@ -1,7 +1,7 @@
 var path = require('path'),
   bodyParser = require('body-parser'),
   express = require('express'),
-  config = require('./config');
+  config = require('./sources/config');
 
 var app = express();
 
@@ -22,7 +22,7 @@ app.get('/', function(req, res) {
 app.get('/search/:loc', function(req, res) {
   var position = null;
   if (req.params.loc) {
-    // verify min format
+    // verify min format, i.e., comma separated values
     position = req.params.loc.split(',');
   }
   res.render('default', {

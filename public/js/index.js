@@ -28,10 +28,10 @@ function initAutocomplete() {
 
   // When the user selects an address from the dropdown, populate the address
   // fields in the form.
-  autocomplete.addListener('place_changed', fillInAddress);
+  autocomplete.addListener('place_changed', searchPlace);
 }
 
-function fillInAddress() {
+function searchPlace() {
   // Get the place details from the autocomplete object.
   var place = autocomplete.getPlace();
   if (place.geometry) {
