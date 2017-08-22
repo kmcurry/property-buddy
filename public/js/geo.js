@@ -16,7 +16,7 @@ function getFeaturesForLocation(position) {
   }
 
   // TODO: Don't need to check the city again if form was used
-
+  // TODO: Stop brute-force checking every city
   d3.json(config.Norfolk.boundary, function(error, mapData) {
     console.log("Checking in NFK");
     var features = mapData.features[0];
@@ -26,9 +26,9 @@ function getFeaturesForLocation(position) {
       d3.select("#location").html(msg);
       getAICUZ(config.Norfolk.AICUZ, ll);
       getFloodZone(config.Norfolk.FIRM, ll);
-      // getSchools(config.VirginiaBeach.schools.elementary, ll, 3, "Elementary");
-      // getSchools(config.VirginiaBeach.schools.middle, ll, 3, "Middle");
-      // getSchools(config.VirginiaBeach.schools.high, ll, 3, "High");
+      // getSchools(config.Norfolk.schools.elementary, ll, 3, "Elementary");
+      // getSchools(config.Norfolk.schools.middle, ll, 3, "Middle");
+      // getSchools(config.Norfolk.schools.high, ll, 3, "High");
       getParks(config.Norfolk.parks, ll, 1);
       getClosestThing(config.Norfolk.parks, ll, "park");
       getClosestThing(config.Norfolk.libraries, ll, "library");
@@ -81,9 +81,9 @@ function getFeaturesForLocation(position) {
       d3.select("#city").html(msg);
       getAICUZ(config.Chesapeake.AICUZ, ll);
       getFloodZone(config.Chesapeake.FIRM, ll);
-      // getSchools(config.VirginiaBeach.schools.elementary, ll, 3, "Elementary");
-      // getSchools(config.VirginiaBeach.schools.middle, ll, 3, "Middle");
-      // getSchools(config.VirginiaBeach.schools.high, ll, 3, "High");
+      // getSchools(config.Chesapeake.schools.elementary, ll, 3, "Elementary");
+      // getSchools(config.Chesapeake.schools.middle, ll, 3, "Middle");
+      // getSchools(config.Chesapeake.schools.high, ll, 3, "High");
       getParks(config.Chesapeake.parks, ll, 1);
       getClosestThing(config.Chesapeake.parks, ll, "park");
       getClosestThing(config.Chesapeake.libraries, ll, "library");
@@ -99,12 +99,39 @@ function getFeaturesForLocation(position) {
     }
   });
 
+  d3.json(config.FallsChurch.boundary, function(error, mapData) {
+    console.log("Checking in Falls Church");
+    var features = mapData.features[0];
+    if (d3.geoContains(features, ll)) {
+      console.log("Location is Falls Church");
+      var msg = "Falls Church";
+      d3.select("#city").html(msg);
+      getAICUZ(config.FallsChurch.AICUZ, ll);
+      getFloodZone(config.FallsChurch.FIRM, ll);
+      // getSchools(config.FallsChurch.schools.elementary, ll, 3, "Elementary");
+      // getSchools(config.FallsChurch.schools.middle, ll, 3, "Middle");
+      // getSchools(config.FallsChurch.schools.high, ll, 3, "High");
+      getParks(config.FallsChurch.parks, ll, 1);
+      getClosestThing(config.FallsChurch.parks, ll, "park");
+      getClosestThing(config.FallsChurch.libraries, ll, "library");
+      getClosestThing(config.FallsChurch.hydrants, ll, "hydrant", "feet");
+      getClosestThing(config.FallsChurch.recCenters, ll, "recCenter");
+      getNearbyNeighborhoods(config.FallsChurch.neighborhoods, ll, 1, "neighborhoods")
+      getAverageResponseTime(config.FallsChurch.emergency.calls, ll, .25, "ems");
+      getAverageResponseTime(config.FallsChurch.police.calls, ll, .25, "police");
+      getCountWithinDays(config.FallsChurch.police.incidents, ll, 1, 30, "police-incidents");
+      getCountWithinDays(config.FallsChurch.police.calls, ll, 1, 30, "police-calls");
+    } else {
+      console.log("Location is not in Chesapeake");
+    }
+  });
+
 }
 
 function getAICUZ(url, ll) {
 
   if (!url || url == "") {
-    d3.select("#aicuz-" + thing).html("Needs data source");
+    d3.select("#aicuz").html("Needs data source");
     return;
   }
 

@@ -1,6 +1,7 @@
 var config = {};
 
 config.Chesapeake = {};
+config.FallsChurch = {};
 config.Norfolk = {};
 config.VirginiaBeach = {};
 
@@ -32,6 +33,35 @@ config.Chesapeake.police = {
     calls: "",
     incidents: ""
 };
+
+config.FallsChurch.boundary = "https://maps-fallschurch.opendata.arcgis.com/datasets/a5ad578107894319b75c8ea00fe0a987_0.geojson";
+config.FallsChurch.AICUZ = "";
+config.FallsChurch.FIRM = "";
+config.FallsChurch.hospitals = "";
+config.FallsChurch.hydrants = "";
+config.FallsChurch.libraries = "";
+
+config.FallsChurch.neighborhoods = "";
+
+config.FallsChurch.parks = "https://maps-fallschurch.opendata.arcgis.com/datasets/83b0e306cfc447a19752cd391e17b348_0.geojson";
+config.FallsChurch.recCenters = "";
+
+// TODO: handle diff btwn NFK & VB
+config.FallsChurch.schools = {
+  elementary: "",
+  middle: "",
+  high: ""
+};
+
+config.FallsChurch.emergency = {
+  calls: ""
+};
+
+config.FallsChurch.police = {
+    calls: "",
+    incidents: ""
+};
+
 
 config.Norfolk.boundary = "https://data-orf.opendata.arcgis.com/datasets/5fcd6cdbd5a84e0fae5db8c35465ad54_2.geojson";
 config.Norfolk.AICUZ = "https://data-orf.opendata.arcgis.com/datasets/c8de1a1f81e14eacbe381ae342318031_8.geojson";
