@@ -74,7 +74,7 @@ config.Norfolk.libraries = "https://data-orf.opendata.arcgis.com/datasets/0c8de8
 config.Norfolk.neighborhoods = "https://raw.githubusercontent.com/blackmad/neighborhoods/master/norfolk.geojson";
 
 config.Norfolk.parks = "https://data-orf.opendata.arcgis.com/datasets/fcaa90ef89de4e17bb2b958915d88ab3_1.geojson";
-config.Norfolk.recCenters = "http://data-orf.opendata.arcgis.com/datasets/fcaa90ef89de4e17bb2b958915d88ab3_0.geojson";
+config.Norfolk.recCenters = "https://data-orf.opendata.arcgis.com/datasets/fcaa90ef89de4e17bb2b958915d88ab3_0.geojson";
 
 // TODO: handle diff btwn NFK & VB
 config.Norfolk.schools = {
