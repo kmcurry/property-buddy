@@ -11,11 +11,11 @@ config.Chesapeake.hospitals = "";
 config.Chesapeake.hydrants = "";
 config.Chesapeake.libraries = "";
 
-// THIRD PARTY
 config.Chesapeake.neighborhoods = "https://public-chesva.opendata.arcgis.com/datasets/e8a4bed38fdf403ca5479779884aadc2_3.geojson";
 
-config.Chesapeake.parks = "";
+config.Chesapeake.parks = "https://public-chesva.opendata.arcgis.com/datasets/e77a9aa5e12a4194b15ae6cb6dadc578_14.geojson";
 config.Chesapeake.recCenters = "";
+config.Chesapeake.waterBodies = "https://public-chesva.opendata.arcgis.com/datasets/98a64c1c912c4be6b27156232334b366_4.geojson";
 
 // TODO: handle diff btwn NFK & VB
 config.Chesapeake.schools = {
