@@ -1,12 +1,42 @@
 var config = {};
 
+config.Chesapeake = {};
 config.Norfolk = {};
 config.VirginiaBeach = {};
+
+config.Chesapeake.boundary = "https://public-chesva.opendata.arcgis.com/datasets/e68ee91297f448188ec30034b1ac27be_31.geojson";
+config.Chesapeake.AICUZ = "https://public-chesva.opendata.arcgis.com/datasets/77ba67c5fbc84d40a5002e3e02d046cb_3.geojson";
+config.Chesapeake.FIRM = "";
+config.Chesapeake.hospitals = "";
+config.Chesapeake.hydrants = "";
+config.Chesapeake.libraries = "";
+
+// THIRD PARTY
+config.Chesapeake.neighborhoods = "https://public-chesva.opendata.arcgis.com/datasets/e8a4bed38fdf403ca5479779884aadc2_3.geojson";
+
+config.Chesapeake.parks = "";
+config.Chesapeake.recCenters = "";
+
+// TODO: handle diff btwn NFK & VB
+config.Chesapeake.schools = {
+  elementary: "",
+  middle: "",
+  high: ""
+};
+
+config.Chesapeake.emergency = {
+  calls: ""
+};
+
+config.Chesapeake.police = {
+    calls: "",
+    incidents: ""
+};
 
 config.Norfolk.boundary = "https://data-orf.opendata.arcgis.com/datasets/5fcd6cdbd5a84e0fae5db8c35465ad54_2.geojson";
 config.Norfolk.AICUZ = "https://data-orf.opendata.arcgis.com/datasets/c8de1a1f81e14eacbe381ae342318031_8.geojson";
 config.Norfolk.FIRM = "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/1";
-config.Norfolk.hospitals = "http://data-orf.opendata.arcgis.com/datasets/77a29d702d1b416fa1e4ffe0d52e6cac_0.geojson";
+config.Norfolk.hospitals = "https://data-orf.opendata.arcgis.com/datasets/77a29d702d1b416fa1e4ffe0d52e6cac_0.geojson";
 config.Norfolk.hydrants = "";
 config.Norfolk.libraries = "https://data-orf.opendata.arcgis.com/datasets/0c8de8e20bba46a283bb1062f276fe33_4.geojson";
 
