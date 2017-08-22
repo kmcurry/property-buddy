@@ -35,7 +35,6 @@ function searchPlace() {
   // Get the place details from the autocomplete object.
   var place = autocomplete.getPlace();
   if (place.geometry) {
-    console.log(place);
     var pos = [2];
     pos[0] = place.geometry.location.lat();
     pos[1] = place.geometry.location.lng();
