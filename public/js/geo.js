@@ -18,7 +18,7 @@ function getFeaturesForLocation(position) {
   // TODO: Don't need to check the city again if form was used
 
   d3.json(config.Norfolk.boundary, function(error, mapData) {
-    console.log("Checking " + ll + " in NFK");
+    console.log("Checking in NFK");
     var features = mapData.features[0];
     if (d3.geoContains(features, ll)) {
       console.log("Location is NFK");
@@ -45,7 +45,7 @@ function getFeaturesForLocation(position) {
   });
 
   d3.json(config.VirginiaBeach.boundary, function(error, mapData) {
-    console.log("Checking " + ll + " in VB");
+    console.log("Checking in VB");
     var features = mapData.features[0];
     if (d3.geoContains(features, ll)) {
       console.log("Location is VB");
@@ -73,7 +73,7 @@ function getFeaturesForLocation(position) {
   });
 
   d3.json(config.Chesapeake.boundary, function(error, mapData) {
-    console.log("Checking " + ll + " in Chesapeake");
+    console.log("Checking in Chesapeake");
     var features = mapData.features[0];
     if (d3.geoContains(features, ll)) {
       console.log("Location is Chesapeake");
@@ -171,11 +171,16 @@ function getClosestThing(url, ll, thing, units) {
     })
     .get(function(data) {
 
+      if (!data || !data.features) {
+        d3.select("#closest-" + thing).html("No data returned");
+        return;
+      }
+
       var closest = getClosestItem(data.features, ll);
 
       var msg = "";
 
-      if (parseInt(closest.distance) === 9999) {
+      if (!closest.item || parseInt(closest.distance) === 9999) {
         msg = "None";
       } else {
         switch (units) {
@@ -286,8 +291,12 @@ function getNearbyNeighborhoods(url, ll, d) {
         var item = $(this);
         if (item[0].properties.NAME) {
           msg += item[0].properties.NAME;
+        } else if (item[0].properties.Name) {
+          msg += item[0].properties.Name;
         } else if (item[0].properties.name) {
           msg += item[0].properties.name;
+        } else if (item[0].properties.NBRHD_NAME) {
+          msg += item[0].properties.NBRHD_NAME;
         } else {
           msg += "Could not locate name field."
         }
@@ -314,6 +323,11 @@ function getParks(url, ll, dist) {
       return JSON.parse(xhr.responseText);
     })
     .get(function(data) {
+
+      if (!data || !data.features) {
+        d3.select("#parks").html("No data returned!");
+        return;
+      }
 
       var items = getItemsForFeatures(data.features, ll, dist);
 
@@ -390,7 +404,17 @@ function getClosestItem(features, ll) {
     var f = $(this);
     //console.log(f[0]);
     if (f && f[0]) {
-      var dist = d3.geoDistance(f[0].geometry.coordinates, ll);
+      var coords = null;
+      if (f[0].geometry.coordinates[0].length) {
+        if (f[0].geometry.coordinates[0][0].length) {
+          coords = f[0].geometry.coordinates[0][0][0];
+        } else {
+          coords = f[0].geometry.coordinates[0][0];
+        }
+      } else {
+        coords = f[0].geometry.coordinates;
+      }
+      var dist = d3.geoDistance(coords, ll);
       if (dist < closest.distance) {
         closest.distance = dist;
         closest.item = f;
@@ -405,28 +429,68 @@ function getClosestItem(features, ll) {
 
 function getItemsForFeatures(features, ll, d) {
   var msg = "";
+
   var items = $(features).filter(function() {
     var f = $(this);
-    //console.log(f[0]);
     if (f && f[0]) {
-      var dist = d3.geoDistance(f[0].geometry.coordinates, ll);
+      var coords = null;
+      if (f[0].geometry.coordinates[0].length) {
+        if (f[0].geometry.coordinates[0][0].length) {
+          coords = f[0].geometry.coordinates[0][0][0];
+        } else {
+          coords = f[0].geometry.coordinates[0][0];
+        }
+      } else {
+        coords = f[0].geometry.coordinates;
+      }
+      var dist = d3.geoDistance(coords, ll);
       var max = d / 3959;
-      if (dist < max) {
+      if (dist <= max) {
+        //console.log(f[0]);
         return f[0];
       }
     }
   });
 
   // Filter only duplicates when .NAME property is the same, example neighborhoods are duplicated by diff lat/lon
+  // TODO: what about diff name fields?
   var flags = {};
   items = items.filter(function() {
     var item = $(this);
-    //console.log(item);
-    if (flags[item[0].properties.NAME]) {
+    if (item[0].properties.NAME) {
+      if (flags[item[0].properties.NAME]) {
+        return false;
+      }
+      flags[item[0].properties.NAME] = true;
+      return true;
+    } else if (item[0].properties.Name) {
+      if (flags[item[0].properties.Name]) {
+        return false;
+      }
+      flags[item[0].properties.Name] = true;
+      return true;
+    } else if (item[0].properties.name) {
+      if (flags[item[0].properties.name]) {
+        return false;
+      }
+      flags[item[0].properties.name] = true;
+      return true;
+    }  else if (item[0].properties.PARK_NAME) {
+      if (flags[item[0].properties.PARK_NAME]) {
+        return false;
+      }
+      flags[item[0].properties.PARK_NAME] = true;
+      return true;
+    }  else if (item[0].properties.NBRHD_NAME) {
+      if (flags[item[0].properties.NBRHD_NAME]) {
+        return false;
+      }
+      flags[item[0].properties.NBRHD_NAME] = true;
+      return true;
+    } else {
       return false;
     }
-    flags[item[0].properties.NAME] = true;
-    return true;
+
   });
 
   return items;
