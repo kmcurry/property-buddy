@@ -72,9 +72,42 @@ function getFeaturesForLocation(position) {
     }
   });
 
+  d3.json(config.Chesapeake.boundary, function(error, mapData) {
+    console.log("Checking " + ll + " in Chesapeake");
+    var features = mapData.features[0];
+    if (d3.geoContains(features, ll)) {
+      console.log("Location is Chesapeake");
+      var msg = "Chesapeake";
+      d3.select("#city").html(msg);
+      getAICUZ(config.Chesapeake.AICUZ, ll);
+      getFloodZone(config.Chesapeake.FIRM, ll);
+      // getSchools(config.VirginiaBeach.schools.elementary, ll, 3, "Elementary");
+      // getSchools(config.VirginiaBeach.schools.middle, ll, 3, "Middle");
+      // getSchools(config.VirginiaBeach.schools.high, ll, 3, "High");
+      getParks(config.Chesapeake.parks, ll, 1);
+      getClosestThing(config.Chesapeake.parks, ll, "park");
+      getClosestThing(config.Chesapeake.libraries, ll, "library");
+      getClosestThing(config.Chesapeake.hydrants, ll, "hydrant", "feet");
+      getClosestThing(config.Chesapeake.recCenters, ll, "recCenter");
+      getNearbyNeighborhoods(config.Chesapeake.neighborhoods, ll, 1, "neighborhoods")
+      getAverageResponseTime(config.Chesapeake.emergency.calls, ll, .25, "ems");
+      getAverageResponseTime(config.Chesapeake.police.calls, ll, .25, "police");
+      getCountWithinDays(config.Chesapeake.police.incidents, ll, 1, 30, "police-incidents");
+      getCountWithinDays(config.Chesapeake.police.calls, ll, 1, 30, "police-calls");
+    } else {
+      console.log("Location is not in Chesapeake");
+    }
+  });
+
 }
 
 function getAICUZ(url, ll) {
+
+  if (!url || url == "") {
+    d3.select("#aicuz-" + thing).html("Needs data source");
+    return;
+  }
+
   d3.request(url)
     .mimeType("application/json")
     .response(function(xhr) {
@@ -95,6 +128,11 @@ function getAICUZ(url, ll) {
 }
 
 function getAverageResponseTime(url, ll, d, type) {
+
+  if (!url || url == "") {
+    d3.select("#" + type + "-response-avg").html("Needs data source");
+    return;
+  }
 
   d = d * 1609.35;
 
@@ -121,7 +159,7 @@ function getAverageResponseTime(url, ll, d, type) {
 }
 
 function getClosestThing(url, ll, thing, units) {
-  if (!url) {
+  if (!url || url == "") {
     d3.select("#closest-" + thing).html("Needs data source");
     return;
   }
@@ -137,16 +175,19 @@ function getClosestThing(url, ll, thing, units) {
 
       var msg = "";
 
-      switch (units) {
-        case "feet": {
-          msg = parseInt(closest.distance * 5280) + " feet";
-        }
-        break;
-        default: {
-          msg = closest.distance + " miles";
+      if (parseInt(closest.distance) === 9999) {
+        msg = "None";
+      } else {
+        switch (units) {
+          case "feet": {
+            msg = parseInt(closest.distance * 5280) + " feet";
+          }
+          break;
+          default: {
+            msg = closest.distance + " miles";
+          }
         }
       }
-
 
       d3.select("#closest-" + thing).html(msg);
 
@@ -154,6 +195,11 @@ function getClosestThing(url, ll, thing, units) {
 }
 
 function getCountWithinDays(url, ll, dist, days, type) {
+  if (!url || url == "") {
+    d3.select("#" + type).html("Needs data source");
+    return;
+  }
+
   dist = dist * 1609.35;
 
   var checkDate = new Date();
@@ -188,6 +234,12 @@ function getCountWithinDays(url, ll, dist, days, type) {
 
 // TODO: update from 2009 to 2015. Something wrong with the 2015 API
 function getFloodZone(url, ll) {
+
+  if (!url || url == "") {
+    d3.select("#flood").html("Needs data source");
+    return;
+  }
+
   var LL = L.latLng(ll[1], ll[0]);
   // use location to find out which census block they are inside.
   L.esri.query({
@@ -215,6 +267,11 @@ function getFloodZone(url, ll) {
 }
 
 function getNearbyNeighborhoods(url, ll, d) {
+  if (!url || url == "") {
+    d3.select("#nearby-neighborhoods").html("Needs data source");
+    return;
+  }
+
   d3.request(url)
     .mimeType("application/json")
     .response(function(xhr) {
@@ -246,6 +303,11 @@ function getNearbyNeighborhoods(url, ll, d) {
 }
 
 function getParks(url, ll, dist) {
+  if (!url || url == "") {
+    d3.select("#parks").html("Needs data source");
+    return;
+  }
+
   d3.request(url)
     .mimeType("application/json")
     .response(function(xhr) {
@@ -263,6 +325,11 @@ function getParks(url, ll, dist) {
 }
 
 function getSchools(url, ll, dist, type) {
+  if (!url || url == "") {
+    d3.select("#" + type).html("Needs data source");
+    return;
+  }
+
   d3.request(url)
     .mimeType("application/json")
     .response(function(xhr) {
@@ -330,7 +397,7 @@ function getClosestItem(features, ll) {
       }
     }
   });
-  closest.distance = parseFloat(closest.distance) * 3959;
+  closest.distance = closest.distance != 9999 ? parseFloat(closest.distance) * 3959 : 9999;
   closest.distance = closest.distance.toFixed(2);
 
   return closest;
