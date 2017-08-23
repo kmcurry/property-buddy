@@ -17,6 +17,25 @@ head
     .title {
       font-size: 90px;
     }
+    /* Portrait */
+    @media only screen 
+      and (min-device-width: 320px) 
+      and (max-device-width: 480px)
+      and (-webkit-min-device-pixel-ratio: 2)
+      and (orientation: portrait) {
+        .pac-container,
+        .pac-input,
+        .pac-item,
+        .pac-item:hover,
+        .pac-item-query,
+        .pac-item-selected,
+        .pac-matched {
+          font-size: 38px !important;
+          padding-top: 12px !important;
+          padding-bottom: 12px !important;
+        }
+
+      }
 body(style="margin-top:20px;")
   div(class="container")
     div(class="row")
@@ -26,7 +45,7 @@ body(style="margin-top:20px;")
           div(id="locationField")
             center
               h1(class="title") Property Buddy
-              input(id="autocomplete" name="address" class="p-lg" placeholder="Enter any address" onFocus="geolocate()" type="text")
+              input(id="autocomplete" name="address" class="p-lg controls" placeholder="Enter any address" onFocus="geolocate()" type="text")
               button(type="submit" class="btn btn-lg btn-primary p-lg" style="margin-top:20px" onclick="go()") Submit
               p(class="p-lg") or
               button(type="button" name="loc" class="glyphicon glyphicon-map-marker btn btn-lg btn-primary p-lg" onclick="go()")
