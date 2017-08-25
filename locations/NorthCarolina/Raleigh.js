@@ -21,7 +21,7 @@ var Raleigh = {
 
   fire: {
     incidents: "https://data.raleighnc.gov/resource/nqdf-wvzj.json"
-  }
+  },
 
   emergency: {
     calls: ""
@@ -35,4 +35,4 @@ var Raleigh = {
 };
 
 
-module.exports = Chesapeake;
+module.exports = Raleigh;

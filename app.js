@@ -1,7 +1,8 @@
 var path = require('path'),
   bodyParser = require('body-parser'),
   express = require('express'),
-  config = require('./sources/config');
+  fs = require('fs'),
+  locations = require('./locations/locations');
 
 var app = express();
 
@@ -19,6 +20,23 @@ app.get('/', function(req, res) {
   res.render('index');
 });
 
+app.get('/locations', function(req, res) {
+  // Read the directory
+  fs.readdir('./locations', function (err, list) {
+    // Return the error if something went wrong
+    if (!err) {
+      // For every file in the list
+      list.forEach(function (file) {
+
+      });
+    }
+
+  });
+  res.render('locations', {
+    locations: locations
+  });
+});
+
 app.get('/search/:loc', function(req, res) {
   var position = null;
   if (req.params.loc) {
@@ -26,7 +44,7 @@ app.get('/search/:loc', function(req, res) {
     position = req.params.loc.split(',');
   }
   res.render('default', {
-    config: JSON.stringify(config),
+    locations: JSON.stringify(locations),
     position: position
   });
 });
