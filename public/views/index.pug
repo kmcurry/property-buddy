@@ -46,13 +46,14 @@ body(style="margin-top:20px;")
             center
               h1(class="title") SpotFax
               h2 Get the facts for any spot.
-                a(href="/cities" title="click for cities") *
+                a(id="locations-list" href="" title="") *
               input(id="autocomplete" name="address" class="p-lg controls" placeholder="Enter any address" onFocus="geolocate()" type="text")
               button(type="submit" class="btn btn-lg btn-primary p-lg" style="margin-top:20px" onclick="go()") Submit
               p(class="p-lg") or
               button(type="button" name="loc" class="glyphicon glyphicon-map-marker btn btn-lg btn-primary p-lg" onclick="go()")
               p(class="p-lg") Use Your Location
       div(class="col-md-2 col-lg-2")
+  input(type="hidden" id="locations" value=""+locations)
 script(src="/bower_components/jquery/dist/jquery.min.js")
 script(src="/bower_components/bootstrap/dist/js/bootstrap.min.js")
 script(src="/bower_components/jquery-ui/jquery-ui.min.js")
