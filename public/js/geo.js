@@ -29,13 +29,13 @@ function getFeaturesForLocation(position) {
       // getSchools(locations.Virginia.Norfolk.schools.elementary, ll, 3, "Elementary");
       // getSchools(locations.Virginia.Norfolk.schools.middle, ll, 3, "Middle");
       // getSchools(locations.Virginia.Norfolk.schools.high, ll, 3, "High");
-      getParks(locations.Virginia.Norfolk.parks, ll, 1);
-      getClosestThing(locations.Virginia.Norfolk.parks, ll, "park");
-      getClosestThing(locations.Virginia.Norfolk.libraries, ll, "library");
-      getClosestThing(locations.Virginia.Norfolk.hydrants, ll, "hydrant", "feet");
-      getClosestThing(locations.Virginia.Norfolk.recCenters, ll, "recCenter");
+      getParks(locations.Virginia.Norfolk.recreation.parks, ll, 1);
+      getClosestThing(locations.Virginia.Norfolk.recreation.parks, ll, "park");
+      getClosestThing(locations.Virginia.Norfolk.recreation.libraries, ll, "library");
+      getClosestThing(locations.Virginia.Norfolk.fire.hydrants.public, ll, "hydrant", "feet");
+      getClosestThing(locations.Virginia.Norfolk.recreation.centers, ll, "recCenter");
       getNearbyNeighborhoods(locations.Virginia.Norfolk.neighborhoods, ll, 1, "neighborhoods")
-      getAverageResponseTime(locations.Virginia.Norfolk.emergency.calls, ll, .25, "ems");
+      getAverageResponseTime(locations.Virginia.Norfolk.medical.emergency.calls, ll, .25, "ems");
       getAverageResponseTime(locations.Virginia.Norfolk.police.calls, ll, .25, "police");
       getCountWithinDays(locations.Virginia.Norfolk.police.incidents, ll, 1, 30, "police-incidents");
       getCountWithinDays(locations.Virginia.Norfolk.police.calls, ll, 1, 30, "police-calls");
@@ -56,13 +56,13 @@ function getFeaturesForLocation(position) {
       // getSchools(locations.Virginia.VirginiaBeach.schools.elementary, ll, 3, "Elementary");
       // getSchools(locations.Virginia.VirginiaBeach.schools.middle, ll, 3, "Middle");
       // getSchools(locations.Virginia.VirginiaBeach.schools.high, ll, 3, "High");
-      getParks(locations.Virginia.VirginiaBeach.parks, ll, 1);
-      getClosestThing(locations.Virginia.VirginiaBeach.parks, ll, "park");
-      getClosestThing(locations.Virginia.VirginiaBeach.libraries, ll, "library");
-      getClosestThing(locations.Virginia.VirginiaBeach.hydrants, ll, "hydrant", "feet");
-      getClosestThing(locations.Virginia.VirginiaBeach.recCenters, ll, "recCenter");
+      getParks(locations.Virginia.VirginiaBeach.recreation.parks, ll, 1);
+      getClosestThing(locations.Virginia.VirginiaBeach.recreation.parks, ll, "park");
+      getClosestThing(locations.Virginia.VirginiaBeach.recreation.libraries, ll, "library");
+      getClosestThing(locations.Virginia.VirginiaBeach.fire.hydrants.public, ll, "hydrant", "feet");
+      getClosestThing(locations.Virginia.VirginiaBeach.recreation.centers, ll, "recCenter");
       getNearbyNeighborhoods(locations.Virginia.VirginiaBeach.neighborhoods, ll, 1, "neighborhoods")
-      getAverageResponseTime(locations.Virginia.VirginiaBeach.emergency.calls, ll, .25, "ems");
+      getAverageResponseTime(locations.Virginia.VirginiaBeach.medical.emergency.calls, ll, .25, "ems");
       getAverageResponseTime(locations.Virginia.VirginiaBeach.police.calls, ll, .25, "police");
       getCountWithinDays(locations.Virginia.VirginiaBeach.police.incidents, ll, 1, 30, "police-incidents");
       getCountWithinDays(locations.Virginia.VirginiaBeach.police.calls, ll, 1, 30, "police-calls");
@@ -84,13 +84,13 @@ function getFeaturesForLocation(position) {
       // getSchools(locations.Virginia.Chesapeake.schools.elementary, ll, 3, "Elementary");
       // getSchools(locations.Virginia.Chesapeake.schools.middle, ll, 3, "Middle");
       // getSchools(locations.Virginia.Chesapeake.schools.high, ll, 3, "High");
-      getParks(locations.Virginia.Chesapeake.parks, ll, 1);
-      getClosestThing(locations.Virginia.Chesapeake.parks, ll, "park");
-      getClosestThing(locations.Virginia.Chesapeake.libraries, ll, "library");
-      getClosestThing(locations.Virginia.Chesapeake.hydrants, ll, "hydrant", "feet");
-      getClosestThing(locations.Virginia.Chesapeake.recCenters, ll, "recCenter");
+      getParks(locations.Virginia.Chesapeake.recreation.parks, ll, 1);
+      getClosestThing(locations.Virginia.Chesapeake.recreation.parks, ll, "park");
+      getClosestThing(locations.Virginia.Chesapeake.recreation.libraries, ll, "library");
+      getClosestThing(locations.Virginia.Chesapeake.fire.hydrants.public, ll, "hydrant", "feet");
+      getClosestThing(locations.Virginia.Chesapeake.recreation.centers, ll, "recCenter");
       getNearbyNeighborhoods(locations.Virginia.Chesapeake.neighborhoods, ll, 1, "neighborhoods")
-      getAverageResponseTime(locations.Virginia.Chesapeake.emergency.calls, ll, .25, "ems");
+      getAverageResponseTime(locations.Virginia.Chesapeake.medical.emergency.calls, ll, .25, "ems");
       getAverageResponseTime(locations.Virginia.Chesapeake.police.calls, ll, .25, "police");
       getCountWithinDays(locations.Virginia.Chesapeake.police.incidents, ll, 1, 30, "police-incidents");
       getCountWithinDays(locations.Virginia.Chesapeake.police.calls, ll, 1, 30, "police-calls");
@@ -111,13 +111,13 @@ function getFeaturesForLocation(position) {
       // getSchools(locations.Virginia.FallsChurch.schools.elementary, ll, 3, "Elementary");
       // getSchools(locations.Virginia.FallsChurch.schools.middle, ll, 3, "Middle");
       // getSchools(locations.Virginia.FallsChurch.schools.high, ll, 3, "High");
-      getParks(locations.Virginia.FallsChurch.parks, ll, 1);
-      getClosestThing(locations.Virginia.FallsChurch.parks, ll, "park");
-      getClosestThing(locations.Virginia.FallsChurch.libraries, ll, "library");
-      getClosestThing(locations.Virginia.FallsChurch.hydrants, ll, "hydrant", "feet");
-      getClosestThing(locations.Virginia.FallsChurch.recCenters, ll, "recCenter");
+      getParks(locations.Virginia.FallsChurch.recreation.parks, ll, 1);
+      getClosestThing(locations.Virginia.FallsChurch.recreation.parks, ll, "park");
+      getClosestThing(locations.Virginia.FallsChurch.recreation.libraries, ll, "library");
+      getClosestThing(locations.Virginia.FallsChurch.fire.hydrants.public, ll, "hydrant", "feet");
+      getClosestThing(locations.Virginia.FallsChurch.recreation.centers, ll, "recCenter");
       getNearbyNeighborhoods(locations.Virginia.FallsChurch.neighborhoods, ll, 1, "neighborhoods")
-      getAverageResponseTime(locations.Virginia.FallsChurch.emergency.calls, ll, .25, "ems");
+      getAverageResponseTime(locations.Virginia.FallsChurch.medical.emergency.calls, ll, .25, "ems");
       getAverageResponseTime(locations.Virginia.FallsChurch.police.calls, ll, .25, "police");
       getCountWithinDays(locations.Virginia.FallsChurch.police.incidents, ll, 1, 30, "police-incidents");
       getCountWithinDays(locations.Virginia.FallsChurch.police.calls, ll, 1, 30, "police-calls");
