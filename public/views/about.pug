@@ -1,0 +1,55 @@
+doctype html
+html
+head
+  title SpotFax - About
+  meta(charset='utf-8')
+  link(rel='stylesheet',  href="/bower_components/bootstrap/dist/css/bootstrap.min.css")
+  style.
+    body {
+      text-align: justify !important;
+    }
+    p {
+      text-align: justify !important;
+    }
+    .p-lg {
+      font-size: 56px;
+    }
+    .p-md {
+      font-size: 24px;
+    }
+    .title {
+      font-size: 90px;
+    }
+    /* Portrait */
+    @media only screen 
+      and (min-device-width: 320px) 
+      and (max-device-width: 480px)
+      and (-webkit-min-device-pixel-ratio: 2)
+      and (orientation: portrait) {
+
+      }
+body(style="margin-top:20px;")
+  div(class="container")
+    div(class="row")
+      div(class="col-md-2 col-lg-2")
+      div(class="col-xs-12 col-sm-12 col-md-8 col-lg-8")
+        center
+          h1(class="title") What is SpotFax?
+          p(class="p-md") SpotFax uses "open data portals" to fetch, process, and display useful information about a location.
+          p(class="p-md") Open data portals are web sites hosted by government and others for publishing data that can be used for purposes just like this.
+          h2 Dislaimer
+          p(class="p-md") Information through SpotFax is provided "as-is" and without warranty of any kind.
+          h2 Caveats
+          p(class="p-md") Distance is "as the crow flies", i.e., over land.
+      div(class="col-md-2 col-lg-2")
+
+script(src="/bower_components/jquery/dist/jquery.min.js")
+script(src="/bower_components/bootstrap/dist/js/bootstrap.min.js")
+script(src="/bower_components/jquery-ui/jquery-ui.min.js")
+link(rel="stylesheet"     
+    href="/bower_components/jquery-ui/themes/smoothness/jquery-ui.css")
+script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAaqbCGgntbeiXizHHV8sWyI9ODyUrdtlc&libraries=places&callback=initAutocomplete" async defer)
+script(src="/js/index.js")
+script(src="/js/google.js")
+      
+  

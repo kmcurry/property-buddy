@@ -22,6 +22,10 @@ app.get('/', function(req, res) {
   });
 });
 
+app.get('/about', function(req, res) {
+  res.render('about');
+});
+
 app.get('/search/:loc', function(req, res) {
   var position = null;
   if (req.params.loc) {
