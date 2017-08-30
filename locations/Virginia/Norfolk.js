@@ -2,8 +2,8 @@ var Norfolk = {
 
   boundary: "https://data-orf.opendata.arcgis.com/datasets/5fcd6cdbd5a84e0fae5db8c35465ad54_2.geojson",
   AICUZ: "https://data-orf.opendata.arcgis.com/datasets/c8de1a1f81e14eacbe381ae342318031_8.geojson",
-  FIRM: "https://orfmaps.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/1",
-  neighborhoods: "https://raw.githubusercontent.com/blackmad/neighborhoods/master/geojson", // THIRD PARTY
+  FIRM: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/1",
+  neighborhoods: "https://raw.githubusercontent.com/blackmad/neighborhoods/master/norfolk.geojson", // THIRD PARTY
 
   fire: {
     calls: "",
@@ -32,11 +32,21 @@ var Norfolk = {
   },
 
   schools: {
-    all: "https://data-orf.opendata.arcgis.com/datasets/0c8de8e20bba46a283bb1062f276fe33_0.geojson",
-    pre: "",
-    elementary: "",
-    middle: "",
-    high: ""
+    locations: {
+      all: "https://data-orf.opendata.arcgis.com/datasets/0c8de8e20bba46a283bb1062f276fe33_0.geojson",
+      pre: "",
+      elementary: "",
+      middle: "",
+      high: ""
+    },
+    zone: {
+      all: "",
+      pre: "",
+      elementary: "https://data-orf.opendata.arcgis.com/datasets/0c8de8e20bba46a283bb1062f276fe33_1.geojson",
+      middle: "https://data-orf.opendata.arcgis.com/datasets/0c8de8e20bba46a283bb1062f276fe33_2.geojson",
+      high: "https://data-orf.opendata.arcgis.com/datasets/0c8de8e20bba46a283bb1062f276fe33_3.geojson"
+    }
+
   }
 
 };

@@ -22,13 +22,11 @@ function getFeaturesForLocation(position) {
     var features = mapData.features[0];
     if (d3.geoContains(features, ll)) {
       console.log("Location is NFK");
-      var msg = "<p class='p-sm'>You are in Norfolk</p>";
-      d3.select("#location").html(msg);
+      var msg = "Norfolk";
+      d3.select("#city").html(msg);
       getAICUZ(locations.Virginia.Norfolk.AICUZ, ll);
       getFloodZone(locations.Virginia.Norfolk.FIRM, ll);
-      // getSchools(locations.Virginia.Norfolk.schools.elementary, ll, 3, "Elementary");
-      // getSchools(locations.Virginia.Norfolk.schools.middle, ll, 3, "Middle");
-      // getSchools(locations.Virginia.Norfolk.schools.high, ll, 3, "High");
+      getSchools(locations.Virginia.Norfolk.schools, ll, 3);
       getParks(locations.Virginia.Norfolk.recreation.parks, ll, 1);
       getClosestThing(locations.Virginia.Norfolk.recreation.parks, ll, "park");
       getClosestThing(locations.Virginia.Norfolk.recreation.libraries, ll, "library");
@@ -53,9 +51,7 @@ function getFeaturesForLocation(position) {
       d3.select("#city").html(msg);
       getAICUZ(locations.Virginia.VirginiaBeach.AICUZ, ll);
       getFloodZone(locations.Virginia.VirginiaBeach.FIRM, ll);
-      // getSchools(locations.Virginia.VirginiaBeach.schools.elementary, ll, 3, "Elementary");
-      // getSchools(locations.Virginia.VirginiaBeach.schools.middle, ll, 3, "Middle");
-      // getSchools(locations.Virginia.VirginiaBeach.schools.high, ll, 3, "High");
+      getSchools(locations.Virginia.VirginiaBeach.schools, ll, 3);
       getParks(locations.Virginia.VirginiaBeach.recreation.parks, ll, 1);
       getClosestThing(locations.Virginia.VirginiaBeach.recreation.parks, ll, "park");
       getClosestThing(locations.Virginia.VirginiaBeach.recreation.libraries, ll, "library");
@@ -81,9 +77,7 @@ function getFeaturesForLocation(position) {
       d3.select("#city").html(msg);
       getAICUZ(locations.Virginia.Chesapeake.AICUZ, ll);
       getFloodZone(locations.Virginia.Chesapeake.FIRM, ll);
-      // getSchools(locations.Virginia.Chesapeake.schools.elementary, ll, 3, "Elementary");
-      // getSchools(locations.Virginia.Chesapeake.schools.middle, ll, 3, "Middle");
-      // getSchools(locations.Virginia.Chesapeake.schools.high, ll, 3, "High");
+      // getSchools(locations.Virginia.Chesapeake.schools, ll, 3);
       getParks(locations.Virginia.Chesapeake.recreation.parks, ll, 1);
       getClosestThing(locations.Virginia.Chesapeake.recreation.parks, ll, "park");
       getClosestThing(locations.Virginia.Chesapeake.recreation.libraries, ll, "library");
@@ -108,9 +102,7 @@ function getFeaturesForLocation(position) {
       d3.select("#city").html(msg);
       getAICUZ(locations.Virginia.FallsChurch.AICUZ, ll);
       getFloodZone(locations.Virginia.FallsChurch.FIRM, ll);
-      // getSchools(locations.Virginia.FallsChurch.schools.elementary, ll, 3, "Elementary");
-      // getSchools(locations.Virginia.FallsChurch.schools.middle, ll, 3, "Middle");
-      // getSchools(locations.Virginia.FallsChurch.schools.high, ll, 3, "High");
+      getSchools(locations.Virginia.FallsChurch.schools, ll, 3);
       getParks(locations.Virginia.FallsChurch.recreation.parks, ll, 1);
       getClosestThing(locations.Virginia.FallsChurch.recreation.parks, ll, "park");
       getClosestThing(locations.Virginia.FallsChurch.recreation.libraries, ll, "library");
@@ -280,17 +272,28 @@ function getFloodZone(url, ll) {
 
     var msg = "";
 
-    checkFeaturesForFloodZone(floodZones.features, ll).then(
-      function(data) {
-        console.log(data);
-        msg += data;
-        d3.select("#flood").html(msg);
-      },
-      function(err) {
-        console.log(err);
-        d3.select("#flood").html(err.message);
-      }
-    );
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    if (floodZones) {
+      console.log(floodZones);
+
+      checkFeaturesForFloodZone(floodZones.features, ll).then(
+        function(data) {
+          console.log(data);
+          msg += data;
+          d3.select("#flood").html(msg);
+        },
+        function(err) {
+          console.log(err);
+          d3.select("#flood").html(err.message);
+        }
+      );
+    }
+
+
 
     d3.select("#flood").html("Still searching. (This is taking a bit longer than usual.)");
 
@@ -365,28 +368,99 @@ function getParks(url, ll, dist) {
     });
 }
 
-function getSchools(url, ll, dist, type) {
-  if (!url || url == "") {
+function getSchools(config, ll, dist) {
+  if (!config || config == "") {
     d3.select("#" + type).html("Needs data source");
     return;
   }
 
-  d3.request(url)
-    .mimeType("application/json")
-    .response(function(xhr) {
-      return JSON.parse(xhr.responseText);
-    })
-    .get(function(data) {
+  // handle local variations, location and zone data
 
-      var msg = "<p class='preamble'>" + type + "</p>";
+  getSchoolThings(config.locations, ll, dist);
+  getSchoolThings(config.zones, ll, dist);
 
-      var items = getItemsForFeatures(data.features, ll, dist);
+}
 
-      msg += items.length;
 
-      d3.select("#" + type).html(msg);
+function getSchoolThings(config, ll, dist) {
 
-    });
+  if (!config || (config.all === "" && config.elementary === "" && config.middle === "" && config.high === "")) return;
+
+  var levels = Object.keys(config);
+
+  $(levels).each(function(i) {
+    var type = this;
+    var url = config[type];
+
+    if (url !== "") {
+      d3.request(url)
+        .mimeType("application/json")
+        .response(function(xhr) {
+          return JSON.parse(xhr.responseText);
+        })
+        .get(function(data) {
+
+          var items = getItemsForFeatures(data.features, ll, dist);
+
+          var msg = "<p style='text-decoration:underline;'>" + items.length + " within " + dist + " miles</p><p>";
+          switch(type.toString()) {
+            case "elementary": {
+              typeStr = " Elementary School";
+            }
+            break;
+            case "middle": {
+              typeStr = " Middle School";
+            }
+            break;
+            case "high": {
+              typeStr = " High School";
+            }
+            break;
+            default: {
+              typeStr = "";
+            }
+          }
+          $(items).each(function(i) {
+            var item = $(this);
+            var len = 0;
+            if (item[0].properties.NAME) {
+              len = item[0].properties.NAME.indexOf(typeStr) > 0 ? item[0].properties.NAME.indexOf(typeStr) : item[0].properties.NAME.length;
+              msg += item[0].properties.NAME.substring(0, len);
+            } else if (item[0].properties.Name) {
+              len = item[0].properties.Name.indexOf(typeStr) > 0 ? item[0].properties.Name.indexOf(typeStr) : item[0].properties.Name.length;
+              msg += item[0].properties.Name.substring(0, len);
+            } else if (item[0].properties.name) {
+              len = item[0].properties.name.indexOf(typeStr) > 0 ? item[0].properties.name.indexOf(typeStr) : item[0].properties.name.length;
+              msg += item[0].properties.name.substring(0, len);
+            } else {
+              msg += "Could not locate name field."
+            }
+
+            if (i < items.length - 1) {
+              msg += ", ";
+            }
+          });
+          msg += "</p>";
+
+          if (type == "all") {
+              $("#all").parent().parent().next().hide();
+              $("#all").parent().parent().next().next().hide();
+              $("#all").parent().parent().next().next().next().hide();
+          } else {
+            $("#all").parent().parent().hide();
+          }
+
+          d3.select("#" + type).html(msg);
+
+        });
+    }
+
+  });
+
+}
+
+function getSchoolZones(config, ll, dist) {
+
 }
 
 function getAverageTime(data) {

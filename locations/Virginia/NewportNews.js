@@ -1,6 +1,6 @@
-var LocationName = {
+var NewportNews = {
 
-  boundary: "",
+  boundary: "https://ckannet-storage.commondatastorage.googleapis.com/2015-07-19T14:54:43.970Z/newport-news-border.geojson",
   neighborhoods: "",
   AICUZ: "",
   FIRM: "",
@@ -38,20 +38,12 @@ var LocationName = {
   },
 
   schools: {
-    locations: {
-      all: "",
-      elementary: "",
-      high: "",
-      middle: "",
-      pre: ""
-    },
-    zones: {
-      elementary: "",
-      high: "",
-      middle: "",
-      pre: ""
-    }
+    all: "",
+    elementary: "",
+    high: "",
+    middle: "",
+    pre: ""
   }
 };
 
-module.exports = LocationName;
+module.exports = NewportNews;

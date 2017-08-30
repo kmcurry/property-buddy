@@ -1,4 +1,4 @@
-var LocationName = {
+var Charlottesville = {
 
   boundary: "https://opendata.arcgis.com/datasets/43253262b4da436bbac25d8cdb2f043b_44.geojson",
   neighborhoods: "",
@@ -46,4 +46,4 @@ var LocationName = {
   }
 };
 
-module.exports = LocationName;
+module.exports = Charlottesville;
