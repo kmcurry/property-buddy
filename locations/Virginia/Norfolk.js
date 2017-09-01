@@ -39,7 +39,7 @@ var Norfolk = {
       middle: "",
       high: ""
     },
-    zone: {
+    zones: {
       all: "",
       pre: "",
       elementary: "https://data-orf.opendata.arcgis.com/datasets/0c8de8e20bba46a283bb1062f276fe33_1.geojson",

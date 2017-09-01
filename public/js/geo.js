@@ -278,11 +278,9 @@ function getFloodZone(url, ll) {
     }
 
     if (floodZones) {
-      console.log(floodZones);
 
       checkFeaturesForFloodZone(floodZones.features, ll).then(
         function(data) {
-          console.log(data);
           msg += data;
           d3.select("#flood").html(msg);
         },
@@ -376,13 +374,13 @@ function getSchools(config, ll, dist) {
 
   // handle local variations, location and zone data
 
-  getSchoolThings(config.locations, ll, dist);
-  getSchoolThings(config.zones, ll, dist);
+  getNearbySchools(config.locations, ll, dist);
+  getZonedSchools(config.zones, ll);
 
 }
 
 
-function getSchoolThings(config, ll, dist) {
+function getNearbySchools(config, ll, dist) {
 
   if (!config || (config.all === "" && config.elementary === "" && config.middle === "" && config.high === "")) return;
 
@@ -443,14 +441,14 @@ function getSchoolThings(config, ll, dist) {
           msg += "</p>";
 
           if (type == "all") {
-              $("#all").parent().parent().next().hide();
-              $("#all").parent().parent().next().next().hide();
-              $("#all").parent().parent().next().next().next().hide();
+              $("#school-location-all").parent().parent().next().hide();
+              $("#school-location-all").parent().parent().next().next().hide();
+              $("#school-location-all").parent().parent().next().next().next().hide();
           } else {
-            $("#all").parent().parent().hide();
+            $("#school-location-all").parent().parent().hide();
           }
 
-          d3.select("#" + type).html(msg);
+          d3.select("#school-location-" + type).html(msg);
 
         });
     }
@@ -459,8 +457,56 @@ function getSchoolThings(config, ll, dist) {
 
 }
 
-function getSchoolZones(config, ll, dist) {
+function getZonedSchools(config, ll) {
+  if (!config || (config.all === "" && config.elementary === "" && config.middle === "" && config.high === "")) return;
 
+  var levels = Object.keys(config);
+
+  $(levels).each(function(i) {
+    var type = this;
+    var url = config[type];
+
+    if (url !== "") {
+      d3.request(url)
+        .mimeType("application/json")
+        .response(function(xhr) {
+          return JSON.parse(xhr.responseText);
+        })
+        .get(function(data) {
+
+          var msg = "";
+          $(data.features).each(function() {
+            var f = $(this);
+            if (f && f[0]) {
+              if (d3.geoContains(f[0], ll)) {
+                if (f[0].properties.ES_NAME) {
+                  msg += f[0].properties.ES_NAME;
+                } else if (f[0].properties.MS_NAME) {
+                  msg += f[0].properties.MS_NAME
+                } else if (f[0].properties.HS_NAME) {
+                  msg += f[0].properties.HS_NAME
+                }
+
+              }
+            }
+          });
+
+          msg += "</p>";
+
+          // if (type == "all") {
+          //     $("#all").parent().parent().next().hide();
+          //     $("#all").parent().parent().next().next().hide();
+          //     $("#all").parent().parent().next().next().next().hide();
+          // } else {
+          //   $("#all").parent().parent().hide();
+          // }
+
+          d3.select("#school-zone-" + type).html(msg);
+
+        });
+    }
+
+  });
 }
 
 function getAverageTime(data) {
@@ -587,6 +633,24 @@ function getItemsForFeatures(features, ll, d) {
         return false;
       }
       flags[item[0].properties.NBRHD_NAME] = true;
+      return true;
+    }  else if (item[0].properties.ES_NAME) {
+      if (flags[item[0].properties.ES_NAME]) {
+        return false;
+      }
+      flags[item[0].properties.ES_NAME] = true;
+      return true;
+    }  else if (item[0].properties.MS_NAME) {
+      if (flags[item[0].properties.MS_NAME]) {
+        return false;
+      }
+      flags[item[0].properties.MS_NAME] = true;
+      return true;
+    }  else if (item[0].properties.HS_NAME) {
+      if (flags[item[0].properties.HS_NAME]) {
+        return false;
+      }
+      flags[item[0].properties.HS_NAME] = true;
       return true;
     } else {
       return false;
