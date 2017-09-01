@@ -475,16 +475,37 @@ function getZonedSchools(config, ll) {
         .get(function(data) {
 
           var msg = "";
+          switch(type.toString()) {
+            case "elementary": {
+              typeStr = " Elementary School";
+            }
+            break;
+            case "middle": {
+              typeStr = " Middle School";
+            }
+            break;
+            case "high": {
+              typeStr = " High School";
+            }
+            break;
+            default: {
+              typeStr = "";
+            }
+          }
           $(data.features).each(function() {
             var f = $(this);
             if (f && f[0]) {
               if (d3.geoContains(f[0], ll)) {
+                var len = 0;
                 if (f[0].properties.ES_NAME) {
-                  msg += f[0].properties.ES_NAME;
+                  len = f[0].properties.ES_NAME.indexOf(typeStr) > 0 ? f[0].properties.ES_NAME.indexOf(typeStr) : f[0].properties.ES_NAME.length;
+                  msg += f[0].properties.ES_NAME.substring(0, len);
                 } else if (f[0].properties.MS_NAME) {
-                  msg += f[0].properties.MS_NAME
+                  len = f[0].properties.MS_NAME.indexOf(typeStr) > 0 ? f[0].properties.MS_NAME.indexOf(typeStr) : f[0].properties.MS_NAME.length;
+                  msg += f[0].properties.MS_NAME.substring(0, len);
                 } else if (f[0].properties.HS_NAME) {
-                  msg += f[0].properties.HS_NAME
+                  len = f[0].properties.HS_NAME.indexOf(typeStr) > 0 ? f[0].properties.HS_NAME.indexOf(typeStr) : f[0].properties.HS_NAME.length;
+                  msg += f[0].properties.HS_NAME.substring(0, len);
                 }
 
               }
