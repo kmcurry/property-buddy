@@ -328,7 +328,6 @@ function getNearbyNeighborhoods(url, ll, d) {
 }
 
 function neighborhoodHelper(data, ll, d) {
-  console.log(data);
   var items = getItemsForFeatures(data.features, ll, d);
 
   var msg = "";
