@@ -1,15 +1,15 @@
 var VirginiaBeach = {
 
   boundary: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/Administrative_Boundaries/MapServer/0/",
-  neighborhoods: "https://gis-vbgov.opendata.arcgis.com/datasets/909c0188a44341a5aa6d39951ce8f984_13.geojson",
-  AICUZ: "https://gis-vbgov.opendata.arcgis.com/datasets/3088488c6c284f3981d61b9efe9c1d04_3.geojson",
+  neighborhoods: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/PropertyInformation_VBgov/MapServer/13/",
+  AICUZ: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/AICUZ/MapServer/3/",
   FIRM: "https://gismaps.vbgov.com/arcgis/rest/services/Public_Safety/Flood_Zones_2015/MapServer/2/",
 
   fire: {
     calls: "",
     hydrants: {
-      public: "https://gis-vbgov.opendata.arcgis.com/datasets/a12e7ee1d4da422b8e711f60aedf8849_0.geojson",
-      private: ""
+      public: "https://gismaps.vbgov.com/arcgis/rest/services/Public_Utilities/Utilities_VBgov/MapServer/0/",
+      private: "https://gismaps.vbgov.com/arcgis/rest/services/Public_Utilities/Utilities_VBgov/MapServer/1/"
     }
   },
 
@@ -26,9 +26,9 @@ var VirginiaBeach = {
   },
 
   recreation: {
-    centers: "https://gis-vbgov.opendata.arcgis.com/datasets/4ee34e8a8aea431ea329743a71c2fd61_4.geojson",
-    parks: "https://gis-vbgov.opendata.arcgis.com/datasets/4ee34e8a8aea431ea329743a71c2fd61_7.geojson",
-    libraries: "https://gis-vbgov.opendata.arcgis.com/datasets/4ee34e8a8aea431ea329743a71c2fd61_0.geojson",
+    centers: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/PointsOfInterest_VBgov/MapServer/4/",
+    parks: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/PointsOfInterest_VBgov/MapServer/7/",
+    libraries: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/PointsOfInterest_VBgov/MapServer/0/",
     trails: "",
     water: ""
   },
@@ -37,9 +37,9 @@ var VirginiaBeach = {
     locations: {
       all: "",
       pre: "",
-      elementary: "https://gis-vbgov.opendata.arcgis.com/datasets/4ee34e8a8aea431ea329743a71c2fd61_1.geojson",
-      middle: "https://gis-vbgov.opendata.arcgis.com/datasets/4ee34e8a8aea431ea329743a71c2fd61_2.geojson",
-      high: "https://gis-vbgov.opendata.arcgis.com/datasets/4ee34e8a8aea431ea329743a71c2fd61_3.geojson"
+      elementary: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/PointsOfInterest_VBgov/MapServer/1/",
+      middle: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/PointsOfInterest_VBgov/MapServer/2/",
+      high: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/PointsOfInterest_VBgov/MapServer/3/"
     },
     zones: {
       all: "",

@@ -42,7 +42,6 @@ function getFeaturesForLocation(position) {
     }
   });
 
-  var contains = false;
   var LL = L.latLng(ll[1], ll[0]);
   // use location to find out which census block they are inside.
   L.esri.query({
@@ -66,16 +65,6 @@ function getFeaturesForLocation(position) {
     getCountWithinDays(locations.Virginia.VirginiaBeach.police.calls, ll, 1, 30, "police-calls");
   });
 
-  // d3.json(locations.Virginia.VirginiaBeach.boundary, function(error, mapData) {
-  //   console.log("Checking in VB");
-  //   var features = mapData.features[0];
-  //   if (d3.geoContains(features, ll)) {
-  //
-  //
-  //   } else {
-  //     console.log("Location is not in VB")
-  //   }
-  // });
 
   d3.json(locations.Virginia.Chesapeake.boundary, function(error, mapData) {
     console.log("Checking in Chesapeake");
@@ -136,23 +125,20 @@ function getAICUZ(url, ll) {
     return;
   }
 
-  d3.request(url)
-    .mimeType("application/json")
-    .response(function(xhr) {
-      return JSON.parse(xhr.responseText);
-    })
-    .get(function(data) {
+  var LL = L.latLng(ll[1], ll[0]);
+  // use location to find out which census block they are inside.
+  L.esri.query({
+    url: url
+  }).intersects(LL).run(function(error, data) {
+    var msg = "";
+    if (data) {
+      msg = checkFeaturesForAICUZNoiseLevel(data.features, ll);
+    } else {
+      msg = "No data. Please refresh the page.";
+    }
 
-      var msg = "";
-      if (data) {
-        msg = checkFeaturesForAICUZNoiseLevel(data.features, ll);
-      } else {
-          msg = "No data. Please refresh the page.";
-      }
-
-      d3.select("#aicuz").html(msg);
-
-    });
+    d3.select("#aicuz").html(msg);
+  });
 }
 
 function getAverageResponseTime(url, ll, d, type) {
@@ -184,6 +170,7 @@ function getAverageResponseTime(url, ll, d, type) {
 
     });
 
+
 }
 
 function getClosestThing(url, ll, thing, units) {
@@ -192,77 +179,78 @@ function getClosestThing(url, ll, thing, units) {
     return;
   }
 
-  d3.request(url)
-    .mimeType("application/json")
-    .response(function(xhr) {
-      return JSON.parse(xhr.responseText);
-    })
-    .get(function(data) {
+  var LL = L.latLng(ll[1], ll[0]);
+  // use location to find out which census block they are inside.
+  L.esri.query({
+    url: url
+  }).run(function(error, data) {
+    if (!data || !data.features) {
+      d3.select("#closest-" + thing).html("No data returned");
+      return;
+    }
 
-      if (!data || !data.features) {
-        d3.select("#closest-" + thing).html("No data returned");
-        return;
-      }
+    var closest = getClosestItem(data.features, ll);
 
-      var closest = getClosestItem(data.features, ll);
+    var msg = "";
 
-      var msg = "";
-
-      if (!closest.item || parseInt(closest.distance) === 9999) {
-        msg = "None";
-      } else {
-        switch (units) {
-          case "feet": {
+    if (!closest.item || parseInt(closest.distance) === 9999) {
+      msg = "None";
+    } else {
+      switch (units) {
+        case "feet":
+          {
             msg = parseInt(closest.distance * 5280) + " feet";
           }
           break;
-          default: {
+        default:
+          {
             msg = closest.distance + " miles";
           }
-        }
       }
+    }
 
-      d3.select("#closest-" + thing).html(msg);
+    d3.select("#closest-" + thing).html(msg);
+  });
 
-    });
 }
 
 function getCountWithinDays(url, ll, dist, days, type) {
   if (!url || url == "") {
-    d3.select("#" + type).html("Needs data source");
-    return;
-  }
+      d3.select("#" + type).html("Needs data source");
+      return;
+    }
 
-  dist = dist * 1609.35;
+    dist = dist * 1609.35;
 
-  var checkDate = new Date();
-  checkDate = new Date(checkDate.setDate(checkDate.getDate() - days)).toISOString();
-  checkDate = checkDate.toString().substring(0, checkDate.lastIndexOf('Z'));
+    var checkDate = new Date();
+    checkDate = new Date(checkDate.setDate(checkDate.getDate() - days)).toISOString();
+    checkDate = checkDate.toString().substring(0, checkDate.lastIndexOf('Z'));
 
-  var dateField = "";
-  if (type.includes("calls")) {
-    dateField = "call_date_time";
-  }
-  if (type.includes("incidents")) {
-    dateField = "date_occured";
-  }
+    var dateField = "";
+    if (type.includes("calls")) {
+      dateField = "call_date_time";
+    }
+    if (type.includes("incidents")) {
+      dateField = "date_occured";
+    }
 
-  url += "?$where=within_circle(location_1," + ll[1] + "," + ll[0] + "," + dist + encodeURIComponent(") and " + dateField + " > '") + encodeURIComponent(checkDate) + encodeURIComponent("'");
+    url += "?$where=within_circle(location_1," + ll[1] + "," + ll[0] + "," + dist + encodeURIComponent(") and " + dateField + " > '") + encodeURIComponent(checkDate) + encodeURIComponent("'");
 
-  d3.request(url)
-    .mimeType("application/json")
-    .response(function(xhr) {
-      return JSON.parse(xhr.responseText);
-    })
-    .get(function(data) {
+    d3.request(url)
+      .mimeType("application/json")
+      .response(function(xhr) {
+        return JSON.parse(xhr.responseText);
+      })
+      .get(function(data) {
 
-      var msg = data.length + " last " + days + " days";
+        var msg = data.length + " last " + days + " days";
 
-      console.log(type + " " + data.length);
+        console.log(type + " " + data.length);
 
-      d3.select("#" + type).html(msg);
+        d3.select("#" + type).html(msg);
 
-    });
+      });
+
 }
 
 // TODO: update from 2009 to 2015. Something wrong with the 2015 API
@@ -277,7 +265,7 @@ function getFloodZone(url, ll) {
   // use location to find out which census block they are inside.
   L.esri.query({
     url: url
-  }).intersects(LL).run(function(error, floodZones) {
+  }).intersects(LL).run(function(error, data) {
 
     var msg = "";
 
@@ -286,9 +274,9 @@ function getFloodZone(url, ll) {
       return;
     }
 
-    if (floodZones) {
+    if (data) {
 
-      checkFeaturesForFloodZone(floodZones.features, ll).then(
+      checkFeaturesForFloodZone(data.features, ll).then(
         function(data) {
           msg += data;
           d3.select("#flood").html(msg);
@@ -314,38 +302,36 @@ function getNearbyNeighborhoods(url, ll, d) {
     return;
   }
 
-  d3.request(url)
-    .mimeType("application/json")
-    .response(function(xhr) {
-      return JSON.parse(xhr.responseText);
-    })
-    .get(function(data) {
+  var LL = L.latLng(ll[1], ll[0]);
+  // use location to find out which census block they are inside.
+  L.esri.query({
+    url: url
+  }).run(function(error, data) {
+    console.log(data);
+    var items = getItemsForFeatures(data.features, ll, d);
 
-      var items = getItemsForFeatures(data.features, ll, d);
+    var msg = "";
+    $(items).each(function(i) {
+      var item = $(this);
+      if (item[0].properties.NAME) {
+        msg += item[0].properties.NAME;
+      } else if (item[0].properties.Name) {
+        msg += item[0].properties.Name;
+      } else if (item[0].properties.name) {
+        msg += item[0].properties.name;
+      } else if (item[0].properties.NBRHD_NAME) {
+        msg += item[0].properties.NBRHD_NAME;
+      } else {
+        msg += "Could not locate name field."
+      }
 
-      var msg = "";
-      $(items).each(function(i) {
-        var item = $(this);
-        if (item[0].properties.NAME) {
-          msg += item[0].properties.NAME;
-        } else if (item[0].properties.Name) {
-          msg += item[0].properties.Name;
-        } else if (item[0].properties.name) {
-          msg += item[0].properties.name;
-        } else if (item[0].properties.NBRHD_NAME) {
-          msg += item[0].properties.NBRHD_NAME;
-        } else {
-          msg += "Could not locate name field."
-        }
-
-        if (i < items.length - 1) {
-          msg += ", ";
-        }
-      });
-
-      d3.select("#nearby-neighborhoods").html(msg);
-
+      if (i < items.length - 1) {
+        msg += ", ";
+      }
     });
+
+    d3.select("#nearby-neighborhoods").html(msg);
+  });
 }
 
 function getParks(url, ll, dist) {
@@ -354,25 +340,22 @@ function getParks(url, ll, dist) {
     return;
   }
 
-  d3.request(url)
-    .mimeType("application/json")
-    .response(function(xhr) {
-      return JSON.parse(xhr.responseText);
-    })
-    .get(function(data) {
+  var LL = L.latLng(ll[1], ll[0]);
+  // use location to find out which census block they are inside.
+  L.esri.query({
+    url: url
+  }).run(function(error, data) {
+    if (!data || !data.features) {
+      d3.select("#parks").html("No data returned!");
+      return;
+    }
 
-      if (!data || !data.features) {
-        d3.select("#parks").html("No data returned!");
-        return;
-      }
+    var items = getItemsForFeatures(data.features, ll, dist);
 
-      var items = getItemsForFeatures(data.features, ll, dist);
+    var msg = items.length;
 
-      var msg = items.length;
-
-      d3.select("#parks").html(msg);
-
-    });
+    d3.select("#parks").html(msg);
+  });
 }
 
 function getSchools(config, ll, dist) {
@@ -400,66 +383,68 @@ function getNearbySchools(config, ll, dist) {
     var url = config[type];
 
     if (url !== "") {
-      d3.request(url)
-        .mimeType("application/json")
-        .response(function(xhr) {
-          return JSON.parse(xhr.responseText);
-        })
-        .get(function(data) {
 
-          var items = getItemsForFeatures(data.features, ll, dist);
+      var LL = L.latLng(ll[1], ll[0]);
+      // use location to find out which census block they are inside.
+      L.esri.query({
+        url: url
+      }).run(function(error, data) {
+        var items = getItemsForFeatures(data.features, ll, dist);
 
-          var msg = "<p style='text-decoration:underline;'>" + items.length + " within " + dist + " miles</p><p>";
-          switch(type.toString()) {
-            case "elementary": {
+        var msg = "<p style='text-decoration:underline;'>" + items.length + " within " + dist + " miles</p><p>";
+        switch (type.toString()) {
+          case "elementary":
+            {
               typeStr = " Elementary School";
             }
             break;
-            case "middle": {
+          case "middle":
+            {
               typeStr = " Middle School";
             }
             break;
-            case "high": {
+          case "high":
+            {
               typeStr = " High School";
             }
             break;
-            default: {
+          default:
+            {
               typeStr = "";
             }
-          }
-          $(items).each(function(i) {
-            var item = $(this);
-            var len = 0;
-            if (item[0].properties.NAME) {
-              len = item[0].properties.NAME.indexOf(typeStr) > 0 ? item[0].properties.NAME.indexOf(typeStr) : item[0].properties.NAME.length;
-              msg += item[0].properties.NAME.substring(0, len);
-            } else if (item[0].properties.Name) {
-              len = item[0].properties.Name.indexOf(typeStr) > 0 ? item[0].properties.Name.indexOf(typeStr) : item[0].properties.Name.length;
-              msg += item[0].properties.Name.substring(0, len);
-            } else if (item[0].properties.name) {
-              len = item[0].properties.name.indexOf(typeStr) > 0 ? item[0].properties.name.indexOf(typeStr) : item[0].properties.name.length;
-              msg += item[0].properties.name.substring(0, len);
-            } else {
-              msg += "Could not locate name field."
-            }
-
-            if (i < items.length - 1) {
-              msg += ", ";
-            }
-          });
-          msg += "</p>";
-
-          if (type == "all") {
-              $("#school-location-all").parent().parent().next().hide();
-              $("#school-location-all").parent().parent().next().next().hide();
-              $("#school-location-all").parent().parent().next().next().next().hide();
+        }
+        $(items).each(function(i) {
+          var item = $(this);
+          var len = 0;
+          if (item[0].properties.NAME) {
+            len = item[0].properties.NAME.indexOf(typeStr) > 0 ? item[0].properties.NAME.indexOf(typeStr) : item[0].properties.NAME.length;
+            msg += item[0].properties.NAME.substring(0, len);
+          } else if (item[0].properties.Name) {
+            len = item[0].properties.Name.indexOf(typeStr) > 0 ? item[0].properties.Name.indexOf(typeStr) : item[0].properties.Name.length;
+            msg += item[0].properties.Name.substring(0, len);
+          } else if (item[0].properties.name) {
+            len = item[0].properties.name.indexOf(typeStr) > 0 ? item[0].properties.name.indexOf(typeStr) : item[0].properties.name.length;
+            msg += item[0].properties.name.substring(0, len);
           } else {
-            $("#school-location-all").parent().parent().hide();
+            msg += "Could not locate name field."
           }
 
-          d3.select("#school-location-" + type).html(msg);
-
+          if (i < items.length - 1) {
+            msg += ", ";
+          }
         });
+        msg += "</p>";
+
+        if (type == "all") {
+          $("#school-location-all").parent().parent().next().hide();
+          $("#school-location-all").parent().parent().next().next().hide();
+          $("#school-location-all").parent().parent().next().next().next().hide();
+        } else {
+          $("#school-location-all").parent().parent().hide();
+        }
+
+        d3.select("#school-location-" + type).html(msg);
+      });
     }
 
   });
@@ -476,64 +461,66 @@ function getZonedSchools(config, ll) {
     var url = config[type];
 
     if (url !== "") {
-      d3.request(url)
-        .mimeType("application/json")
-        .response(function(xhr) {
-          return JSON.parse(xhr.responseText);
-        })
-        .get(function(data) {
-
-          var msg = "";
-          switch(type.toString()) {
-            case "elementary": {
+      var LL = L.latLng(ll[1], ll[0]);
+      // use location to find out which census block they are inside.
+      L.esri.query({
+        url: url
+      }).run(function(error, data) {
+        var msg = "";
+        switch (type.toString()) {
+          case "elementary":
+            {
               typeStr = " Elementary School";
             }
             break;
-            case "middle": {
+          case "middle":
+            {
               typeStr = " Middle School";
             }
             break;
-            case "high": {
+          case "high":
+            {
               typeStr = " High School";
             }
             break;
-            default: {
+          default:
+            {
               typeStr = "";
             }
-          }
-          $(data.features).each(function() {
-            var f = $(this);
-            if (f && f[0]) {
-              if (d3.geoContains(f[0], ll)) {
-                var len = 0;
-                if (f[0].properties.ES_NAME) {
-                  len = f[0].properties.ES_NAME.indexOf(typeStr) > 0 ? f[0].properties.ES_NAME.indexOf(typeStr) : f[0].properties.ES_NAME.length;
-                  msg += f[0].properties.ES_NAME.substring(0, len);
-                } else if (f[0].properties.MS_NAME) {
-                  len = f[0].properties.MS_NAME.indexOf(typeStr) > 0 ? f[0].properties.MS_NAME.indexOf(typeStr) : f[0].properties.MS_NAME.length;
-                  msg += f[0].properties.MS_NAME.substring(0, len);
-                } else if (f[0].properties.HS_NAME) {
-                  len = f[0].properties.HS_NAME.indexOf(typeStr) > 0 ? f[0].properties.HS_NAME.indexOf(typeStr) : f[0].properties.HS_NAME.length;
-                  msg += f[0].properties.HS_NAME.substring(0, len);
-                }
-
+        }
+        $(data.features).each(function() {
+          var f = $(this);
+          if (f && f[0]) {
+            if (d3.geoContains(f[0], ll)) {
+              var len = 0;
+              if (f[0].properties.ES_NAME) {
+                len = f[0].properties.ES_NAME.indexOf(typeStr) > 0 ? f[0].properties.ES_NAME.indexOf(typeStr) : f[0].properties.ES_NAME.length;
+                msg += f[0].properties.ES_NAME.substring(0, len);
+              } else if (f[0].properties.MS_NAME) {
+                len = f[0].properties.MS_NAME.indexOf(typeStr) > 0 ? f[0].properties.MS_NAME.indexOf(typeStr) : f[0].properties.MS_NAME.length;
+                msg += f[0].properties.MS_NAME.substring(0, len);
+              } else if (f[0].properties.HS_NAME) {
+                len = f[0].properties.HS_NAME.indexOf(typeStr) > 0 ? f[0].properties.HS_NAME.indexOf(typeStr) : f[0].properties.HS_NAME.length;
+                msg += f[0].properties.HS_NAME.substring(0, len);
               }
+
             }
-          });
-
-          msg += "</p>";
-
-          // if (type == "all") {
-          //     $("#all").parent().parent().next().hide();
-          //     $("#all").parent().parent().next().next().hide();
-          //     $("#all").parent().parent().next().next().next().hide();
-          // } else {
-          //   $("#all").parent().parent().hide();
-          // }
-
-          d3.select("#school-zone-" + type).html(msg);
-
+          }
         });
+
+        msg += "</p>";
+
+        // if (type == "all") {
+        //     $("#all").parent().parent().next().hide();
+        //     $("#all").parent().parent().next().next().hide();
+        //     $("#all").parent().parent().next().next().next().hide();
+        // } else {
+        //   $("#all").parent().parent().hide();
+        // }
+
+        d3.select("#school-zone-" + type).html(msg);
+      });
+
     }
 
   });
@@ -652,31 +639,31 @@ function getItemsForFeatures(features, ll, d) {
       }
       flags[item[0].properties.name] = true;
       return true;
-    }  else if (item[0].properties.PARK_NAME) {
+    } else if (item[0].properties.PARK_NAME) {
       if (flags[item[0].properties.PARK_NAME]) {
         return false;
       }
       flags[item[0].properties.PARK_NAME] = true;
       return true;
-    }  else if (item[0].properties.NBRHD_NAME) {
+    } else if (item[0].properties.NBRHD_NAME) {
       if (flags[item[0].properties.NBRHD_NAME]) {
         return false;
       }
       flags[item[0].properties.NBRHD_NAME] = true;
       return true;
-    }  else if (item[0].properties.ES_NAME) {
+    } else if (item[0].properties.ES_NAME) {
       if (flags[item[0].properties.ES_NAME]) {
         return false;
       }
       flags[item[0].properties.ES_NAME] = true;
       return true;
-    }  else if (item[0].properties.MS_NAME) {
+    } else if (item[0].properties.MS_NAME) {
       if (flags[item[0].properties.MS_NAME]) {
         return false;
       }
       flags[item[0].properties.MS_NAME] = true;
       return true;
-    }  else if (item[0].properties.HS_NAME) {
+    } else if (item[0].properties.HS_NAME) {
       if (flags[item[0].properties.HS_NAME]) {
         return false;
       }
