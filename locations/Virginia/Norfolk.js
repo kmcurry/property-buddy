@@ -1,7 +1,7 @@
 var Norfolk = {
 
-  boundary: "https://data-orf.opendata.arcgis.com/datasets/5fcd6cdbd5a84e0fae5db8c35465ad54_2.geojson",
-  AICUZ: "https://data-orf.opendata.arcgis.com/datasets/c8de1a1f81e14eacbe381ae342318031_8.geojson",
+  boundary: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Municipal/MapServer/2/",
+  AICUZ: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/8/",
   FIRM: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/1",
   neighborhoods: "https://raw.githubusercontent.com/blackmad/neighborhoods/master/norfolk.geojson", // THIRD PARTY
 
@@ -17,7 +17,7 @@ var Norfolk = {
     emergency: {
       calls: ""
     },
-    hospitals: "https://data-orf.opendata.arcgis.com/datasets/77a29d702d1b416fa1e4ffe0d52e6cac_0.geojson",
+    hospitals: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Public_Safety/MapServer/0/",
   },
 
   police: {
@@ -26,14 +26,14 @@ var Norfolk = {
   },
 
   recreation: {
-    centers: "https://data-orf.opendata.arcgis.com/datasets/fcaa90ef89de4e17bb2b958915d88ab3_0.geojson",
-    libraries: "https://data-orf.opendata.arcgis.com/datasets/0c8de8e20bba46a283bb1062f276fe33_4.geojson",
-    parks: "https://data-orf.opendata.arcgis.com/datasets/fcaa90ef89de4e17bb2b958915d88ab3_1.geojson",
+    centers: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Parks_and_Rec/MapServer/0/",
+    libraries: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Arts_and_Education/MapServer/4/",
+    parks: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Parks_and_Rec/MapServer/1/",
   },
 
   schools: {
     locations: {
-      all: "https://data-orf.opendata.arcgis.com/datasets/0c8de8e20bba46a283bb1062f276fe33_0.geojson",
+      all: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Arts_and_Education/MapServer/0/",
       pre: "",
       elementary: "",
       middle: "",
@@ -42,9 +42,9 @@ var Norfolk = {
     zones: {
       all: "",
       pre: "",
-      elementary: "https://data-orf.opendata.arcgis.com/datasets/0c8de8e20bba46a283bb1062f276fe33_1.geojson",
-      middle: "https://data-orf.opendata.arcgis.com/datasets/0c8de8e20bba46a283bb1062f276fe33_2.geojson",
-      high: "https://data-orf.opendata.arcgis.com/datasets/0c8de8e20bba46a283bb1062f276fe33_3.geojson"
+      elementary: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Arts_and_Education/MapServer/1/",
+      middle: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Arts_and_Education/MapServer/2/",
+      high: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Arts_and_Education/MapServer/3/"
     }
 
   }

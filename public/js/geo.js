@@ -17,10 +17,13 @@ function getFeaturesForLocation(position) {
 
   // TODO: Don't need to check the city again if form was used
   // TODO: Stop brute-force checking every city
-  d3.json(locations.Virginia.Norfolk.boundary, function(error, mapData) {
-    console.log("Checking in NFK");
-    var features = mapData.features[0];
-    if (d3.geoContains(features, ll)) {
+
+  var LL = L.latLng(ll[1], ll[0]);
+  // use location to find out which census block they are inside.
+  L.esri.query({
+    url: locations.Virginia.Norfolk.boundary
+  }).intersects(LL).run(function(error, data) {
+    if (data && data.features && data.features.length) {
       console.log("Location is NFK");
       var msg = "Norfolk";
       d3.select("#city").html(msg);
@@ -37,8 +40,6 @@ function getFeaturesForLocation(position) {
       getAverageResponseTime(locations.Virginia.Norfolk.police.calls, ll, .25, "police");
       getCountWithinDays(locations.Virginia.Norfolk.police.incidents, ll, 1, 30, "police-incidents");
       getCountWithinDays(locations.Virginia.Norfolk.police.calls, ll, 1, 30, "police-calls");
-    } else {
-      console.log("Location is not in NFK")
     }
   });
 
@@ -46,23 +47,26 @@ function getFeaturesForLocation(position) {
   // use location to find out which census block they are inside.
   L.esri.query({
     url: locations.Virginia.VirginiaBeach.boundary
-  }).intersects(LL).run(function(error, bounds) {
-    console.log("Location is VB");
-    var msg = "Virginia Beach";
-    d3.select("#city").html(msg);
-    getAICUZ(locations.Virginia.VirginiaBeach.AICUZ, ll);
-    getFloodZone(locations.Virginia.VirginiaBeach.FIRM, ll);
-    getSchools(locations.Virginia.VirginiaBeach.schools, ll, 3);
-    getParks(locations.Virginia.VirginiaBeach.recreation.parks, ll, 1);
-    getClosestThing(locations.Virginia.VirginiaBeach.recreation.parks, ll, "park");
-    getClosestThing(locations.Virginia.VirginiaBeach.recreation.libraries, ll, "library");
-    getClosestThing(locations.Virginia.VirginiaBeach.fire.hydrants.public, ll, "hydrant", "feet");
-    getClosestThing(locations.Virginia.VirginiaBeach.recreation.centers, ll, "recCenter");
-    getNearbyNeighborhoods(locations.Virginia.VirginiaBeach.neighborhoods, ll, 1, "neighborhoods")
-    getAverageResponseTime(locations.Virginia.VirginiaBeach.medical.emergency.calls, ll, .25, "ems");
-    getAverageResponseTime(locations.Virginia.VirginiaBeach.police.calls, ll, .25, "police");
-    getCountWithinDays(locations.Virginia.VirginiaBeach.police.incidents, ll, 1, 30, "police-incidents");
-    getCountWithinDays(locations.Virginia.VirginiaBeach.police.calls, ll, 1, 30, "police-calls");
+  }).intersects(LL).run(function(error, data) {
+    if (data && data.features && data.features.length) {
+      console.log("Location is VB");
+      var msg = "Virginia Beach";
+      d3.select("#city").html(msg);
+      getAICUZ(locations.Virginia.VirginiaBeach.AICUZ, ll);
+      getFloodZone(locations.Virginia.VirginiaBeach.FIRM, ll);
+      getSchools(locations.Virginia.VirginiaBeach.schools, ll, 3);
+      getParks(locations.Virginia.VirginiaBeach.recreation.parks, ll, 1);
+      getClosestThing(locations.Virginia.VirginiaBeach.recreation.parks, ll, "park");
+      getClosestThing(locations.Virginia.VirginiaBeach.recreation.libraries, ll, "library");
+      getClosestThing(locations.Virginia.VirginiaBeach.fire.hydrants.public, ll, "hydrant", "feet");
+      getClosestThing(locations.Virginia.VirginiaBeach.recreation.centers, ll, "recCenter");
+      getNearbyNeighborhoods(locations.Virginia.VirginiaBeach.neighborhoods, ll, 1, "neighborhoods")
+      getAverageResponseTime(locations.Virginia.VirginiaBeach.medical.emergency.calls, ll, .25, "ems");
+      getAverageResponseTime(locations.Virginia.VirginiaBeach.police.calls, ll, .25, "police");
+      getCountWithinDays(locations.Virginia.VirginiaBeach.police.incidents, ll, 1, 30, "police-incidents");
+      getCountWithinDays(locations.Virginia.VirginiaBeach.police.calls, ll, 1, 30, "police-calls");
+    }
+
   });
 
 
@@ -302,36 +306,52 @@ function getNearbyNeighborhoods(url, ll, d) {
     return;
   }
 
-  var LL = L.latLng(ll[1], ll[0]);
-  // use location to find out which census block they are inside.
-  L.esri.query({
-    url: url
-  }).run(function(error, data) {
-    console.log(data);
-    var items = getItemsForFeatures(data.features, ll, d);
-
-    var msg = "";
-    $(items).each(function(i) {
-      var item = $(this);
-      if (item[0].properties.NAME) {
-        msg += item[0].properties.NAME;
-      } else if (item[0].properties.Name) {
-        msg += item[0].properties.Name;
-      } else if (item[0].properties.name) {
-        msg += item[0].properties.name;
-      } else if (item[0].properties.NBRHD_NAME) {
-        msg += item[0].properties.NBRHD_NAME;
-      } else {
-        msg += "Could not locate name field."
-      }
-
-      if (i < items.length - 1) {
-        msg += ", ";
-      }
+  if (url.indexOf(".geojson") > -1) {
+    d3.request(url)
+    .mimeType("application/json")
+    .response(function(xhr) {
+      return JSON.parse(xhr.responseText);
+    })
+    .get(function(data) {
+      neighborhoodHelper(data, ll, d);
     });
 
-    d3.select("#nearby-neighborhoods").html(msg);
+  } else {
+    var LL = L.latLng(ll[1], ll[0]);
+    // use location to find out which census block they are inside.
+    L.esri.query({
+      url: url
+    }).run(function(error, data) {
+      neighborhoodHelper(data, ll, d);
+    });
+  }
+}
+
+function neighborhoodHelper(data, ll, d) {
+  console.log(data);
+  var items = getItemsForFeatures(data.features, ll, d);
+
+  var msg = "";
+  $(items).each(function(i) {
+    var item = $(this);
+    if (item[0].properties.NAME) {
+      msg += item[0].properties.NAME;
+    } else if (item[0].properties.Name) {
+      msg += item[0].properties.Name;
+    } else if (item[0].properties.name) {
+      msg += item[0].properties.name;
+    } else if (item[0].properties.NBRHD_NAME) {
+      msg += item[0].properties.NBRHD_NAME;
+    } else {
+      msg += "Could not locate name field."
+    }
+
+    if (i < items.length - 1) {
+      msg += ", ";
+    }
   });
+
+  d3.select("#nearby-neighborhoods").html(msg);
 }
 
 function getParks(url, ll, dist) {
