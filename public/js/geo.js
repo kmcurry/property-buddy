@@ -42,31 +42,40 @@ function getFeaturesForLocation(position) {
     }
   });
 
-  d3.json(locations.Virginia.VirginiaBeach.boundary, function(error, mapData) {
-    console.log("Checking in VB");
-    var features = mapData.features[0];
-    if (d3.geoContains(features, ll)) {
-      console.log("Location is VB");
-      var msg = "Virginia Beach";
-      d3.select("#city").html(msg);
-      getAICUZ(locations.Virginia.VirginiaBeach.AICUZ, ll);
-      getFloodZone(locations.Virginia.VirginiaBeach.FIRM, ll);
-      getSchools(locations.Virginia.VirginiaBeach.schools, ll, 3);
-      getParks(locations.Virginia.VirginiaBeach.recreation.parks, ll, 1);
-      getClosestThing(locations.Virginia.VirginiaBeach.recreation.parks, ll, "park");
-      getClosestThing(locations.Virginia.VirginiaBeach.recreation.libraries, ll, "library");
-      getClosestThing(locations.Virginia.VirginiaBeach.fire.hydrants.public, ll, "hydrant", "feet");
-      getClosestThing(locations.Virginia.VirginiaBeach.recreation.centers, ll, "recCenter");
-      getNearbyNeighborhoods(locations.Virginia.VirginiaBeach.neighborhoods, ll, 1, "neighborhoods")
-      getAverageResponseTime(locations.Virginia.VirginiaBeach.medical.emergency.calls, ll, .25, "ems");
-      getAverageResponseTime(locations.Virginia.VirginiaBeach.police.calls, ll, .25, "police");
-      getCountWithinDays(locations.Virginia.VirginiaBeach.police.incidents, ll, 1, 30, "police-incidents");
-      getCountWithinDays(locations.Virginia.VirginiaBeach.police.calls, ll, 1, 30, "police-calls");
-
-    } else {
-      console.log("Location is not in VB")
-    }
+  var contains = false;
+  var LL = L.latLng(ll[1], ll[0]);
+  // use location to find out which census block they are inside.
+  L.esri.query({
+    url: locations.Virginia.VirginiaBeach.boundary
+  }).intersects(LL).run(function(error, bounds) {
+    console.log("Location is VB");
+    var msg = "Virginia Beach";
+    d3.select("#city").html(msg);
+    getAICUZ(locations.Virginia.VirginiaBeach.AICUZ, ll);
+    getFloodZone(locations.Virginia.VirginiaBeach.FIRM, ll);
+    getSchools(locations.Virginia.VirginiaBeach.schools, ll, 3);
+    getParks(locations.Virginia.VirginiaBeach.recreation.parks, ll, 1);
+    getClosestThing(locations.Virginia.VirginiaBeach.recreation.parks, ll, "park");
+    getClosestThing(locations.Virginia.VirginiaBeach.recreation.libraries, ll, "library");
+    getClosestThing(locations.Virginia.VirginiaBeach.fire.hydrants.public, ll, "hydrant", "feet");
+    getClosestThing(locations.Virginia.VirginiaBeach.recreation.centers, ll, "recCenter");
+    getNearbyNeighborhoods(locations.Virginia.VirginiaBeach.neighborhoods, ll, 1, "neighborhoods")
+    getAverageResponseTime(locations.Virginia.VirginiaBeach.medical.emergency.calls, ll, .25, "ems");
+    getAverageResponseTime(locations.Virginia.VirginiaBeach.police.calls, ll, .25, "police");
+    getCountWithinDays(locations.Virginia.VirginiaBeach.police.incidents, ll, 1, 30, "police-incidents");
+    getCountWithinDays(locations.Virginia.VirginiaBeach.police.calls, ll, 1, 30, "police-calls");
   });
+
+  // d3.json(locations.Virginia.VirginiaBeach.boundary, function(error, mapData) {
+  //   console.log("Checking in VB");
+  //   var features = mapData.features[0];
+  //   if (d3.geoContains(features, ll)) {
+  //
+  //
+  //   } else {
+  //     console.log("Location is not in VB")
+  //   }
+  // });
 
   d3.json(locations.Virginia.Chesapeake.boundary, function(error, mapData) {
     console.log("Checking in Chesapeake");
