@@ -14,6 +14,9 @@ head
     .p-lg {
       font-size: 56px;
     }
+    .p-md {
+      font-size: 24px;
+    }
     .title {
       font-size: 90px;
     }
@@ -36,7 +39,7 @@ head
         }
 
       }
-body(style="margin-top:20px;")
+body
   div(class="container")
     div(class="row")
       div(class="col-md-2 col-lg-2")
@@ -55,7 +58,7 @@ body(style="margin-top:20px;")
       div(class="col-md-2 col-lg-2")
     div(class="row")
       center
-        a(href="/about") About
+        a(class="p-md" href="/about") About
   input(type="hidden" id="locations" value=""+locations)
 script(src="/bower_components/jquery/dist/jquery.min.js")
 script(src="/bower_components/bootstrap/dist/js/bootstrap.min.js")
