@@ -26,7 +26,7 @@ app.get('/about', function(req, res) {
   res.render('about');
 });
 
-app.get('/easteregg', function(req, res) {
+app.get('/eastereggs', function(req, res) {
   res.render('easteregg');
 });
 
