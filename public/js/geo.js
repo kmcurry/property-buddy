@@ -454,13 +454,7 @@ function getNearbySchools(config, ll, dist) {
         });
         msg += "</p>";
 
-        if (type == "all") {
-          $("#school-location-all").parent().parent().next().hide();
-          $("#school-location-all").parent().parent().next().next().hide();
-          $("#school-location-all").parent().parent().next().next().next().hide();
-        } else {
-          $("#school-location-all").parent().parent().hide();
-        }
+
 
         d3.select("#school-location-" + type).html(msg);
       });
