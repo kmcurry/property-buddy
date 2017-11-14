@@ -1,0 +1,246 @@
+html
+head
+  title SpotFax
+  meta(charset='utf-8')
+  link(rel='stylesheet',  href="/bower_components/bootstrap/dist/css/bootstrap.min.css")
+  style.
+    body {
+      font-family: sans-serif;
+      font-size: 24px !important;
+      color: #383838;
+    }
+    .report {
+      margin: 10px;
+      padding: 10px;
+    }
+    
+    .ems {
+      background: #ffb3ec;
+    }
+    
+    .flood {
+      background: #C1ECFA;
+      padding-left: 2px !important;
+      padding-right: 2px !important;
+    }
+    
+    .fire {
+      background: #ffb3b3;
+    }
+
+    .libraries {
+      background: #ffcc99;
+    }
+    
+    .neighborhoods {
+      background: #e6ccb3;
+    }
+    
+    .parks {
+      background: #dff0d8;
+    }
+    
+    .police {
+      background: #b3c6ff;
+    }
+    
+    .recCenters {
+      background: #ffffb3;
+    }
+
+    .schools {
+      background: #f1daf1;
+    }
+    
+    ._0 {
+      background-color: #55ff00;
+    }
+
+    ._50 {
+      background-color: #55ff00;
+    }
+
+    ._55 {
+      background-color: #80ff00;
+    }
+
+    ._60 {
+      background-color: #aaff00;
+    }
+
+    ._65 {
+      background-color: #d5ff00;
+    }
+
+    ._70 {
+      background-color: #ffff00;
+    }
+
+    ._75 {
+      background-color: #ffd500;
+    }
+
+    ._80 {
+      background-color: #ff5500;
+    }
+
+    ._85 {
+      background-color: #ff0000;
+    }
+    
+    /* Portrait */
+    @media only screen 
+      and (min-device-width: 320px) 
+      and (max-device-width: 480px)
+      and (-webkit-min-device-pixel-ratio: 2)
+      and (orientation: portrait) {
+        body {
+          font-size: 40px !important;
+        }
+        .container {
+          margin: 10px !important;
+          padding: 10px !important;
+        }
+    }
+    
+body
+  div(class="report")
+    div(name="location" id="location")
+      div(class="row")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-map-marker"></span> City
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          div(id="city") ...
+    div(name="environment" id="environment")
+      div(class="row aicuz")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-plane"></span> AICUZ Noise
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          div(id="aicuz") ...
+      div(class="row flood")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-life-ring"></span> Flood Zone
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          div(id="flood") ...(this can take some time)
+    div(name="safety" id="safety")
+      div(class="row ems")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-ambulance"></span> Response Time
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          div(id="ems-response-avg") ...
+      div(class="row police")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-shield"></span> Response Time
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          div(id="police-response-avg") ...
+      div(class="row police")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-shield"></span> Service Calls <a href="" title="Non-emergency">*</a>
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          div(id="police-calls") ...
+      div(class="row police")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-shield"></span> Incidents <a href="" title="Emergency, possible crime">*</a>
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          div(id="police-incidents") ...
+      div(class="row fire")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-fire"></span> Closest Hydrant
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          div(id="closest-hydrant") ...
+    div(name="neighborhood" id="neighborhood")
+      div(class="row schools")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-graduation-cap"></span> Nearby
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          p(id="school-location-all")
+      div(class="row schools")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          p Elementary
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          p(id="school-location-elementary")
+      div(class="row schools")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          p Middle
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          p(id="school-location-middle")
+      div(class="row schools")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          p High
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          p(id="school-location-high")
+      div(class="row schools")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-graduation-cap"></span> Zoned
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          p(id="school-zone-all")
+      div(class="row schools")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          p Elementary
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          p(id="school-zone-elementary")
+      div(class="row schools")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          p Middle
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          p(id="school-zone-middle")
+      div(class="row schools")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          p High
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          p(id="school-zone-high")
+      div(class="row parks")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-tree"></span> Parks within 1 mile
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          div(id="parks") ...
+      div(class="row parks")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-tree"></span> Closest Park
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          div(id="closest-park") ...
+      div(class="row libraries")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-book"></span> Closest Library
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          div(id="closest-library") ...
+      div(class="row recCenters")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-soccer-ball-o"></span> Closest Recreation Center
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          div(id="closest-recCenter") ...
+      div(class="row neighborhoods")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-home"></span> Nearby Neighborhoods
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          div(id="nearby-neighborhoods") ...
+  div(id="invisibleMap")
+  input(type="hidden" id="locations" value=""+locations)
+  input(type="hidden" id="searchPosition" value=""+position)
+  link(rel='stylesheet',  href="/bower_components/font-awesome/css/font-awesome.min.css")
+  script(src="//d3js.org/d3.v3.min.js")
+  script(src="//d3js.org/d3-collection.v1.min.js")
+  script(src="//d3js.org/d3-dispatch.v1.min.js")
+  script(src="//d3js.org/d3-dsv.v1.min.js")
+  script(src="//d3js.org/d3-request.v1.min.js")
+  script(src="//d3js.org/d3-array.v1.min.js")
+  script(src="//d3js.org/d3-geo.v1.min.js")
+  script(src="/bower_components/D.js/lib/D.min.js")
+  script(src="/bower_components/jquery/dist/jquery.min.js")
+  script(src="/bower_components/bootstrap/dist/js/bootstrap.min.js")
+  script(src="/bower_components/jquery-ui/jquery-ui.min.js")
+  link(rel="stylesheet"     
+      href="/bower_components/jquery-ui/themes/smoothness/jquery-ui.css")
+  link(rel="stylesheet"     
+      href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css",
+      integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw==",
+      crossorigin="")
+  script(src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js",
+  integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA==",
+  crossorigin="")
+  script(src="https://unpkg.com/esri-leaflet@2.1.0/dist/esri-leaflet.js",
+  integrity="sha512-Tojl3UMd387f6DdAJlo+fKfJZiP55fYT+6Y58yKbHydnueOdSFOxrgLPuUxm7VW1szEt3hZVwv3V2sSUCuT35w==",
+  crossorigin="")
+  script(src="/js/geo.js")
+  script(src="/js/google.js")
+      
