@@ -6,8 +6,14 @@ var path = require('path'),
 
 var app = express();
 
+// allow custom bower install location with default
+var bowerComponents = path.join(__dirname + '/bower_components');
+if (process.env.BOWER_PATH) {
+    bowerComponents = path.join(process.env.BOWER_PATH + '/bower_components');
+};
+
 app.use(express.static('public'));
-app.use('/bower_components', express.static(__dirname + '/bower_components'));
+app.use('/bower_components', express.static(bowerComponents));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
@@ -43,5 +49,5 @@ app.get('/search/:loc', function(req, res) {
 });
 
 app.listen(process.env.PORT || 3000, function() {
-  console.log('Example app listening on port 3000!');
+  console.log('App listening on port ' + process.env.PORT);
 });
