@@ -1,0 +1,160 @@
+body {
+  text-align: justify !important;
+}
+p {
+  text-align: justify !important;
+}
+.p-lg {
+  font-size: 56px;
+}
+.p-md {
+  font-size: 24px;
+}
+.title {
+  font-size: 90px;
+}
+/* Portrait */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) {
+
+  }
+
+  body {
+    font-family: sans-serif;
+    font-size: 40px !important;
+    color: #383838;
+  }
+  
+  .row-border {
+    border: 1px solid gray;
+    border-radius: 8px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+
+  .ems {
+    background: #ffb3ec;
+  }
+  
+  .flood {
+    background: #C1ECFA;
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+  }
+  
+  .fire {
+    background: #ffb3b3;
+  }
+
+  .libraries {
+    background: #ffcc99;
+  }
+  
+  .neighborhoods {
+    background: #e6ccb3;
+  }
+  
+  .parks {
+    background: #dff0d8;
+  }
+  
+  .police {
+    background: #b3c6ff;
+  }
+  
+  .recCenters {
+    background: #ffffb3;
+  }
+
+  .schools {
+    background: #f1daf1;
+  }
+  
+  ._0 {
+    background-color: #55ff00;
+  }
+
+  ._50 {
+    background-color: #55ff00;
+  }
+
+  ._55 {
+    background-color: #80ff00;
+  }
+
+  ._60 {
+    background-color: #aaff00;
+  }
+
+  ._65 {
+    background-color: #d5ff00;
+  }
+
+  ._70 {
+    background-color: #ffff00;
+  }
+
+  ._75 {
+    background-color: #ffd500;
+  }
+
+  ._80 {
+    background-color: #ff5500;
+  }
+
+  ._85 {
+    background-color: #ff0000;
+  }
+  
+  /* Portrait */
+  @media only screen 
+    and (min-device-width: 320px) 
+    and (max-device-width: 480px)
+    and (-webkit-min-device-pixel-ratio: 2)
+    and (orientation: portrait) {
+      body {
+        font-size: 60px !important;
+        text-align: center;
+      }
+      #AICUZ0 {
+        display: none;
+      }
+  }
+
+  input {
+    width: 100%;
+    padding: 3%;
+    border: 2px solid rgb(17, 74, 244);
+    border-radius: 4px;
+  }
+  .p-lg {
+    font-size: 56px;
+  }
+  .p-md {
+    font-size: 24px;
+  }
+  .title {
+    font-size: 90px;
+  }
+  /* Portrait */
+  @media only screen 
+    and (min-device-width: 320px) 
+    and (max-device-width: 480px)
+    and (-webkit-min-device-pixel-ratio: 2)
+    and (orientation: portrait) {
+      .pac-container,
+      .pac-input,
+      .pac-item,
+      .pac-item:hover,
+      .pac-item-query,
+      .pac-item-selected,
+      .pac-matched {
+        font-size: 38px !important;
+        padding-top: 12px !important;
+        padding-bottom: 12px !important;
+      }
+
+    }
