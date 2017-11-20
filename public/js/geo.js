@@ -7,16 +7,28 @@ function getFeaturesForLocation(position) {
   console.log(position);
 
   var ll = null;
+  var latitude = null;
+  var longitude = null;
 
   // LON LAT unless locally manipulated b/c D3 is LON LAT
   if (position.coords) {
     ll = [position.coords.longitude, position.coords.latitude];
+  // Set lat and long
+    latitude = position.coords.latitude;
+    longitude = position.coords.longitude;
   } else {
     ll = [position[1], position[0]];
+  // Set lat and long
+    latitude = position[0];
+    longitude = position[1];
   }
 
   // TODO: Don't need to check the city again if form was used
   // TODO: Stop brute-force checking every city
+  
+  getAddress(latitude, longitude)
+  .then(setAddress)
+  .catch(console.error);
 
   var LL = L.latLng(ll[1], ll[0]);
   // use location to find out which census block they are inside.
@@ -120,6 +132,39 @@ function getFeaturesForLocation(position) {
     }
   });
 
+}
+
+function getAddress(latitude, longitude) {
+  return new Promise(function(resolve, reject) {
+    var request = new XMLHttpRequest();
+    var method = "GET";
+    var url =
+      "http://maps.googleapis.com/maps/api/geocode/json?latlng=" +
+      latitude +
+      "," +
+      longitude;
+    var async = true;
+
+    request.open(method, url, async);
+    request.onreadystatechange = function() {
+      if (request.readyState == 4) {
+        if (request.status == 200) {
+          var data = JSON.parse(request.responseText);
+          var address = data.results[0];
+          resolve(address);
+        } else {
+          reject(request.status);
+        }
+      }
+    };
+    request.send();
+  });
+}
+
+function setAddress(address) {
+  console.log(address);
+  formattedAddress = address.formatted_address;
+  console.log("The address is: " + formattedAddress);
 }
 
 function getAICUZ(url, ll) {
