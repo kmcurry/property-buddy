@@ -4,7 +4,6 @@ var searchPosition = [];
 var cityStr = "Not Found";
 var objPath;
 //Used to filter address by city
-//Needs better support
 var supportedCities = [
   "Charlottesville",
   "Chesapeake",
@@ -39,7 +38,7 @@ function getAddress(searchPosition) {
     request.send();
   });
 }
-//Needs work for error handling
+//Needs work for error handling unmatched cities or states
 function setObjPath(address) {
   // console.log(address);
   formattedAddress = address.formatted_address;
@@ -72,12 +71,10 @@ function getFeaturesForLocation(position) {
   var LL = L.latLng(ll[1], ll[0]);
   // use location to find out which census block they are inside.
 
-  console.log("Path before query: " + objPath);
   L.esri.query({
     url: objPath.boundary
   }).intersects(LL).run(function(error, data) {
       d3.select("#city").html(cityStr);
-      console.log("Path inside query: " + objPath);
       getAICUZ(objPath.AICUZ, ll);
       getFloodZone(objPath.FIRM, ll);
       getSchools(objPath.schools, ll, 3);
