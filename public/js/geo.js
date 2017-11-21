@@ -6,9 +6,13 @@ var objPath;
 //Used to filter address by city
 //Needs better support
 var supportedCities = [
-  "Virginia Beach",
-  "Norfolk",
+  "Charlottesville",
   "Chesapeake",
+  "Falls Church",
+  "Newport News",
+  "Norfolk",
+  "Richmond",
+  "Virginia Beach"
 ];
 
 function getAddress(searchPosition) {
