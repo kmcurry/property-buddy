@@ -1,5 +1,14 @@
 var locations = {};
 var searchPosition = [];
+var cityStr = "";
+var objPath;
+//Used to filter address by city
+//Needs better support
+var supportedCities = [
+  "Virginia Beach",
+  "Norfolk",
+  "Chesapeake",
+];
 
 function getFeaturesForLocation(position) {
 
@@ -25,112 +34,118 @@ function getFeaturesForLocation(position) {
 
   // TODO: Don't need to check the city again if form was used
   // TODO: Stop brute-force checking every city
+
+  // TODO: Fix async issue with setting objPath
   
   getAddress(latitude, longitude)
   .then(setAddress)
   .catch(console.error);
 
-  var LL = L.latLng(ll[1], ll[0]);
-  // use location to find out which census block they are inside.
-  L.esri.query({
-    url: locations.Virginia.Norfolk.boundary
-  }).intersects(LL).run(function(error, data) {
-    if (data && data.features && data.features.length) {
-      console.log("Location is NFK");
-      var msg = "Norfolk";
-      d3.select("#city").html(msg);
-      getAICUZ(locations.Virginia.Norfolk.AICUZ, ll);
-      getFloodZone(locations.Virginia.Norfolk.FIRM, ll);
-      getSchools(locations.Virginia.Norfolk.schools, ll, 3);
-      getParks(locations.Virginia.Norfolk.recreation.parks, ll, 1);
-      getClosestThing(locations.Virginia.Norfolk.recreation.parks, ll, "park");
-      getClosestThing(locations.Virginia.Norfolk.recreation.libraries, ll, "library");
-      getClosestThing(locations.Virginia.Norfolk.fire.hydrants.public, ll, "hydrant", "feet");
-      getClosestThing(locations.Virginia.Norfolk.recreation.centers, ll, "recCenter");
-      getNearbyNeighborhoods(locations.Virginia.Norfolk.neighborhoods, ll, 1, "neighborhoods")
-      getAverageResponseTime(locations.Virginia.Norfolk.medical.emergency.calls, ll, .25, "ems");
-      getAverageResponseTime(locations.Virginia.Norfolk.police.calls, ll, .25, "police");
-      getCountWithinDays(locations.Virginia.Norfolk.police.incidents, ll, 1, 30, "police-incidents");
-      getCountWithinDays(locations.Virginia.Norfolk.police.calls, ll, 1, 30, "police-calls");
-    }
-  });
+  // var LL = L.latLng(ll[1], ll[0]);
+  // // use location to find out which census block they are inside.
+  // L.esri.query({
+  //   url: locations.Virginia.Norfolk.boundary
+  // }).intersects(LL).run(function(error, data) {
+  //   if (data && data.features && data.features.length) {
+  //     console.log("Location is NFK");
+  //     var msg = "Norfolk";
+  //     d3.select("#city").html(msg);
+  //     getAICUZ(locations.Virginia.Norfolk.AICUZ, ll);
+  //     getFloodZone(locations.Virginia.Norfolk.FIRM, ll);
+  //     getSchools(locations.Virginia.Norfolk.schools, ll, 3);
+  //     getParks(locations.Virginia.Norfolk.recreation.parks, ll, 1);
+  //     getClosestThing(locations.Virginia.Norfolk.recreation.parks, ll, "park");
+  //     getClosestThing(locations.Virginia.Norfolk.recreation.libraries, ll, "library");
+  //     getClosestThing(locations.Virginia.Norfolk.fire.hydrants.public, ll, "hydrant", "feet");
+  //     getClosestThing(locations.Virginia.Norfolk.recreation.centers, ll, "recCenter");
+  //     getNearbyNeighborhoods(locations.Virginia.Norfolk.neighborhoods, ll, 1, "neighborhoods")
+  //     getAverageResponseTime(locations.Virginia.Norfolk.medical.emergency.calls, ll, .25, "ems");
+  //     getAverageResponseTime(locations.Virginia.Norfolk.police.calls, ll, .25, "police");
+  //     getCountWithinDays(locations.Virginia.Norfolk.police.incidents, ll, 1, 30, "police-incidents");
+  //     getCountWithinDays(locations.Virginia.Norfolk.police.calls, ll, 1, 30, "police-calls");
+  //   }
+  // });
 
   var LL = L.latLng(ll[1], ll[0]);
   // use location to find out which census block they are inside.
+
+  //Need to make this objPath variable accessible here
+  console.log("Check here: " + objPath);
   L.esri.query({
     url: locations.Virginia.VirginiaBeach.boundary
   }).intersects(LL).run(function(error, data) {
-    if (data && data.features && data.features.length) {
-      console.log("Location is VB");
-      var msg = "Virginia Beach";
-      d3.select("#city").html(msg);
-      getAICUZ(locations.Virginia.VirginiaBeach.AICUZ, ll);
-      getFloodZone(locations.Virginia.VirginiaBeach.FIRM, ll);
-      getSchools(locations.Virginia.VirginiaBeach.schools, ll, 3);
-      getParks(locations.Virginia.VirginiaBeach.recreation.parks, ll, 1);
-      getClosestThing(locations.Virginia.VirginiaBeach.recreation.parks, ll, "park");
-      getClosestThing(locations.Virginia.VirginiaBeach.recreation.libraries, ll, "library");
-      getClosestThing(locations.Virginia.VirginiaBeach.fire.hydrants.public, ll, "hydrant", "feet");
-      getClosestThing(locations.Virginia.VirginiaBeach.recreation.centers, ll, "recCenter");
-      getNearbyNeighborhoods(locations.Virginia.VirginiaBeach.neighborhoods, ll, 1, "neighborhoods")
-      getAverageResponseTime(locations.Virginia.VirginiaBeach.medical.emergency.calls, ll, .25, "ems");
-      getAverageResponseTime(locations.Virginia.VirginiaBeach.police.calls, ll, .25, "police");
-      getCountWithinDays(locations.Virginia.VirginiaBeach.police.incidents, ll, 1, 30, "police-incidents");
-      getCountWithinDays(locations.Virginia.VirginiaBeach.police.calls, ll, 1, 30, "police-calls");
-    }
+    // if (data && data.features && data.features.length) {
+      //NOTE: cityStr has spaces removed, need to use 
+      //another variable before spaces get removed
+      d3.select("#city").html(cityStr);
+      console.log("Check inside query: " + objPath);
+      getAICUZ(objPath.AICUZ, ll);
+      getFloodZone(objPath.FIRM, ll);
+      getSchools(objPath.schools, ll, 3);
+      getParks(objPath.recreation.parks, ll, 1);
+      getClosestThing(objPath.recreation.parks, ll, "park");
+      getClosestThing(objPath.recreation.libraries, ll, "library");
+      getClosestThing(objPath.fire.hydrants.public, ll, "hydrant", "feet");
+      getClosestThing(objPath.recreation.centers, ll, "recCenter");
+      getNearbyNeighborhoods(objPath.neighborhoods, ll, 1, "neighborhoods")
+      getAverageResponseTime(objPath.medical.emergency.calls, ll, .25, "ems");
+      getAverageResponseTime(objPath.police.calls, ll, .25, "police");
+      getCountWithinDays(objPath.police.incidents, ll, 1, 30, "police-incidents");
+      getCountWithinDays(objPath.police.calls, ll, 1, 30, "police-calls");
+    // }
 
   });
 
 
-  d3.json(locations.Virginia.Chesapeake.boundary, function(error, mapData) {
-    console.log("Checking in Chesapeake");
-    var features = mapData.features[0];
-    if (d3.geoContains(features, ll)) {
-      console.log("Location is Chesapeake");
-      var msg = "Chesapeake";
-      d3.select("#city").html(msg);
-      getAICUZ(locations.Virginia.Chesapeake.AICUZ, ll);
-      getFloodZone(locations.Virginia.Chesapeake.FIRM, ll);
-      // getSchools(locations.Virginia.Chesapeake.schools, ll, 3);
-      getParks(locations.Virginia.Chesapeake.recreation.parks, ll, 1);
-      getClosestThing(locations.Virginia.Chesapeake.recreation.parks, ll, "park");
-      getClosestThing(locations.Virginia.Chesapeake.recreation.libraries, ll, "library");
-      getClosestThing(locations.Virginia.Chesapeake.fire.hydrants.public, ll, "hydrant", "feet");
-      getClosestThing(locations.Virginia.Chesapeake.recreation.centers, ll, "recCenter");
-      getNearbyNeighborhoods(locations.Virginia.Chesapeake.neighborhoods, ll, 1, "neighborhoods")
-      getAverageResponseTime(locations.Virginia.Chesapeake.medical.emergency.calls, ll, .25, "ems");
-      getAverageResponseTime(locations.Virginia.Chesapeake.police.calls, ll, .25, "police");
-      getCountWithinDays(locations.Virginia.Chesapeake.police.incidents, ll, 1, 30, "police-incidents");
-      getCountWithinDays(locations.Virginia.Chesapeake.police.calls, ll, 1, 30, "police-calls");
-    } else {
-      console.log("Location is not in Chesapeake");
-    }
-  });
+  // d3.json(locations.Virginia.Chesapeake.boundary, function(error, mapData) {
+  //   console.log("Checking in Chesapeake");
+  //   var features = mapData.features[0];
+  //   if (d3.geoContains(features, ll)) {
+  //     console.log("Location is Chesapeake");
+  //     var msg = "Chesapeake";
+  //     d3.select("#city").html(msg);
+  //     getAICUZ(locations.Virginia.Chesapeake.AICUZ, ll);
+  //     getFloodZone(locations.Virginia.Chesapeake.FIRM, ll);
+  //     // getSchools(locations.Virginia.Chesapeake.schools, ll, 3);
+  //     getParks(locations.Virginia.Chesapeake.recreation.parks, ll, 1);
+  //     getClosestThing(locations.Virginia.Chesapeake.recreation.parks, ll, "park");
+  //     getClosestThing(locations.Virginia.Chesapeake.recreation.libraries, ll, "library");
+  //     getClosestThing(locations.Virginia.Chesapeake.fire.hydrants.public, ll, "hydrant", "feet");
+  //     getClosestThing(locations.Virginia.Chesapeake.recreation.centers, ll, "recCenter");
+  //     getNearbyNeighborhoods(locations.Virginia.Chesapeake.neighborhoods, ll, 1, "neighborhoods")
+  //     getAverageResponseTime(locations.Virginia.Chesapeake.medical.emergency.calls, ll, .25, "ems");
+  //     getAverageResponseTime(locations.Virginia.Chesapeake.police.calls, ll, .25, "police");
+  //     getCountWithinDays(locations.Virginia.Chesapeake.police.incidents, ll, 1, 30, "police-incidents");
+  //     getCountWithinDays(locations.Virginia.Chesapeake.police.calls, ll, 1, 30, "police-calls");
+  //   } else {
+  //     console.log("Location is not in Chesapeake");
+  //   }
+  // });
 
-  d3.json(locations.Virginia.FallsChurch.boundary, function(error, mapData) {
-    console.log("Checking in Falls Church");
-    var features = mapData.features[0];
-    if (d3.geoContains(features, ll)) {
-      console.log("Location is Falls Church");
-      var msg = "Falls Church";
-      d3.select("#city").html(msg);
-      getAICUZ(locations.Virginia.FallsChurch.AICUZ, ll);
-      getFloodZone(locations.Virginia.FallsChurch.FIRM, ll);
-      getSchools(locations.Virginia.FallsChurch.schools, ll, 3);
-      getParks(locations.Virginia.FallsChurch.recreation.parks, ll, 1);
-      getClosestThing(locations.Virginia.FallsChurch.recreation.parks, ll, "park");
-      getClosestThing(locations.Virginia.FallsChurch.recreation.libraries, ll, "library");
-      getClosestThing(locations.Virginia.FallsChurch.fire.hydrants.public, ll, "hydrant", "feet");
-      getClosestThing(locations.Virginia.FallsChurch.recreation.centers, ll, "recCenter");
-      getNearbyNeighborhoods(locations.Virginia.FallsChurch.neighborhoods, ll, 1, "neighborhoods")
-      getAverageResponseTime(locations.Virginia.FallsChurch.medical.emergency.calls, ll, .25, "ems");
-      getAverageResponseTime(locations.Virginia.FallsChurch.police.calls, ll, .25, "police");
-      getCountWithinDays(locations.Virginia.FallsChurch.police.incidents, ll, 1, 30, "police-incidents");
-      getCountWithinDays(locations.Virginia.FallsChurch.police.calls, ll, 1, 30, "police-calls");
-    } else {
-      console.log("Location is not in Chesapeake");
-    }
-  });
+  // d3.json(locations.Virginia.FallsChurch.boundary, function(error, mapData) {
+  //   console.log("Checking in Falls Church");
+  //   var features = mapData.features[0];
+  //   if (d3.geoContains(features, ll)) {
+  //     console.log("Location is Falls Church");
+  //     var msg = "Falls Church";
+  //     d3.select("#city").html(msg);
+  //     getAICUZ(locations.Virginia.FallsChurch.AICUZ, ll);
+  //     getFloodZone(locations.Virginia.FallsChurch.FIRM, ll);
+  //     getSchools(locations.Virginia.FallsChurch.schools, ll, 3);
+  //     getParks(locations.Virginia.FallsChurch.recreation.parks, ll, 1);
+  //     getClosestThing(locations.Virginia.FallsChurch.recreation.parks, ll, "park");
+  //     getClosestThing(locations.Virginia.FallsChurch.recreation.libraries, ll, "library");
+  //     getClosestThing(locations.Virginia.FallsChurch.fire.hydrants.public, ll, "hydrant", "feet");
+  //     getClosestThing(locations.Virginia.FallsChurch.recreation.centers, ll, "recCenter");
+  //     getNearbyNeighborhoods(locations.Virginia.FallsChurch.neighborhoods, ll, 1, "neighborhoods")
+  //     getAverageResponseTime(locations.Virginia.FallsChurch.medical.emergency.calls, ll, .25, "ems");
+  //     getAverageResponseTime(locations.Virginia.FallsChurch.police.calls, ll, .25, "police");
+  //     getCountWithinDays(locations.Virginia.FallsChurch.police.incidents, ll, 1, 30, "police-incidents");
+  //     getCountWithinDays(locations.Virginia.FallsChurch.police.calls, ll, 1, 30, "police-calls");
+  //   } else {
+  //     console.log("Location is not in Chesapeake");
+  //   }
+  // });
 
 }
 
@@ -165,6 +180,17 @@ function setAddress(address) {
   console.log(address);
   formattedAddress = address.formatted_address;
   console.log("The address is: " + formattedAddress);
+  for (i = 0; i < supportedCities.length; i++) {
+    if (formattedAddress.includes(supportedCities[i])) {
+      cityStr = supportedCities[i];
+      //remove whitespace if any
+      cityStr = cityStr.replace(/\s+/g, '');
+      console.log("The city to search is: " + cityStr);
+      //create object path to dynamically insert city into function parameters
+      objPath = cityStr.split('.').reduce((o,i)=>o[i], locations.Virginia);
+      console.log(objPath);
+    }
+  }
 }
 
 function getAICUZ(url, ll) {
