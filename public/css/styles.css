@@ -29,9 +29,6 @@ p {
 
 .row-border {
   border: 1px solid gray;
-  border-radius: 8px;
-  margin-top: 4px;
-  margin-bottom: 4px;
 }
 
 .ems {
