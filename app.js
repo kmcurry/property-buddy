@@ -48,6 +48,9 @@ app.get('/search/:loc', function(req, res) {
   });
 });
 
-app.listen(process.env.PORT || 3000, function() {
-  console.log('App listening on port ' + process.env.PORT);
+// default to port 3000, but allow custom env PORT to override
+var port = process.env.PORT || 3000;
+
+app.listen(port, function() {
+  console.log('App listening on port ' + port);
 });
