@@ -3,117 +3,23 @@ head
   title SpotFax
   meta(charset='utf-8')
   link(rel='stylesheet',  href="/bower_components/bootstrap/dist/css/bootstrap.min.css")
-  style.
-    body {
-      font-family: sans-serif;
-      font-size: 40px !important;
-      color: #383838;
-    }
-    
-    .ems {
-      background: #ffb3ec;
-    }
-    
-    .flood {
-      background: #C1ECFA;
-      padding-left: 2px !important;
-      padding-right: 2px !important;
-    }
-    
-    .fire {
-      background: #ffb3b3;
-    }
-
-    .libraries {
-      background: #ffcc99;
-    }
-    
-    .neighborhoods {
-      background: #e6ccb3;
-    }
-    
-    .parks {
-      background: #dff0d8;
-    }
-    
-    .police {
-      background: #b3c6ff;
-    }
-    
-    .recCenters {
-      background: #ffffb3;
-    }
-
-    .schools {
-      background: #f1daf1;
-    }
-    
-    ._0 {
-      background-color: #55ff00;
-    }
-
-    ._50 {
-      background-color: #55ff00;
-    }
-
-    ._55 {
-      background-color: #80ff00;
-    }
-
-    ._60 {
-      background-color: #aaff00;
-    }
-
-    ._65 {
-      background-color: #d5ff00;
-    }
-
-    ._70 {
-      background-color: #ffff00;
-    }
-
-    ._75 {
-      background-color: #ffd500;
-    }
-
-    ._80 {
-      background-color: #ff5500;
-    }
-
-    ._85 {
-      background-color: #ff0000;
-    }
-    
-    /* Portrait */
-    @media only screen 
-      and (min-device-width: 320px) 
-      and (max-device-width: 480px)
-      and (-webkit-min-device-pixel-ratio: 2)
-      and (orientation: portrait) {
-        body {
-          font-size: 60px !important;
-          text-align: center;
-        }
-        #AICUZ0 {
-          display: none;
-        }
-    }
-    
+  link(rel='stylesheet',  href="/css/styles.css")
+  
 body
   div(class="container")
     div(name="location" id="location")
-      div(class="row")
+      div(class="row row-border")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           <span class="fa fa-map-marker" aria-hidden="true"></span> City
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           div(id="city") ...
     div(name="environment" id="environment")
-      div(class="row aicuz")
+      div(class="row row-border aicuz")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           <span class="fa fa-plane" aria-hidden="true"></span> AICUZ Noise Level
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           div(id="aicuz") ...
-      div(class="row")
+      div(class="row row-border")
         div(id="AICUZ0" class="col-md-4 col-lg-4 _0")
           t 0
         div(class="col-xs-3 col-sm-3 col-md-1 col-lg-1 _50")
@@ -132,99 +38,99 @@ body
           t 80
         div(class="col-xs-3 col-sm-3 col-md-1 col-lg-1 _85")
           t 85
-      div(class="row flood")
+      div(class="row row-border flood")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           <span class="fa fa-life-ring" aria-hidden="true"></span> Flood Zone
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           div(id="flood") ...(this can take some time)
     div(name="safety" id="safety")
-      div(class="row ems")
+      div(class="row row-border ems")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           <span class="fa fa-ambulance" aria-hidden="true"></span> EMS Response
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           div(id="ems-response-avg") ...
-      div(class="row police")
+      div(class="row row-border police")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           <span class="fa fa-shield" aria-hidden="true"></span> Police Response
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           div(id="police-response-avg") ...
-      div(class="row police")
+      div(class="row row-border police")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           <span class="fa fa-shield" aria-hidden="true"></span> Police Service Calls <a href="" title="Non-emergency">*</a>
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           div(id="police-calls") ...
-      div(class="row police")
+      div(class="row row-border police")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           <span class="fa fa-shield" aria-hidden="true"></span> Police Incidents <a href="" title="Emergency, possible crime">*</a>
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           div(id="police-incidents") ...
-      div(class="row fire")
+      div(class="row row-border fire")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           <span class="fa fa-fire" aria-hidden="true"></span> Closest Public Hydrant
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           div(id="closest-hydrant") ...
     div(name="neighborhood" id="neighborhood")
-      div(class="row schools")
+      div(class="row row-border schools")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           <span class="fa fa-graduation-cap" aria-hidden="true"></span> Nearby Schools
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p(id="school-location-all")
-      div(class="row schools")
+      div(class="row row-border schools")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p Elementary
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p(id="school-location-elementary")
-      div(class="row schools")
+      div(class="row row-border schools")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p Middle
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p(id="school-location-middle")
-      div(class="row schools")
+      div(class="row row-border schools")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p High
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p(id="school-location-high")
-      div(class="row schools")
+      div(class="row row-border schools")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           <span class="fa fa-graduation-cap" aria-hidden="true"></span> Zoned Schools
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p(id="school-zone-all")
-      div(class="row schools")
+      div(class="row row-border schools")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p Elementary
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p(id="school-zone-elementary")
-      div(class="row schools")
+      div(class="row row-border schools")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p Middle
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p(id="school-zone-middle")
-      div(class="row schools")
+      div(class="row row-border schools")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p High
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p(id="school-zone-high")
-      div(class="row parks")
+      div(class="row row-border parks")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           <span class="fa fa-tree" aria-hidden="true"></span> Parks within 1 mile
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           div(id="parks") ...
-      div(class="row parks")
+      div(class="row row-border parks")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           <span class="fa fa-tree" aria-hidden="true"></span> Closest Park
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           div(id="closest-park") ...
-      div(class="row libraries")
+      div(class="row row-border libraries")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           <span class="fa fa-book" aria-hidden="true"></span> Closest Library
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           div(id="closest-library") ...
-      div(class="row recCenters")
+      div(class="row row-border recCenters")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           <span class="fa fa-soccer-ball-o" aria-hidden="true"></span> Closest Recreation Center
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           div(id="closest-recCenter") ...
-      div(class="row neighborhoods")
+      div(class="row row-border neighborhoods")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           <span class="fa fa-home" aria-hidden="true"></span> Nearby Neighborhoods
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")

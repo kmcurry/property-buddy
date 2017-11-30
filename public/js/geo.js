@@ -1,11 +1,62 @@
 var locations = {};
 var searchPosition = [];
+//setting a value here can be used to handle errors with unmatched cities
+var cityStr = "Not Found";
+var objPath;
+//Used to filter address by city
+var supportedCities = [
+  "Charlottesville",
+  "Chesapeake",
+  "Falls Church",
+  "Newport News",
+  "Norfolk",
+  "Richmond",
+  "Virginia Beach"
+];
+
+function getAddress(searchPosition) {
+  return new Promise(function(resolve, reject) {
+    var request = new XMLHttpRequest();
+    var method = "GET";
+    var url =
+      "http://maps.googleapis.com/maps/api/geocode/json?latlng=" +
+      searchPosition;
+    var async = true;
+
+    request.open(method, url, async);
+    request.onreadystatechange = function() {
+      if (request.readyState == 4) {
+        if (request.status == 200) {
+          var data = JSON.parse(request.responseText);
+          var address = data.results[0];
+          resolve(address);
+        } else {
+          reject(request.status);
+        }
+      }
+    };
+    request.send();
+  });
+}
+//Needs work for error handling unmatched cities or states
+function setObjPath(address) {
+  // console.log(address);
+  formattedAddress = address.formatted_address;
+  console.log("The address is: " + formattedAddress);
+  for (i = 0; i < supportedCities.length; i++) {
+    if (formattedAddress.includes(supportedCities[i])) {
+      cityStr = supportedCities[i];
+    }
+  }
+  //remove whitespace
+  cityPath = cityStr.replace(/\s+/g, '');
+  console.log("The city to search is: " + cityStr);
+  //create object path to dynamically insert city into function parameters
+  objPath = cityPath.split('.').reduce((o,i)=>o[i], locations.Virginia);
+  console.log("setObjPath returns this: " + objPath);
+}
 
 function getFeaturesForLocation(position) {
-
-  console.log("Checking features for position:");
-  console.log(position);
-
   var ll = null;
 
   // LON LAT unless locally manipulated b/c D3 is LON LAT
@@ -16,110 +67,28 @@ function getFeaturesForLocation(position) {
   }
 
   // TODO: Don't need to check the city again if form was used
-  // TODO: Stop brute-force checking every city
 
   var LL = L.latLng(ll[1], ll[0]);
   // use location to find out which census block they are inside.
+
   L.esri.query({
-    url: locations.Virginia.Norfolk.boundary
+    url: objPath.boundary
   }).intersects(LL).run(function(error, data) {
-    if (data && data.features && data.features.length) {
-      console.log("Location is NFK");
-      var msg = "Norfolk";
-      d3.select("#city").html(msg);
-      getAICUZ(locations.Virginia.Norfolk.AICUZ, ll);
-      getFloodZone(locations.Virginia.Norfolk.FIRM, ll);
-      getSchools(locations.Virginia.Norfolk.schools, ll, 3);
-      getParks(locations.Virginia.Norfolk.recreation.parks, ll, 1);
-      getClosestThing(locations.Virginia.Norfolk.recreation.parks, ll, "park");
-      getClosestThing(locations.Virginia.Norfolk.recreation.libraries, ll, "library");
-      getClosestThing(locations.Virginia.Norfolk.fire.hydrants.public, ll, "hydrant", "feet");
-      getClosestThing(locations.Virginia.Norfolk.recreation.centers, ll, "recCenter");
-      getNearbyNeighborhoods(locations.Virginia.Norfolk.neighborhoods, ll, 1, "neighborhoods")
-      getAverageResponseTime(locations.Virginia.Norfolk.medical.emergency.calls, ll, .25, "ems");
-      getAverageResponseTime(locations.Virginia.Norfolk.police.calls, ll, .25, "police");
-      getCountWithinDays(locations.Virginia.Norfolk.police.incidents, ll, 1, 30, "police-incidents");
-      getCountWithinDays(locations.Virginia.Norfolk.police.calls, ll, 1, 30, "police-calls");
-    }
+      d3.select("#city").html(cityStr);
+      getAICUZ(objPath.AICUZ, ll);
+      getFloodZone(objPath.FIRM, ll);
+      getSchools(objPath.schools, ll, 3);
+      getParks(objPath.recreation.parks, ll, 1);
+      getClosestThing(objPath.recreation.parks, ll, "park");
+      getClosestThing(objPath.recreation.libraries, ll, "library");
+      getClosestThing(objPath.fire.hydrants.public, ll, "hydrant", "feet");
+      getClosestThing(objPath.recreation.centers, ll, "recCenter");
+      getNearbyNeighborhoods(objPath.neighborhoods, ll, 1, "neighborhoods")
+      getAverageResponseTime(objPath.medical.emergency.calls, ll, .25, "ems");
+      getAverageResponseTime(objPath.police.calls, ll, .25, "police");
+      getCountWithinDays(objPath.police.incidents, ll, 1, 30, "police-incidents");
+      getCountWithinDays(objPath.police.calls, ll, 1, 30, "police-calls");
   });
-
-  var LL = L.latLng(ll[1], ll[0]);
-  // use location to find out which census block they are inside.
-  L.esri.query({
-    url: locations.Virginia.VirginiaBeach.boundary
-  }).intersects(LL).run(function(error, data) {
-    if (data && data.features && data.features.length) {
-      console.log("Location is VB");
-      var msg = "Virginia Beach";
-      d3.select("#city").html(msg);
-      getAICUZ(locations.Virginia.VirginiaBeach.AICUZ, ll);
-      getFloodZone(locations.Virginia.VirginiaBeach.FIRM, ll);
-      getSchools(locations.Virginia.VirginiaBeach.schools, ll, 3);
-      getParks(locations.Virginia.VirginiaBeach.recreation.parks, ll, 1);
-      getClosestThing(locations.Virginia.VirginiaBeach.recreation.parks, ll, "park");
-      getClosestThing(locations.Virginia.VirginiaBeach.recreation.libraries, ll, "library");
-      getClosestThing(locations.Virginia.VirginiaBeach.fire.hydrants.public, ll, "hydrant", "feet");
-      getClosestThing(locations.Virginia.VirginiaBeach.recreation.centers, ll, "recCenter");
-      getNearbyNeighborhoods(locations.Virginia.VirginiaBeach.neighborhoods, ll, 1, "neighborhoods")
-      getAverageResponseTime(locations.Virginia.VirginiaBeach.medical.emergency.calls, ll, .25, "ems");
-      getAverageResponseTime(locations.Virginia.VirginiaBeach.police.calls, ll, .25, "police");
-      getCountWithinDays(locations.Virginia.VirginiaBeach.police.incidents, ll, 1, 30, "police-incidents");
-      getCountWithinDays(locations.Virginia.VirginiaBeach.police.calls, ll, 1, 30, "police-calls");
-    }
-
-  });
-
-
-  d3.json(locations.Virginia.Chesapeake.boundary, function(error, mapData) {
-    console.log("Checking in Chesapeake");
-    var features = mapData.features[0];
-    if (d3.geoContains(features, ll)) {
-      console.log("Location is Chesapeake");
-      var msg = "Chesapeake";
-      d3.select("#city").html(msg);
-      getAICUZ(locations.Virginia.Chesapeake.AICUZ, ll);
-      getFloodZone(locations.Virginia.Chesapeake.FIRM, ll);
-      // getSchools(locations.Virginia.Chesapeake.schools, ll, 3);
-      getParks(locations.Virginia.Chesapeake.recreation.parks, ll, 1);
-      getClosestThing(locations.Virginia.Chesapeake.recreation.parks, ll, "park");
-      getClosestThing(locations.Virginia.Chesapeake.recreation.libraries, ll, "library");
-      getClosestThing(locations.Virginia.Chesapeake.fire.hydrants.public, ll, "hydrant", "feet");
-      getClosestThing(locations.Virginia.Chesapeake.recreation.centers, ll, "recCenter");
-      getNearbyNeighborhoods(locations.Virginia.Chesapeake.neighborhoods, ll, 1, "neighborhoods")
-      getAverageResponseTime(locations.Virginia.Chesapeake.medical.emergency.calls, ll, .25, "ems");
-      getAverageResponseTime(locations.Virginia.Chesapeake.police.calls, ll, .25, "police");
-      getCountWithinDays(locations.Virginia.Chesapeake.police.incidents, ll, 1, 30, "police-incidents");
-      getCountWithinDays(locations.Virginia.Chesapeake.police.calls, ll, 1, 30, "police-calls");
-    } else {
-      console.log("Location is not in Chesapeake");
-    }
-  });
-
-  d3.json(locations.Virginia.FallsChurch.boundary, function(error, mapData) {
-    console.log("Checking in Falls Church");
-    var features = mapData.features[0];
-    if (d3.geoContains(features, ll)) {
-      console.log("Location is Falls Church");
-      var msg = "Falls Church";
-      d3.select("#city").html(msg);
-      getAICUZ(locations.Virginia.FallsChurch.AICUZ, ll);
-      getFloodZone(locations.Virginia.FallsChurch.FIRM, ll);
-      getSchools(locations.Virginia.FallsChurch.schools, ll, 3);
-      getParks(locations.Virginia.FallsChurch.recreation.parks, ll, 1);
-      getClosestThing(locations.Virginia.FallsChurch.recreation.parks, ll, "park");
-      getClosestThing(locations.Virginia.FallsChurch.recreation.libraries, ll, "library");
-      getClosestThing(locations.Virginia.FallsChurch.fire.hydrants.public, ll, "hydrant", "feet");
-      getClosestThing(locations.Virginia.FallsChurch.recreation.centers, ll, "recCenter");
-      getNearbyNeighborhoods(locations.Virginia.FallsChurch.neighborhoods, ll, 1, "neighborhoods")
-      getAverageResponseTime(locations.Virginia.FallsChurch.medical.emergency.calls, ll, .25, "ems");
-      getAverageResponseTime(locations.Virginia.FallsChurch.police.calls, ll, .25, "police");
-      getCountWithinDays(locations.Virginia.FallsChurch.police.incidents, ll, 1, 30, "police-incidents");
-      getCountWithinDays(locations.Virginia.FallsChurch.police.calls, ll, 1, 30, "police-calls");
-    } else {
-      console.log("Location is not in Chesapeake");
-    }
-  });
-
 }
 
 function getAICUZ(url, ll) {
@@ -389,7 +358,6 @@ function getSchools(config, ll, dist) {
   getZonedSchools(config.zones, ll);
 
 }
-
 
 function getNearbySchools(config, ll, dist) {
 
@@ -818,6 +786,14 @@ function checkFeaturesForFloodZone(features, ll) {
   return deferred.promise;
 }
 
+async function start() {
+  await getAddress(searchPosition)
+  .then(setObjPath)
+  .catch(console.error);
+  console.log("The object path should be here: " + objPath);
+  getFeaturesForLocation(searchPosition);
+}
+
 $(document).ready(function() {
   locations = $("#locations").val();
   locations = JSON.parse(locations);
@@ -825,6 +801,6 @@ $(document).ready(function() {
   searchPosition = $("#searchPosition").val();
   //console.log(searchPosition);
   searchPosition = searchPosition.split(',');
-  getFeaturesForLocation(searchPosition);
+  start();
   $(document).tooltip();
 })
