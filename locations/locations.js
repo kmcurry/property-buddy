@@ -1,12 +1,12 @@
 var locations = {};
 
-locations.NC = {};
-locations.NC.Raleigh  = require('./NorthCarolina/Raleigh');
+locations.NorthCarolina = {};
+locations.NorthCarolina.Raleigh  = require('./NorthCarolina/Raleigh');
 
-locations.VA = {};
-locations.VA.Chesapeake    = require('./Virginia/Chesapeake');
-locations.VA.FallsChurch   = require('./Virginia/FallsChurch');
-locations.VA.Norfolk       = require('./Virginia/Norfolk');
-locations.VA.VirginiaBeach = require('./Virginia/VirginiaBeach');
+locations.Virginia = {};
+locations.Virginia.Chesapeake    = require('./Virginia/Chesapeake');
+locations.Virginia.FallsChurch   = require('./Virginia/FallsChurch');
+locations.Virginia.Norfolk       = require('./Virginia/Norfolk');
+locations.Virginia.VirginiaBeach = require('./Virginia/VirginiaBeach');
 
 module.exports = locations;
