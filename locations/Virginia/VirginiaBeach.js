@@ -44,9 +44,9 @@ var VirginiaBeach = {
     zones: {
       all: "",
       pre: "",
-      elementary: "https://services5.arcgis.com/36soGIYKLrgDhHrr/ArcGIS/rest/services/ES17_18Zones/FeatureServer",
-      middle: "https://services5.arcgis.com/36soGIYKLrgDhHrr/ArcGIS/rest/services/MS17_18Zones/FeatureServer",
-      high: "https://services5.arcgis.com/36soGIYKLrgDhHrr/ArcGIS/rest/services/HS17_18Zones/FeatureServer"
+      elementary: "",
+      middle: "",
+      high: ""
     }
   }
 
