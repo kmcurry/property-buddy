@@ -19,7 +19,7 @@ function getAddress(searchPosition) {
     var request = new XMLHttpRequest();
     var method = "GET";
     var url =
-      "http://maps.googleapis.com/maps/api/geocode/json?latlng=" +
+      "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +
       searchPosition;
     var async = true;
 
