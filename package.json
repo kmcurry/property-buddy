@@ -6,14 +6,14 @@
   "main": "app.js",
   "devDependencies": {},
   "dependencies": {
-    "angular-template": "^2.0.13",
-    "body-parser": "^1.17.2",
-    "bower": "latest",
-    "chai": "^4.1.1",
-    "express": "^4.15.3",
-    "lodash": "^4.17.4",
+    "angular-template": "^2.4.0",
+    "body-parser": "^1.18.3",
+    "bower": "^1.8.4",
+    "chai": "^4.1.2",
+    "express": "4.16.2",
+    "lodash": "^4.17.10",
     "nodemon": "^1.12.1",
-    "pug": "^2.0.0-rc.2"
+    "pug": "^2.0.3"
   },
   "scripts": {
     "postinstall": "bower install",
