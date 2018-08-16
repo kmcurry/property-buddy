@@ -761,10 +761,10 @@ function checkFeaturesForFloodZone(features, ll) {
             break;
           default:
             {
-              if (fz.indexOf("0.2") !== -1) {
+              if (fz && fz.indexOf("0.2") !== -1) {
                 msg += " Insurance is NOT REQUIRED"
               } else {
-                msg += " Your flood zone could not be determined";
+                msg = "Your flood zone could not be determined";
               }
             }
             break;
