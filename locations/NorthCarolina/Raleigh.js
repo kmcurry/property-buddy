@@ -37,6 +37,8 @@ var Raleigh = {
     water: ""
   },
 
+  representatives: "https://www.googleapis.com/civicinfo/v2/representatives/",
+
   schools: {
     all: "",
     pre: "",

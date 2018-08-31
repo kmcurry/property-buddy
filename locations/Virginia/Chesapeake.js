@@ -4,6 +4,7 @@ var Chesapeake = {
   neighborhoods: "https://public-chesva.opendata.arcgis.com/datasets/e8a4bed38fdf403ca5479779884aadc2_3.geojson",
   AICUZ: "https://public-chesva.opendata.arcgis.com/datasets/77ba67c5fbc84d40a5002e3e02d046cb_3.geojson",
   FIRM: "",
+  representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
 
   fire: {
     calls: "",

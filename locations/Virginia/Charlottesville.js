@@ -4,6 +4,8 @@ var Charlottesville = {
   neighborhoods: "",
   AICUZ: "",
   FIRM: "",
+  representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
+
 
   fire: {
     calls: "",

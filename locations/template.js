@@ -37,6 +37,8 @@ var LocationName = {
     water: ""
   },
 
+  representatives: "",
+
   schools: {
     locations: {
       all: "",

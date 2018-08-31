@@ -4,6 +4,7 @@ var VirginiaBeach = {
   neighborhoods: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/PropertyInformation_VBgov/MapServer/13/",
   AICUZ: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/AICUZ/MapServer/3/",
   FIRM: "https://gismaps.vbgov.com/arcgis/rest/services/Public_Safety/Flood_Zones_2015/MapServer/2/",
+  representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
 
   fire: {
     calls: "",
@@ -44,9 +45,9 @@ var VirginiaBeach = {
     zones: {
       all: "",
       pre: "",
-      elementary: "",
-      middle: "",
-      high: ""
+      elementary: "https://services5.arcgis.com/36soGIYKLrgDhHrr/ArcGIS/rest/services/VBCPS_2018_2019ESAttendanceZone/FeatureServer/0",
+      middle: "https://services5.arcgis.com/36soGIYKLrgDhHrr/ArcGIS/rest/services/VBCPS_2018_2019MSAttendanceZone/FeatureServer/0",
+      high: "https://services5.arcgis.com/36soGIYKLrgDhHrr/ArcGIS/rest/services/20182019_HSAttendanceZone/FeatureServer/0"
     }
   }
 

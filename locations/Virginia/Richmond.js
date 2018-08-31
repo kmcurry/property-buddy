@@ -4,6 +4,8 @@ var Richmond = {
   neighborhoods: "https://data.richmondgov.com/resource/7juf-nwis.json",
   AICUZ: "",
   FIRM: "",
+  representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
+
 
   fire: {
     calls: "",
@@ -36,7 +38,6 @@ var Richmond = {
     trails: "",
     water: ""
   },
-
   schools: {
     all: "",
     elementary: "",

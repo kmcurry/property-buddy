@@ -4,6 +4,9 @@ var Norfolk = {
   AICUZ: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/8/",
   FIRM: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/1",
   neighborhoods: "https://raw.githubusercontent.com/blackmad/neighborhoods/master/norfolk.geojson", // THIRD PARTY
+  representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
+
+  
 
   fire: {
     calls: "",
