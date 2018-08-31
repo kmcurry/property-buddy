@@ -53,10 +53,9 @@ function setObjPath(address) {
   console.log("The city to search is: " + cityStr);
   //create object path to dynamically insert city into function parameters
   objPath = cityPath.split('.').reduce((o,i)=>o[i], locations.Virginia);
-  console.log("setObjPath returns this: " + objPath);
 }
 
-function getFeaturesForLocation(position) {
+function getFeaturesForLocation(address, position) {
   var ll = null;
 
   // LON LAT unless locally manipulated b/c D3 is LON LAT
@@ -71,6 +70,8 @@ function getFeaturesForLocation(position) {
   var LL = L.latLng(ll[1], ll[0]);
   // use location to find out which census block they are inside.
 
+  getRepresentation(objPath.representatives, address);    
+
   L.esri.query({
     url: objPath.boundary
   }).intersects(LL).run(function(error, data) {
@@ -81,12 +82,13 @@ function getFeaturesForLocation(position) {
       getParks(objPath.recreation.parks, ll, 1);
       getClosestThing(objPath.recreation.parks, ll, "park");
       getClosestThing(objPath.recreation.libraries, ll, "library");
-      getClosestThing(objPath.fire.hydrants.public, ll, "hydrant", "feet");
+      getClosestThing(objPath.fire.hydrants.public, ll, "hydrant-public", "feet");
+      getClosestThing(objPath.fire.hydrants.private, ll, "hydrant-private", "feet");
       getClosestThing(objPath.recreation.centers, ll, "recCenter");
       getNearbyNeighborhoods(objPath.neighborhoods, ll, 1, "neighborhoods")
       getAverageResponseTime(objPath.medical.emergency.calls, ll, .25, "ems");
       getAverageResponseTime(objPath.police.calls, ll, .25, "police");
-      getCountWithinDays(objPath.police.incidents, ll, 1, 30, "police-incidents");
+      getPoliceIncidents(objPath.police.incidents, ll, 1, 30);
       getCountWithinDays(objPath.police.calls, ll, 1, 30, "police-calls");
   });
 }
@@ -169,6 +171,8 @@ function getClosestThing(url, ll, thing, units) {
     if (!closest.item || parseInt(closest.distance) === 9999) {
       msg = "None";
     } else {
+      console.log(thing + ": " + closest.distance);
+        
       switch (units) {
         case "feet":
           {
@@ -214,11 +218,15 @@ function getCountWithinDays(url, ll, dist, days, type) {
       .response(function(xhr) {
         return JSON.parse(xhr.responseText);
       })
-      .get(function(data) {
+      .get(function(error, data) {
+        var msg = "";
+        if (error) {
+          console.error("Getting count within days" )
+        } else {
+          msg = data.length + " last " + days + " days";
 
-        var msg = data.length + " last " + days + " days";
-
-        console.log(type + " " + data.length);
+          console.log(type + " " + data.length);
+        }
 
         d3.select("#" + type).html(msg);
 
@@ -346,9 +354,56 @@ function getParks(url, ll, dist) {
   });
 }
 
+function getPoliceIncidents(incidents, ll, dist) {
+  getCountWithinDays(incidents, ll, dist, 30, "police-incidents");
+}
+
+function getRepresentation(url, address) {
+  if (!url || url == "") {
+    d3.select("#representation").html("Needs data source");
+    return;
+  }
+
+  url = url + "?address=" + address + "&key=AIzaSyDU6QMdA4dv9HM4QYzEd-ptv3ztueEbezY";
+
+  d3.request(url)
+    .mimeType("application/json")
+    .header("X-Requested-With", "XMLHttpRequest")
+    .response(function(xhr) {
+      return JSON.parse(xhr.responseText);
+    })
+    .get(function(error, data) {
+      var msg = "";
+
+      if (error) {
+        msg = "There was an error retreiving representatives"
+        console.error(error);
+      } else {
+        console.log(data);
+        var divisions = data.divisions;
+        //divisions = Object.values(divisions);
+        var officials = data.officials;
+        var offices = data.offices;
+
+        $(offices).each(function(index, office) {
+          //console.log(office);
+          msg += "<p style='background-color:LightBlue'>" + office.name + "</p>";
+            
+
+          $(office.officialIndices).each(function(index, officialIndex) {
+            var official = officials[officialIndex];
+            msg += "<p>" + official.name + "</p>";
+          });
+        })
+      }
+
+      d3.select("#representatives").html(msg);
+    })
+}
+
 function getSchools(config, ll, dist) {
   if (!config || config == "") {
-    d3.select("#" + type).html("Needs data source");
+    d3.select("#schools").html("Needs data source");
     return;
   }
 
@@ -782,10 +837,14 @@ function checkFeaturesForFloodZone(features, ll) {
 
 async function start() {
   await getAddress(searchPosition)
-  .then(setObjPath)
-  .catch(console.error);
-  console.log("The object path should be here: " + objPath);
-  getFeaturesForLocation(searchPosition);
+  .then(function(address) {
+    var addr = address;
+    setObjPath(address);
+    getFeaturesForLocation(addr.formatted_address, searchPosition);
+  })
+  .catch(function(err) {
+    console.error(err);
+  });
 }
 
 $(document).ready(function() {

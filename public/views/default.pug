@@ -77,17 +77,17 @@ body
           p(id="school-location-all")
       div(class="row row-border schools")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
-          p Elementary
+          <span class="fa fa-graduation-cap"></span> Elementary
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p(id="school-location-elementary")
       div(class="row row-border schools")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
-          p Middle
+          <span class="fa fa-graduation-cap"></span> Middle
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p(id="school-location-middle")
       div(class="row row-border schools")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
-          p High
+          <span class="fa fa-graduation-cap"></span> High
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p(id="school-location-high")
       div(class="row row-border schools")
@@ -97,17 +97,17 @@ body
           p(id="school-zone-all")
       div(class="row row-border schools")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
-          p Elementary
+          <span class="fa fa-graduation-cap"></span> Elementary
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p(id="school-zone-elementary")
       div(class="row row-border schools")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
-          p Middle
+          <span class="fa fa-graduation-cap"></span> Middle
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p(id="school-zone-middle")
       div(class="row row-border schools")
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
-          p High
+          <span class="fa fa-graduation-cap"></span> High
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           p(id="school-zone-high")
       div(class="row row-border parks")
@@ -135,6 +135,14 @@ body
           <span class="fa fa-home" aria-hidden="true"></span> Nearby Neighborhoods
         div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
           div(id="nearby-neighborhoods") ...
+      div(name='representation' id='representation' class='row row-border representation')
+        div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
+          <span class="fa fa-user" aria-hidden="true"></span> Representation
+        div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
+          div(name='representatives' id='representatives')
+            div(name='reps-municipal' id='reps-municipal')
+            div(name='reps-state' id='reps-state')
+            div(name='reps-federal' id='reps-federal')
   div(id="invisibleMap")
   input(type="hidden" id="locations" value=""+locations)
   input(type="hidden" id="searchPosition" value=""+position)

@@ -73,23 +73,6 @@ function go() {
 }
 
 $(document).ready(function() {
-  // locations = $("#locations").val();
-  // locations = JSON.parse(locations);
-  //
-  // var states = Object.keys(locations);
-  // var locs = "";
-  // $(states).each(function(i) {
-  //   var cities = Object.keys(locations[this]);
-  //   $(cities).each(function(j) {
-  //     var city = this;
-  //     var rex = /([A-Z])([A-Z])([a-z])|([a-z])([A-Z])/g;
-  //     city = city.replace( rex, '$1$4 $2$3$5' );
-  //     locs += city;
-  //     if (j < cities.length-1) locs += ", ";
-  //   });
-  //   if (i < states.length-1) locs += " - ";
-  // });
-  // $("#locations-list").attr("title", locs);
   $(document).tooltip();
 })
 

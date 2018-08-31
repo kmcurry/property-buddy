@@ -42,7 +42,8 @@ app.get('/search/:loc', function(req, res) {
     // verify min format, i.e., comma separated values
     position = req.params.loc.split(',');
   }
-  res.render('grid', {
+
+  res.render('simple', {
     locations: JSON.stringify(locations),
     position: position
   });
