@@ -15,7 +15,7 @@ var supportedCities = [
 ];
 
 function getAddress(searchPosition) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     var request = new XMLHttpRequest();
     var method = "GET";
     var url =
@@ -24,7 +24,7 @@ function getAddress(searchPosition) {
     var async = true;
 
     request.open(method, url, async);
-    request.onreadystatechange = function() {
+    request.onreadystatechange = function () {
       if (request.readyState == 4) {
         if (request.status == 200) {
           var data = JSON.parse(request.responseText);
@@ -52,7 +52,7 @@ function setObjPath(address) {
   cityPath = cityStr.replace(/\s+/g, '');
   console.log("The city to search is: " + cityStr);
   //create object path to dynamically insert city into function parameters
-  objPath = cityPath.split('.').reduce((o,i)=>o[i], locations.Virginia);
+  objPath = cityPath.split('.').reduce((o, i) => o[i], locations.Virginia);
 }
 
 function getFeaturesForLocation(address, position) {
@@ -70,26 +70,26 @@ function getFeaturesForLocation(address, position) {
   var LL = L.latLng(ll[1], ll[0]);
   // use location to find out which census block they are inside.
 
-  getRepresentation(objPath.representatives, address);    
+  getRepresentation(objPath.representatives, address);
 
   L.esri.query({
     url: objPath.boundary
-  }).intersects(LL).run(function(error, data) {
-      d3.select("#city").html(cityStr);
-      getAICUZ(objPath.AICUZ, ll);
-      getFloodZone(objPath.FIRM, ll);
-      getSchools(objPath.schools, ll, 3);
-      getParks(objPath.recreation.parks, ll, 1);
-      getClosestThing(objPath.recreation.parks, ll, "park");
-      getClosestThing(objPath.recreation.libraries, ll, "library");
-      getClosestThing(objPath.fire.hydrants.public, ll, "hydrant-public", "feet");
-      getClosestThing(objPath.fire.hydrants.private, ll, "hydrant-private", "feet");
-      getClosestThing(objPath.recreation.centers, ll, "recCenter");
-      getNearbyNeighborhoods(objPath.neighborhoods, ll, 1, "neighborhoods")
-      getAverageResponseTime(objPath.medical.emergency.calls, ll, .25, "ems");
-      getAverageResponseTime(objPath.police.calls, ll, .25, "police");
-      getPoliceIncidents(objPath.police.incidents, ll, 1, 30);
-      getCountWithinDays(objPath.police.calls, ll, 1, 30, "police-calls");
+  }).intersects(LL).run(function (error, data) {
+    d3.select("#city").html(cityStr);
+    getAICUZ(objPath.AICUZ, ll);
+    getFloodZone(objPath.FIRM, ll);
+    getSchools(objPath.schools, ll, 3);
+    getParks(objPath.recreation.parks, ll, 1);
+    getClosestThing(objPath.recreation.parks, ll, "park");
+    getClosestThing(objPath.recreation.libraries, ll, "library");
+    getClosestThing(objPath.fire.hydrants.public, ll, "hydrant-public", "feet");
+    getClosestThing(objPath.fire.hydrants.private, ll, "hydrant-private", "feet");
+    getClosestThing(objPath.recreation.centers, ll, "recCenter");
+    getNearbyNeighborhoods(objPath.neighborhoods, ll, 1, "neighborhoods")
+    getAverageResponseTime(objPath.medical.emergency.calls, ll, .25, "ems");
+    getAverageResponseTime(objPath.police.calls, ll, .25, "police");
+    getPoliceIncidents(objPath.police.incidents, ll, 1, 30);
+    getCountWithinDays(objPath.police.calls, ll, 1, 30, "police-calls");
   });
 }
 
@@ -104,7 +104,7 @@ function getAICUZ(url, ll) {
   // use location to find out which census block they are inside.
   L.esri.query({
     url: url
-  }).intersects(LL).run(function(error, data) {
+  }).intersects(LL).run(function (error, data) {
     var msg = "";
     if (data) {
       msg = checkFeaturesForAICUZNoiseLevel(data.features, ll);
@@ -129,10 +129,10 @@ function getAverageResponseTime(url, ll, d, type) {
 
   d3.request(url)
     .mimeType("application/json")
-    .response(function(xhr) {
+    .response(function (xhr) {
       return JSON.parse(xhr.responseText);
     })
-    .get(function(data) {
+    .get(function (data) {
 
       console.log("Response records: " + data.length);
 
@@ -158,7 +158,7 @@ function getClosestThing(url, ll, thing, units) {
   // use location to find out which census block they are inside.
   L.esri.query({
     url: url
-  }).run(function(error, data) {
+  }).run(function (error, data) {
     if (!data || !data.features) {
       d3.select("#closest-" + thing).html("No data returned");
       return;
@@ -172,7 +172,7 @@ function getClosestThing(url, ll, thing, units) {
       msg = "None";
     } else {
       console.log(thing + ": " + closest.distance);
-        
+
       switch (units) {
         case "feet":
           {
@@ -192,46 +192,52 @@ function getClosestThing(url, ll, thing, units) {
 }
 
 function getCountWithinDays(url, ll, dist, days, type) {
+
+  var deferred = D();
+
   if (!url || url == "") {
-      d3.select("#" + type).html("Needs data source");
-      return;
-    }
+    d3.select("#" + type).html("Needs data source");
+    return;
+  }
 
-    dist = dist * 1609.35;
+  dist = dist * 1609.35;  // ??????????????????????????????????????????????????
 
-    var checkDate = new Date();
-    checkDate = new Date(checkDate.setDate(checkDate.getDate() - days)).toISOString();
-    checkDate = checkDate.toString().substring(0, checkDate.lastIndexOf('Z'));
+  var checkDate = new Date();
+  checkDate = new Date(checkDate.setDate(checkDate.getDate() - days)).toISOString();
+  checkDate = checkDate.toString().substring(0, checkDate.lastIndexOf('Z'));
 
-    var dateField = "";
-    if (type.includes("calls")) {
-      dateField = "call_date_time";
-    }
-    if (type.includes("incidents")) {
-      dateField = "date_occured";
-    }
+  var dateField = "";
+  if (type.includes("calls")) {
+    dateField = "call_date_time";
+  }
+  if (type.includes("incidents")) {
+    dateField = "date_occured";
+  }
 
-    url += "?$where=within_circle(location_1," + ll[1] + "," + ll[0] + "," + dist + encodeURIComponent(") and " + dateField + " > '") + encodeURIComponent(checkDate) + encodeURIComponent("'");
+  url += "?$where=within_circle(location_1," + ll[1] + "," + ll[0] + "," + dist + encodeURIComponent(") and " + dateField + " > '") + encodeURIComponent(checkDate) + encodeURIComponent("'");
 
-    d3.request(url)
-      .mimeType("application/json")
-      .response(function(xhr) {
-        return JSON.parse(xhr.responseText);
-      })
-      .get(function(error, data) {
-        var msg = "";
-        if (error) {
-          console.error("Getting count within days" )
-        } else {
-          msg = data.length + " last " + days + " days";
+  d3.request(url)
+    .mimeType("application/json")
+    .response(function (xhr) {
+      return JSON.parse(xhr.responseText);
+    })
+    .get(function (error, data) {
+      var count = "";
+      if (error) {
+        console.error("Getting count within days");
+        deferred.resolve(null);
+      } else {
+        count = data.length + type + " in the past " + days + " days";
 
-          console.log(type + " " + data.length);
-        }
+        console.log(type + " " + data.length);
+        console.log(data);
+      }
 
-        d3.select("#" + type).html(msg);
+      d3.select("#" + type).html(count);
+      deferred.resolve(data);
+    });
 
-      });
-
+  return deferred.promise
 }
 
 // TODO: update from 2009 to 2015. Something wrong with the 2015 API
@@ -246,7 +252,7 @@ function getFloodZone(url, ll) {
   // use location to find out which census block they are inside.
   L.esri.query({
     url: url
-  }).intersects(LL).run(function(error, data) {
+  }).intersects(LL).run(function (error, data) {
 
     var msg = "";
 
@@ -258,11 +264,11 @@ function getFloodZone(url, ll) {
     if (data) {
 
       checkFeaturesForFloodZone(data.features, ll).then(
-        function(data) {
+        function (data) {
           msg += data;
           d3.select("#flood").html(msg);
         },
-        function(err) {
+        function (err) {
           console.log(err);
           d3.select("#flood").html(err.message);
         }
@@ -285,20 +291,20 @@ function getNearbyNeighborhoods(url, ll, d) {
 
   if (url.indexOf(".geojson") > -1) {
     d3.request(url)
-    .mimeType("application/json")
-    .response(function(xhr) {
-      return JSON.parse(xhr.responseText);
-    })
-    .get(function(data) {
-      neighborhoodHelper(data, ll, d);
-    });
+      .mimeType("application/json")
+      .response(function (xhr) {
+        return JSON.parse(xhr.responseText);
+      })
+      .get(function (data) {
+        neighborhoodHelper(data, ll, d);
+      });
 
   } else {
     var LL = L.latLng(ll[1], ll[0]);
     // use location to find out which census block they are inside.
     L.esri.query({
       url: url
-    }).run(function(error, data) {
+    }).run(function (error, data) {
       neighborhoodHelper(data, ll, d);
     });
   }
@@ -308,7 +314,7 @@ function neighborhoodHelper(data, ll, d) {
   var items = getItemsForFeatures(data.features, ll, d);
 
   var msg = "";
-  $(items).each(function(i) {
+  $(items).each(function (i) {
     var item = $(this);
     if (item[0].properties.NAME) {
       msg += item[0].properties.NAME;
@@ -340,7 +346,7 @@ function getParks(url, ll, dist) {
   // use location to find out which census block they are inside.
   L.esri.query({
     url: url
-  }).run(function(error, data) {
+  }).run(function (error, data) {
     if (!data || !data.features) {
       d3.select("#parks").html("No data returned!");
       return;
@@ -355,7 +361,21 @@ function getParks(url, ll, dist) {
 }
 
 function getPoliceIncidents(incidents, ll, dist) {
-  getCountWithinDays(incidents, ll, dist, 30, "police-incidents");
+  getCountWithinDays(incidents, ll, dist, 30, "police-incidents").then(function(incidents) {
+    if (incidents) {
+      console.log("Police Incidents")
+      //console.log(incidents);
+      var html = "";
+      $(incidents).each(function(index, incident) {
+        html += "<div class='row'>";
+        html += "<p>" + incident.offense_description + ", " + incident.location_1_address + ", " + incident.case_status + "</p>"
+        html += "</div>";
+      })
+      $("#police-incidents-list").html(html);
+    } else {
+      console.log("No Data from getCountWithinDays")
+    }
+  });
 }
 
 function getRepresentation(url, address) {
@@ -369,28 +389,27 @@ function getRepresentation(url, address) {
   d3.request(url)
     .mimeType("application/json")
     .header("X-Requested-With", "XMLHttpRequest")
-    .response(function(xhr) {
+    .response(function (xhr) {
       return JSON.parse(xhr.responseText);
     })
-    .get(function(error, data) {
+    .get(function (error, data) {
       var msg = "";
 
       if (error) {
         msg = "There was an error retreiving representatives"
         console.error(error);
       } else {
-        console.log(data);
         var divisions = data.divisions;
         //divisions = Object.values(divisions);
         var officials = data.officials;
         var offices = data.offices;
 
-        $(offices).each(function(index, office) {
+        $(offices).each(function (index, office) {
           //console.log(office);
           msg += "<p style='background-color:LightBlue'>" + office.name + "</p>";
-            
 
-          $(office.officialIndices).each(function(index, officialIndex) {
+
+          $(office.officialIndices).each(function (index, officialIndex) {
             var official = officials[officialIndex];
             msg += "<p>" + official.name + "</p>";
           });
@@ -420,7 +439,7 @@ function getNearbySchools(config, ll, dist) {
 
   var levels = Object.keys(config);
 
-  $(levels).each(function(i) {
+  $(levels).each(function (i) {
     var type = this;
     var url = config[type];
 
@@ -430,7 +449,7 @@ function getNearbySchools(config, ll, dist) {
       // use location to find out which census block they are inside.
       L.esri.query({
         url: url
-      }).run(function(error, data) {
+      }).run(function (error, data) {
         var items = getItemsForFeatures(data.features, ll, dist);
 
         var msg = "<p style='text-decoration:underline;'>" + items.length + " within " + dist + " miles</p><p>";
@@ -455,7 +474,7 @@ function getNearbySchools(config, ll, dist) {
               typeStr = "";
             }
         }
-        $(items).each(function(i) {
+        $(items).each(function (i) {
           var item = $(this);
           var len = 0;
           if (item[0].properties.NAME) {
@@ -492,18 +511,20 @@ function getZonedSchools(config, ll) {
 
   var levels = Object.keys(config);
 
-  $(levels).each(function(i) {
+  $(levels).each(function (i) {
     var type = this;
     var url = config[type];
+
+    type = type.toString();
 
     if (url !== "") {
       var LL = L.latLng(ll[1], ll[0]);
       // use location to find out which census block they are inside.
       L.esri.query({
         url: url
-      }).run(function(error, data) {
+      }).run(function (error, data) {
         var msg = "";
-        switch (type.toString()) {
+        switch (type) {
           case "elementary":
             {
               typeStr = " Elementary School";
@@ -524,7 +545,7 @@ function getZonedSchools(config, ll) {
               typeStr = "";
             }
         }
-        $(data.features).each(function() {
+        $(data.features).each(function () {
           var f = $(this);
           if (f && f[0]) {
             if (d3.geoContains(f[0], ll)) {
@@ -532,6 +553,9 @@ function getZonedSchools(config, ll) {
               if (f[0].properties.ES_NAME) {
                 len = f[0].properties.ES_NAME.indexOf(typeStr) > 0 ? f[0].properties.ES_NAME.indexOf(typeStr) : f[0].properties.ES_NAME.length;
                 msg += f[0].properties.ES_NAME.substring(0, len);
+              } else if (f[0].properties.ELEM_NAME) {
+                len = f[0].properties.ELEM_NAME.indexOf(typeStr) > 0 ? f[0].properties.ELEM_NAME.indexOf(typeStr) : f[0].properties.ELEM_NAME.length;
+                msg += f[0].properties.ELEM_NAME.substring(0, len);
               } else if (f[0].properties.MS_NAME) {
                 len = f[0].properties.MS_NAME.indexOf(typeStr) > 0 ? f[0].properties.MS_NAME.indexOf(typeStr) : f[0].properties.MS_NAME.length;
                 msg += f[0].properties.MS_NAME.substring(0, len);
@@ -565,7 +589,7 @@ function getZonedSchools(config, ll) {
 function getAverageTime(data) {
   var msg = "";
   var avg = 0;
-  $(data).each(function() {
+  $(data).each(function () {
     var d = $(this);
     if (d && d[0]) {
       d = d[0];
@@ -600,7 +624,7 @@ function getClosestItem(features, ll) {
     item: null,
     distance: 9999
   };
-  $(features).each(function() {
+  $(features).each(function () {
     var f = $(this);
     //console.log(f[0]);
     if (f && f[0]) {
@@ -630,7 +654,7 @@ function getClosestItem(features, ll) {
 function getItemsForFeatures(features, ll, d) {
   var msg = "";
 
-  var items = $(features).filter(function() {
+  var items = $(features).filter(function () {
     var f = $(this);
     if (f && f[0]) {
       var coords = null;
@@ -655,7 +679,7 @@ function getItemsForFeatures(features, ll, d) {
   // Filter only duplicates when .NAME property is the same, example neighborhoods are duplicated by diff lat/lon
   // TODO: what about diff name fields?
   var flags = {};
-  items = items.filter(function() {
+  items = items.filter(function () {
     var item = $(this);
     if (item[0].properties.NAME) {
       if (flags[item[0].properties.NAME]) {
@@ -717,7 +741,7 @@ function getItemsForFeatures(features, ll, d) {
 function checkFeaturesForAICUZNoiseLevel(features, ll) {
   var msg = "";
   var lvl = 0;
-  $(features).each(function() {
+  $(features).each(function () {
     var f = $(this);
     if (f && f[0]) {
       if (d3.geoContains(f[0], ll)) {
@@ -792,7 +816,7 @@ function checkFeaturesForFloodZone(features, ll) {
 
   var msg = "";
 
-  $(features).each(function(i) {
+  $(features).each(function (i) {
     var f = $(this);
     if (f && f[0]) {
       if (d3.geoContains(f[0], ll)) {
@@ -837,17 +861,17 @@ function checkFeaturesForFloodZone(features, ll) {
 
 async function start() {
   await getAddress(searchPosition)
-  .then(function(address) {
-    var addr = address;
-    setObjPath(address);
-    getFeaturesForLocation(addr.formatted_address, searchPosition);
-  })
-  .catch(function(err) {
-    console.error(err);
-  });
+    .then(function (address) {
+      var addr = address;
+      setObjPath(address);
+      getFeaturesForLocation(addr.formatted_address, searchPosition);
+    })
+    .catch(function (err) {
+      console.error(err);
+    });
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
   locations = $("#locations").val();
   locations = JSON.parse(locations);
   //console.log(locations);
