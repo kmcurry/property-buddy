@@ -43,7 +43,7 @@ app.get('/search/:loc', function(req, res) {
     position = req.params.loc.split(',');
   }
 
-  res.render('simple', {
+  res.render('grid', {
     locations: JSON.stringify(locations),
     position: position
   });

@@ -19,14 +19,16 @@ body
             div(name='school' id='school' class='col-xs-12 col-sm-4 col-md-4 col-lg-4 block')
                 center
                     h1 School
-                h4 Nearby
-                p(id="school-location-elementary")
-                p(id="school-location-middle")
-                p(id="school-location-high")
                 h4 Zoned
+                p(id="school-zone-all")
                 p(id="school-zone-elementary")
                 p(id="school-zone-middle")
                 p(id="school-zone-high")
+                h4 Nearby
+                p(id="school-location-all")
+                p(id="school-location-elementary")
+                p(id="school-location-middle")
+                p(id="school-location-high")
             div(name='publicworks' id='publicworks' class='col-xs-12 col-sm-4 col-md-4 col-lg-4 block')
                 center
                     h1 Public Works
@@ -34,7 +36,8 @@ body
             div(name='publicsafety' id='publicsafety' class='col-xs-12 col-sm-4 col-md-4 col-lg-4 block')
                 center
                     h1 Public Safety
-                div(id="police-incidents") ...
+                h3(id="police-incidents") ...
+                div(id="police-incidents-list" style="margin-left:20px") ...
             div(name='news' id='news' class='col-xs-12 col-sm-4 col-md-4 col-lg-4 block')
                 center
                     h1 News
