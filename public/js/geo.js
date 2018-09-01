@@ -227,10 +227,9 @@ function getCountWithinDays(url, ll, dist, days, type) {
         console.error("Getting count within days");
         deferred.resolve(null);
       } else {
-        count = data.length + type + " in the past " + days + " days";
+        count = data.length + " " + type + " in the past " + days + " days";
 
         console.log(type + " " + data.length);
-        console.log(data);
       }
 
       d3.select("#" + type).html(count);
@@ -365,12 +364,15 @@ function getPoliceIncidents(incidents, ll, dist) {
     if (incidents) {
       console.log("Police Incidents")
       //console.log(incidents);
-      var html = "";
+      var html = "<table style='width:100%'>";
       $(incidents).each(function(index, incident) {
-        html += "<div class='row'>";
-        html += "<p>" + incident.offense_description + ", " + incident.location_1_address + ", " + incident.case_status + "</p>"
-        html += "</div>";
+        html += "<tr>";
+        html += "<td>" + incident.offense_description + "</td>";
+        html += "<td>" + incident.location_1_address + "</td>";
+        html += "<td>" + incident.case_status + "</td>"
+        html += "</tr>";
       })
+      html += "</table>"
       $("#police-incidents-list").html(html);
     } else {
       console.log("No Data from getCountWithinDays")
