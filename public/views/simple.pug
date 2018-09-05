@@ -91,6 +91,22 @@ head
     ._85 {
       background-color: #ff0000;
     }
+
+    .active {
+      color: orange;
+    }
+
+    .inactive {
+      color: gray;
+    }
+
+    .cleared {
+      color: blue;
+    }
+
+    .unfounded {
+      color: purple;
+    }
     
     /* Portrait */
     @media only screen 
@@ -231,6 +247,10 @@ body
             div(name='reps-state' id='reps-state')
             div(name='reps-federal' id='reps-federal')
     h2 Police Incident List
+    text(class="active") Active, 
+    text(class="inactive") Inactive, 
+    text(class="cleared") Exceptionally Cleared, 
+    text(class="unfounded") Unfounded
     div(id="police-incidents-list") ...
   div(id="invisibleMap")
   input(type="hidden" id="locations" value=""+locations)
@@ -247,6 +267,7 @@ body
   script(src="/bower_components/jquery/dist/jquery.min.js")
   script(src="/bower_components/bootstrap/dist/js/bootstrap.min.js")
   script(src="/bower_components/jquery-ui/jquery-ui.min.js")
+  script(src="/bower_components/moment/min/moment.min.js")
   link(rel="stylesheet"     
       href="/bower_components/jquery-ui/themes/smoothness/jquery-ui.css")
   link(rel="stylesheet"     

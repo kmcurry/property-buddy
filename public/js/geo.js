@@ -363,10 +363,33 @@ function getPoliceIncidents(incidents, ll, dist) {
   getCountWithinDays(incidents, ll, dist, 30, "police-incidents").then(function(incidents) {
     if (incidents) {
       console.log("Police Incidents")
-      //console.log(incidents);
+      console.log(incidents);
       var html = "<table style='width:100%'>";
       $(incidents).each(function(index, incident) {
-        html += "<tr>";
+        var statusStyle = "unfounded";
+        switch (incident.case_status) {
+          case "ACTIVE - PENDING":
+          case "ACTIVE PENDING WARRANT OBTAINED": {
+            statusStyle = "active";
+          }
+          break;
+          case "INACTIVE - PENDING": {
+            statusStyle = "inactive";
+          }
+          break;
+          case "EXCEPTIONALLY CLEARED":
+          case "CLEARED BY ARREST": {
+            statusStyle = "cleared";
+          }
+          break;
+          case "UNFOUNDED, NO FURTHER ACTION NEEDED":
+          case "OTHER": {
+            statusStyle = "unfounded";
+          }
+          break;
+        };
+        html += "<tr class='" + statusStyle + "'>";
+        html += "<td>" + moment(incident.date_occured).format("MM-DD-YYYY") + "</td>";
         html += "<td>" + incident.offense_description + "</td>";
         html += "<td>" + incident.location_1_address + "</td>";
         html += "<td>" + incident.case_status + "</td>"
