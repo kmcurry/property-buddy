@@ -5,6 +5,7 @@ var Norfolk = {
   FIRM: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/1",
   neighborhoods: "https://raw.githubusercontent.com/blackmad/neighborhoods/master/norfolk.geojson", // THIRD PARTY
   representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
+  evacuation: "https://services3.arcgis.com/qVupYidwzMKkDQzr/arcgis/rest/services/Hurricane_Evacuation_Zones_Expanded/FeatureServer/0",
 
   
 
@@ -25,7 +26,7 @@ var Norfolk = {
 
   police: {
     calls: "",
-    incidents: ""
+    incidents: "https://data.norfolk.gov/resource/6vsy-ykpv.json"
   },
 
   recreation: {

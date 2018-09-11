@@ -5,6 +5,7 @@ var Chesapeake = {
   AICUZ: "https://public-chesva.opendata.arcgis.com/datasets/77ba67c5fbc84d40a5002e3e02d046cb_3.geojson",
   FIRM: "",
   representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
+  evacuation: "https://services3.arcgis.com/qVupYidwzMKkDQzr/arcgis/rest/services/Hurricane_Evacuation_Zones_Expanded/FeatureServer/0",
 
   fire: {
     calls: "",
