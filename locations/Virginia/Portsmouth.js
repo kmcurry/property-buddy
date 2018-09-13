@@ -3,7 +3,7 @@ var Portsmouth = {
     boundary: "http://www2.portsmouthva.gov/arcgisweb/rest/services/StandardLayers/MapServer/4",
     neighborhoods: "http://www2.portsmouthva.gov/arcgisweb/rest/services/ArcGIS_Online_GDB/MapServer/12",
     AICUZ: "",
-    FIRM: "",
+    FIRM: "http://www2.portsmouthva.gov/arcgisweb/rest/services/Environment/MapServer/8",
     representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
     evacuation: "https://services3.arcgis.com/qVupYidwzMKkDQzr/arcgis/rest/services/Hurricane_Evacuation_Zones_Expanded/FeatureServer/0",
 
@@ -12,10 +12,11 @@ var Portsmouth = {
       calls: "",
       districts: "",
       hydrants: {
-        public: "",
+        public: "http://www2.portsmouthva.gov/arcgisweb/rest/services/PublicSafety/MapServer/3",
         private: ""
       },
-      incidents: ""
+      incidents: "",
+      stations: "http://www2.portsmouthva.gov/arcgisweb/rest/services/PublicSafety/MapServer/2"
     },
   
     medical: {
@@ -35,7 +36,7 @@ var Portsmouth = {
       centers: "",
       greenways: "",
       libraries: "",
-      parks: "",
+      parks: "http://www2.portsmouthva.gov/arcgisweb/rest/services/Environment/MapServer/3",
       trails: "",
       water: ""
     },
