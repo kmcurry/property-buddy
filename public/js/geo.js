@@ -8,8 +8,10 @@ var supportedCities = [
   "Charlottesville",
   "Chesapeake",
   "Falls Church",
+  "Hampton",
   "Newport News",
   "Norfolk",
+  "Portsmouth",
   "Richmond",
   "Virginia Beach"
 ];
