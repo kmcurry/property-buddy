@@ -84,14 +84,14 @@ function getFeaturesForLocation(address, position) {
     getParks(objPath.recreation.parks, ll, 1);
     getClosestThing(objPath.recreation.parks, ll, "park");
     getClosestThing(objPath.recreation.libraries, ll, "library");
-    getClosestThing(objPath.fire.hydrants.public, ll, "hydrant-public", "feet");
-    getClosestThing(objPath.fire.hydrants.private, ll, "hydrant-private", "feet");
+    // getClosestThing(objPath.fire.hydrants.public, ll, "hydrant-public", "feet");
+    // getClosestThing(objPath.fire.hydrants.private, ll, "hydrant-private", "feet");
     getClosestThing(objPath.recreation.centers, ll, "recCenter");
     getNearbyNeighborhoods(objPath.neighborhoods, ll, 1, "neighborhoods")
     getAverageResponseTime(objPath.medical.emergency.calls, ll, .25, "ems");
     getAverageResponseTime(objPath.police.calls, ll, .25, "police");
-    getPoliceIncidents(objPath.police.incidents, ll, 1, 30);
-    getCountWithinDays(objPath.police.calls, ll, 1, 30, "police-calls");
+    getPoliceIncidents(objPath.police.incidents, ll, .5, 30);
+    //getCountWithinDays(objPath.police.calls, ll, 1, 30, "police-calls");
   });
 }
 
@@ -178,6 +178,7 @@ function getClosestThing(url, ll, thing, units) {
       switch (units) {
         case "feet":
           {
+            console.log(closest.distance);
             msg = parseInt(closest.distance * 5280) + " feet";
           }
           break;
@@ -390,8 +391,8 @@ function getParks(url, ll, dist) {
   });
 }
 
-function getPoliceIncidents(incidents, ll, dist) {
-  getCountWithinDays(incidents, ll, dist, 30, "police-incidents").then(function(incidents) {
+function getPoliceIncidents(incidents, ll, dist, days) {
+  getCountWithinDays(incidents, ll, dist, days, "police-incidents").then(function(incidents) {
     if (incidents) {
       console.log("Police Incidents")
       console.log(incidents);
@@ -694,15 +695,18 @@ function getClosestItem(features, ll) {
       } else {
         coords = f[0].geometry.coordinates;
       }
-      var dist = d3.geoDistance(coords, ll);
+      var dist = d3.geoDistance(coords, ll); // distance in radians
       if (dist < closest.distance) {
+        //console.log(dist);
         closest.distance = dist;
         closest.item = f;
       }
     }
   });
-  closest.distance = closest.distance != 9999 ? parseFloat(closest.distance) * 3959 : 9999;
+  closest.distance = closest.distance != 9999 ? parseFloat(closest.distance) * 3959 : 9999; // 3959 is Earth radius in miles
   closest.distance = closest.distance.toFixed(2);
+
+  console.log(closest.distance)
 
   return closest;
 }
