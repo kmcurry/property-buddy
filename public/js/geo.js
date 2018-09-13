@@ -276,46 +276,50 @@ function getEvacuationZone(url, ll) {
 }
 
 // TODO: update from 2009 to 2015. Something wrong with the 2015 API
-function getFloodZone(url, ll) {
+async function getFloodZone(url, ll) {
 
-  if (!url || url == "") {
-    d3.select("#flood").html("Needs data source");
-    return;
-  }
-
-  var LL = L.latLng(ll[1], ll[0]);
-  // use location to find out which census block they are inside.
-  L.esri.query({
-    url: url
-  }).intersects(LL).run(function (error, data) {
-
-    var msg = "";
-
-    if (error) {
-      console.log(error);
-      return;
+  var promise = new Promise(function(resolve, reject) {
+    if (!url || url == "") {
+      d3.select("#flood").html("Needs data source");
+      resolve;
     }
-
-    if (data) {
-
-      checkFeaturesForFloodZone(data.features, ll).then(
-        function (data) {
-          msg += data;
-          d3.select("#flood").html(msg);
-        },
-        function (err) {
-          console.log(err);
-          d3.select("#flood").html(err.message);
-        }
-      );
-    }
-
-
-
-    d3.select("#flood").html("Still searching. (This is taking a bit longer than usual.)");
-
-
+  
+    var LL = L.latLng(ll[1], ll[0]);
+    // use location to find out which census block they are inside.
+    L.esri.query({
+      url: url
+    }).intersects(LL).run(function (error, data) {
+  
+      var msg = "";
+  
+      if (error) {
+        console.log(error);
+        resolve;
+      }
+  
+      if (data) {
+  
+        checkFeaturesForFloodZone(data.features, ll).then(
+          function (data) {
+            msg += data;
+            d3.select("#flood").html(msg);
+            resolve;
+          },
+          function (err) {
+            console.log(err);
+            d3.select("#flood").html(err.message);
+            resolve;
+          }
+        );
+      }
+  
+      d3.select("#flood").html("Still searching. (This is taking a bit longer than usual.)");
+  
+  
+    });
   });
+
+  return promise;
 }
 
 function getNearbyNeighborhoods(url, ll, d) {
