@@ -661,7 +661,8 @@ function getAverageTime(data) {
       }
 
       var duration = onSceneTime.getTime() - callTime.getTime();
-      if (!isNaN(duration) && duration > 0) {
+      console.log(duration);
+      if (!isNaN(duration) && duration > 0 && duration < 999999) { // throw out unreasonable numbers
         avg += duration;
       }
     }
