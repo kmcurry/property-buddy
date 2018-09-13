@@ -330,6 +330,8 @@ function getNearbyNeighborhoods(url, ll, d) {
     return;
   }
 
+  console.log(url);
+
   if (url.indexOf(".geojson") > -1) {
     d3.request(url)
       .mimeType("application/json")
@@ -346,7 +348,11 @@ function getNearbyNeighborhoods(url, ll, d) {
     L.esri.query({
       url: url
     }).run(function (error, data) {
-      neighborhoodHelper(data, ll, d);
+      if (error) {
+        console.error(error);
+      } else {
+        neighborhoodHelper(data, ll, d);
+      }
     });
   }
 }
@@ -402,6 +408,8 @@ function getParks(url, ll, dist) {
 }
 
 function getPoliceIncidents(incidents, ll, dist, days) {
+  if (!incidents) return;
+  
   getCountWithinDays(incidents, ll, dist, days, "police-incidents").then(function(incidents) {
     if (incidents) {
       console.log("Police Incidents")
