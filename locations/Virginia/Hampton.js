@@ -1,4 +1,4 @@
-var LocationName = {
+var Hampton = {
 
     boundary: "",
     neighborhoods: "",

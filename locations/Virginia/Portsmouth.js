@@ -1,4 +1,4 @@
-var LocationName = {
+var Portsmouth = {
 
     boundary: "",
     neighborhoods: "",
