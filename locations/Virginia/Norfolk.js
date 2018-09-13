@@ -26,7 +26,7 @@ var Norfolk = {
 
   police: {
     calls: "",
-    incidents: "https://data.norfolk.gov/resource/6vsy-ykpv.json"
+    incidents: ""//"https://data.norfolk.gov/resource/6vsy-ykpv.json"
   },
 
   recreation: {
