@@ -40,8 +40,6 @@ var Portsmouth = {
       water: ""
     },
   
-    representatives: "",
-  
     schools: {
       locations: {
         all: "",
@@ -59,5 +57,5 @@ var Portsmouth = {
     }
   };
   
-  module.exports = LocationName;
+  module.exports = Portsmouth;
   

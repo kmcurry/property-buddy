@@ -40,8 +40,6 @@ var Hampton = {
       water: ""
     },
   
-    representatives: "",
-  
     schools: {
       locations: {
         all: "",
@@ -59,5 +57,5 @@ var Hampton = {
     }
   };
   
-  module.exports = LocationName;
+  module.exports = Hampton;
   
