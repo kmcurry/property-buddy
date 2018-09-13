@@ -264,7 +264,7 @@ function getEvacuationZone(url, ll) {
 
     if (data) {
       console.log(data);
-      d3.select("#evacuation").html("<p style='font-size:44px'>" + data.features[0].properties.Zone + "</p>");
+      d3.select("#evacuation").html("<p style='font-size:44px !important'>" + data.features[0].properties.Zone + "</p>");
     }
 
 
