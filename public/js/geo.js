@@ -78,7 +78,6 @@ function getFeaturesForLocation(address, position) {
   }).intersects(LL).run(function (error, data) {
     d3.select("#city").html(cityStr);
     getAICUZ(objPath.AICUZ, ll);
-    getFloodZone(objPath.FIRM, ll);
     getEvacuationZone(objPath.evacuation, ll);
     getSchools(objPath.schools, ll, 3);
     getParks(objPath.recreation.parks, ll, 1);
@@ -92,6 +91,8 @@ function getFeaturesForLocation(address, position) {
     getAverageResponseTime(objPath.police.calls, ll, .25, "police");
     getPoliceIncidents(objPath.police.incidents, ll, .5, 30);
     //getCountWithinDays(objPath.police.calls, ll, 1, 30, "police-calls");
+    getFloodZone(objPath.FIRM, ll);
+    
   });
 }
 
