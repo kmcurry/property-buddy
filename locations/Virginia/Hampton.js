@@ -1,6 +1,6 @@
 var Hampton = {
 
-    boundary: "",
+    boundary: "http://webgis.hampton.gov/ArcGIS/rest/services/Public/MapServer/57",
     neighborhoods: "",
     AICUZ: "",
     FIRM: "",

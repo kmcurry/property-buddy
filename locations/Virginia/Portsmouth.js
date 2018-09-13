@@ -1,7 +1,7 @@
 var Portsmouth = {
 
-    boundary: "",
-    neighborhoods: "",
+    boundary: "http://www2.portsmouthva.gov/arcgisweb/rest/services/StandardLayers/MapServer/4",
+    neighborhoods: "http://www2.portsmouthva.gov/arcgisweb/rest/services/ArcGIS_Online_GDB/MapServer/12",
     AICUZ: "",
     FIRM: "",
     representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
