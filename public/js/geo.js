@@ -28,7 +28,7 @@ function getAddress(searchPosition) {
       if (request.readyState == 4) {
         if (request.status == 200) {
           var data = JSON.parse(request.responseText);
-          console.log(data);
+          //console.log(data);
           var address = data.results[0];
           resolve(address);
         } else {
@@ -41,7 +41,7 @@ function getAddress(searchPosition) {
 }
 //Needs work for error handling unmatched cities or states
 function setObjPath(address) {
-  console.log(address);
+  //console.log(address);
   formattedAddress = address.formatted_address;
   console.log("The address is: " + formattedAddress);
   for (i = 0; i < supportedCities.length; i++) {
@@ -263,10 +263,13 @@ function getEvacuationZone(url, ll) {
     }
 
     if (data) {
-      console.log(data);
-      d3.select("#evacuation").html(data.features[0].properties.Zone);
+      //console.log(data && data.features[0]);
+      var evacZone = data.features[0].properties.Zone ? data.features[0].properties.Zone : "UNKNOWN";
+      d3.select('#modal-body').html(evacZone);
+      console.log("Showing modal with: " + evacZone);
+      $('#notice').modal('show');
+      d3.select("#evacuation").html(evacZone);
     }
-
 
   });
 }
@@ -661,7 +664,7 @@ function getAverageTime(data) {
       }
 
       var duration = onSceneTime.getTime() - callTime.getTime();
-      console.log(duration);
+      //console.log(duration);
       if (!isNaN(duration) && duration > 0 && duration < 999999) { // throw out unreasonable numbers
         avg += duration;
       }
@@ -876,6 +879,8 @@ function checkFeaturesForFloodZone(features, ll) {
   var deferred = D();
 
   var msg = "";
+
+  console.log(features.length)
 
   $(features).each(function (i) {
     var f = $(this);
