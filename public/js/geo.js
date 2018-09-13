@@ -20,7 +20,7 @@ function getAddress(searchPosition) {
     var method = "GET";
     var url =
       "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +
-      searchPosition;
+      searchPosition + "&key=AIzaSyARkBbFV0fE_q9WkLN2PaM-7Ip2JltKy8s";
     var async = true;
 
     request.open(method, url, async);
@@ -28,6 +28,7 @@ function getAddress(searchPosition) {
       if (request.readyState == 4) {
         if (request.status == 200) {
           var data = JSON.parse(request.responseText);
+          console.log(data);
           var address = data.results[0];
           resolve(address);
         } else {
@@ -40,7 +41,7 @@ function getAddress(searchPosition) {
 }
 //Needs work for error handling unmatched cities or states
 function setObjPath(address) {
-  // console.log(address);
+  console.log(address);
   formattedAddress = address.formatted_address;
   console.log("The address is: " + formattedAddress);
   for (i = 0; i < supportedCities.length; i++) {
@@ -78,6 +79,7 @@ function getFeaturesForLocation(address, position) {
     d3.select("#city").html(cityStr);
     getAICUZ(objPath.AICUZ, ll);
     getFloodZone(objPath.FIRM, ll);
+    getEvacuationZone(objPath.evacuation, ll);
     getSchools(objPath.schools, ll, 3);
     getParks(objPath.recreation.parks, ll, 1);
     getClosestThing(objPath.recreation.parks, ll, "park");
@@ -225,6 +227,7 @@ function getCountWithinDays(url, ll, dist, days, type) {
       var count = "";
       if (error) {
         console.error("Getting count within days");
+        console.error(error);
         deferred.resolve(null);
       } else {
         count = data.length + " " + type + " in the past " + days + " days";
@@ -237,6 +240,34 @@ function getCountWithinDays(url, ll, dist, days, type) {
     });
 
   return deferred.promise
+}
+
+function getEvacuationZone(url, ll) {
+  if (!url || url == "") {
+    d3.select("#evacuation").html("Needs data source");
+    return;
+  }
+
+  var LL = L.latLng(ll[1], ll[0]);
+  // use location to find out which census block they are inside.
+  L.esri.query({
+    url: url
+  }).intersects(LL).run(function (error, data) {
+
+    var msg = "";
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    if (data) {
+      console.log(data);
+      d3.select("#evacuation").html("<p style='font-size:44px'>" + data.features[0].properties.Zone + "</p>");
+    }
+
+
+  });
 }
 
 // TODO: update from 2009 to 2015. Something wrong with the 2015 API
@@ -409,7 +440,7 @@ function getRepresentation(url, address) {
     return;
   }
 
-  url = url + "?address=" + address + "&key=AIzaSyDU6QMdA4dv9HM4QYzEd-ptv3ztueEbezY";
+  url = url + "?address=" + address + "&key=AIzaSyDnUIMupv7DsRZDPB0zkeSJrtn8hSE6uWk";
 
   d3.request(url)
     .mimeType("application/json")
