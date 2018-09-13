@@ -4,6 +4,8 @@ var LocationName = {
   neighborhoods: "",
   AICUZ: "",
   FIRM: "",
+  representatives: "",
+  evacuation: "",
 
   fire: {
     calls: "",
@@ -12,7 +14,8 @@ var LocationName = {
       public: "",
       private: ""
     },
-    incidents: ""
+    incidents: "",
+    stations: ""
   },
 
   medical: {
@@ -25,7 +28,9 @@ var LocationName = {
 
   police: {
     calls: "",
-    incidents: ""
+    incidents: "",
+    districtis: "",
+    stations: ""
   },
 
   recreation: {
