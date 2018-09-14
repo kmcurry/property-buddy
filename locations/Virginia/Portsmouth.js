@@ -2,11 +2,14 @@ var Portsmouth = {
 
     boundary: "http://www2.portsmouthva.gov/arcgisweb/rest/services/StandardLayers/MapServer/4",
     neighborhoods: "http://www2.portsmouthva.gov/arcgisweb/rest/services/ArcGIS_Online_GDB/MapServer/12",
-    AICUZ: "",
-    FIRM: "http://www2.portsmouthva.gov/arcgisweb/rest/services/Environment/MapServer/8",
     representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
     evacuation: "https://services3.arcgis.com/qVupYidwzMKkDQzr/arcgis/rest/services/Hurricane_Evacuation_Zones_Expanded/FeatureServer/0",
 
+    property: {
+      AICUZ: "",
+      FIRM: "http://www2.portsmouthva.gov/arcgisweb/rest/services/Environment/MapServer/8",
+      sales: ""
+    },
   
     fire: {
       calls: "",

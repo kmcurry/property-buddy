@@ -2,10 +2,14 @@ var VirginiaBeach = {
 
   boundary: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/Administrative_Boundaries/MapServer/0/",
   neighborhoods: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/PropertyInformation_VBgov/MapServer/13/",
-  AICUZ: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/AICUZ/MapServer/3/",
-  FIRM: "https://gismaps.vbgov.com/arcgis/rest/services/Public_Safety/Flood_Zones_2015/MapServer/2/",
   representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
   evacuation: "https://services3.arcgis.com/qVupYidwzMKkDQzr/arcgis/rest/services/Hurricane_Evacuation_Zones_Expanded/FeatureServer/0",
+
+  property: {
+    AICUZ: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/AICUZ/MapServer/3/",
+    FIRM: "https://gismaps.vbgov.com/arcgis/rest/services/Public_Safety/Flood_Zones_2015/MapServer/2/",
+    sales: "https://data.vbgov.com/resource/p3zb-bkwc.json"
+  },
 
   fire: {
     calls: "",
@@ -23,8 +27,8 @@ var VirginiaBeach = {
   },
 
   police: {
-      calls: "https://data.vbgov.com/resource/rqn2-9am9.json",
-      incidents: "https://data.vbgov.com/resource/r37t-tt64.json"
+    calls: "https://data.vbgov.com/resource/rqn2-9am9.json",
+    incidents: "https://data.vbgov.com/resource/r37t-tt64.json"
   },
 
   recreation: {

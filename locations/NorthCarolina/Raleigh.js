@@ -1,9 +1,15 @@
 var Raleigh = {
 
   boundary: "",
-  AICUZ: "",
-  FIRM: "",
   neighorhoods: "http://data-ral.opendata.arcgis.com/datasets/7155aafedeec477d9a86e80223ba30ce_0.geojson",
+  representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
+  evacuation: "",
+
+  property: {
+    AICUZ: "",
+    FIRM: "",
+    sales: ""
+  },
 
   fire: {
     districts: "http://data-ral.opendata.arcgis.com/datasets/571a9c3081bf4ea39c673fcca7cb40ef_9.geojson",
@@ -24,8 +30,8 @@ var Raleigh = {
   },
 
   police: {
-      calls: "",
-      incidents: ""
+    calls: "",
+    incidents: ""
   },
 
   recreation: {

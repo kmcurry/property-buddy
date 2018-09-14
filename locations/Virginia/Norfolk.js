@@ -1,13 +1,15 @@
 var Norfolk = {
 
   boundary: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Municipal/MapServer/2/",
-  AICUZ: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/8/",
-  FIRM: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/1",
   neighborhoods: "https://raw.githubusercontent.com/blackmad/neighborhoods/master/norfolk.geojson", // THIRD PARTY
   representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
   evacuation: "https://services3.arcgis.com/qVupYidwzMKkDQzr/arcgis/rest/services/Hurricane_Evacuation_Zones_Expanded/FeatureServer/0",
 
-  
+  property: {
+    AICUZ: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/8/",
+    FIRM: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/1",
+    sales: ""
+  },
 
   fire: {
     calls: "",
@@ -26,7 +28,7 @@ var Norfolk = {
 
   police: {
     calls: "",
-    incidents: ""//"https://data.norfolk.gov/resource/6vsy-ykpv.json"
+    incidents: "" //"https://data.norfolk.gov/resource/6vsy-ykpv.json"
   },
 
   recreation: {

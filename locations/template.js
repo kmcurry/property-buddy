@@ -2,10 +2,14 @@ var LocationName = {
 
   boundary: "",
   neighborhoods: "",
-  AICUZ: "",
-  FIRM: "",
   representatives: "",
   evacuation: "",
+
+  property: {
+    AICUZ: "",
+    FIRM: "",
+    sales: ""
+  },
 
   fire: {
     calls: "",

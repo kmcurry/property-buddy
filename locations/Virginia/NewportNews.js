@@ -2,10 +2,14 @@ var NewportNews = {
 
   boundary: "https://ckannet-storage.commondatastorage.googleapis.com/2015-07-19T14:54:43.970Z/newport-news-border.geojson",
   neighborhoods: "",
-  AICUZ: "",
-  FIRM: "",
   representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
   evacuation: "https://services3.arcgis.com/qVupYidwzMKkDQzr/arcgis/rest/services/Hurricane_Evacuation_Zones_Expanded/FeatureServer/0",
+
+  property: {
+    AICUZ: "",
+    FIRM: "",  
+    sales: ""
+  },
 
   fire: {
     calls: "",
