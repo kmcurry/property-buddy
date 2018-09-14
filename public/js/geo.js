@@ -73,13 +73,13 @@ function getFeaturesForLocation(address, position) {
   var LL = L.latLng(ll[1], ll[0]);
   // use location to find out which census block they are inside.
 
-  getRepresentation(objPath.representatives, address);
+  getRepresentation(objPath.representatives, address.formatted_address);
 
   L.esri.query({
     url: objPath.boundary
   }).intersects(LL).run(function (error, data) {
     d3.select("#city").html(cityStr);
-    getAICUZ(objPath.AICUZ, ll);
+    getAICUZ(objPath.property.AICUZ, ll);
     getEvacuationZone(objPath.evacuation, ll);
     getSchools(objPath.schools, ll, 3);
     getParks(objPath.recreation.parks, ll, 1);
@@ -93,8 +93,8 @@ function getFeaturesForLocation(address, position) {
     getAverageResponseTime(objPath.police.calls, ll, .25, "police");
     getPoliceIncidents(objPath.police.incidents, ll, .5, 30);
     //getCountWithinDays(objPath.police.calls, ll, 1, 30, "police-calls");
-    getFloodZone(objPath.FIRM, ll);
-    
+    getFloodZone(objPath.property.FIRM, ll);
+    getPropertySales(objPath.property.sales, address)
   });
 }
 
@@ -206,7 +206,7 @@ function getCountWithinDays(url, ll, dist, days, type) {
     return;
   }
 
-  dist = dist * 1609.35;  // ??????????????????????????????????????????????????
+  dist = dist * 1609.35; // 1609.35 is 1 mile in meters
 
   var checkDate = new Date();
   checkDate = new Date(checkDate.setDate(checkDate.getDate() - days)).toISOString();
@@ -237,10 +237,12 @@ function getCountWithinDays(url, ll, dist, days, type) {
         count = data.length + " " + type + " in the past " + days + " days";
 
         console.log(type + " " + data.length);
+
+
+        d3.select("#" + type).html(count);
+        deferred.resolve(data);
       }
 
-      d3.select("#" + type).html(count);
-      deferred.resolve(data);
     });
 
   return deferred.promise
@@ -280,27 +282,27 @@ function getEvacuationZone(url, ll) {
 // TODO: update from 2009 to 2015. Something wrong with the 2015 API
 async function getFloodZone(url, ll) {
 
-  var promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
     if (!url || url == "") {
       d3.select("#flood").html("Needs data source");
       resolve;
     }
-  
+
     var LL = L.latLng(ll[1], ll[0]);
     // use location to find out which census block they are inside.
     L.esri.query({
       url: url
     }).intersects(LL).run(function (error, data) {
-  
+
       var msg = "";
-  
+
       if (error) {
         console.log(error);
         resolve;
       }
-  
+
       if (data) {
-  
+
         checkFeaturesForFloodZone(data.features, ll).then(
           function (data) {
             msg += data;
@@ -314,10 +316,10 @@ async function getFloodZone(url, ll) {
           }
         );
       }
-  
+
       d3.select("#flood").html("Still searching. (This is taking a bit longer than usual.)");
-  
-  
+
+
     });
   });
 
@@ -330,7 +332,7 @@ function getNearbyNeighborhoods(url, ll, d) {
     return;
   }
 
-  console.log(url);
+  //console.log(url);
 
   if (url.indexOf(".geojson") > -1) {
     d3.request(url)
@@ -357,30 +359,57 @@ function getNearbyNeighborhoods(url, ll, d) {
   }
 }
 
-function neighborhoodHelper(data, ll, d) {
-  var items = getItemsForFeatures(data.features, ll, d);
+function getPropertySales(url, address) {
+  var deferred = D();
 
-  var msg = "";
-  $(items).each(function (i) {
-    var item = $(this);
-    if (item[0].properties.NAME) {
-      msg += item[0].properties.NAME;
-    } else if (item[0].properties.Name) {
-      msg += item[0].properties.Name;
-    } else if (item[0].properties.name) {
-      msg += item[0].properties.name;
-    } else if (item[0].properties.NBRHD_NAME) {
-      msg += item[0].properties.NBRHD_NAME;
-    } else {
-      msg += "Could not locate name field."
-    }
+  if (!url || url == "") {
+    d3.select("#" + type).html("Needs data source");
+    deferred.resolve(null);
+    return;
+  }
 
-    if (i < items.length - 1) {
-      msg += ", ";
-    }
-  });
+  var street_name = address.formatted_address.split(",")[0];
+  console.log(street_name);
 
-  d3.select("#nearby-neighborhoods").html(msg);
+  url += "?$where=street_address=" + encodeURIComponent("'") + street_name + encodeURIComponent("'");
+
+  //console.log(url);
+
+  d3.request(url)
+    .mimeType("application/json")
+    .response(function (xhr) {
+      return JSON.parse(xhr.responseText);
+    })
+    .get(function (error, data) {
+      if (error) {
+        console.error("Getting Property Sales");
+        console.error(error);
+        deferred.resolve(null);
+      } else {
+        console.log(data);
+
+        var last_record = data.length-1;
+
+        var dataLast = data[last_record];
+
+        var land_value = dataLast.land_value;
+        var improvement_value = dataLast.improvement_value;
+        var total_value = dataLast.total_value;
+        var sale_date = dataLast.sale_date;
+
+        var html = "";
+        html += "<p> Last Sale: " + moment(sale_date).format('MM/DD/YYYY') + "</p>";
+        html += "<p>Land Value: $" + land_value + "</p>";
+        html += "<p>Improvement Value: $" + improvement_value + "</p>";
+        html += "<p>Total Value: $" + total_value + "</p>";
+
+        d3.select("#property-sales").html(html);
+        deferred.resolve(data);
+      }
+
+    });
+
+  return deferred.promise
 }
 
 function getParks(url, ll, dist) {
@@ -409,34 +438,38 @@ function getParks(url, ll, dist) {
 
 function getPoliceIncidents(incidents, ll, dist, days) {
   if (!incidents) return;
-  
-  getCountWithinDays(incidents, ll, dist, days, "police-incidents").then(function(incidents) {
+
+  getCountWithinDays(incidents, ll, dist, days, "police-incidents").then(function (incidents) {
     if (incidents) {
       console.log("Police Incidents")
       console.log(incidents);
       var html = "<table style='width:100%'>";
-      $(incidents).each(function(index, incident) {
+      $(incidents).each(function (index, incident) {
         var statusStyle = "unfounded";
         switch (incident.case_status) {
           case "ACTIVE - PENDING":
-          case "ACTIVE PENDING WARRANT OBTAINED": {
-            statusStyle = "active";
-          }
-          break;
-          case "INACTIVE - PENDING": {
-            statusStyle = "inactive";
-          }
-          break;
+          case "ACTIVE PENDING WARRANT OBTAINED":
+            {
+              statusStyle = "active";
+            }
+            break;
+          case "INACTIVE - PENDING":
+            {
+              statusStyle = "inactive";
+            }
+            break;
           case "EXCEPTIONALLY CLEARED":
-          case "CLEARED BY ARREST": {
-            statusStyle = "cleared";
-          }
-          break;
+          case "CLEARED BY ARREST":
+            {
+              statusStyle = "cleared";
+            }
+            break;
           case "UNFOUNDED, NO FURTHER ACTION NEEDED":
-          case "OTHER": {
-            statusStyle = "unfounded";
-          }
-          break;
+          case "OTHER":
+            {
+              statusStyle = "unfounded";
+            }
+            break;
         };
         html += "<tr class='" + statusStyle + "'>";
         html += "<td>" + moment(incident.date_occured).format("MM-DD-YYYY") + "</td>";
@@ -940,12 +973,38 @@ function checkFeaturesForFloodZone(features, ll) {
   return deferred.promise;
 }
 
+function neighborhoodHelper(data, ll, d) {
+  var items = getItemsForFeatures(data.features, ll, d);
+
+  var msg = "";
+  $(items).each(function (i) {
+    var item = $(this);
+    if (item[0].properties.NAME) {
+      msg += item[0].properties.NAME;
+    } else if (item[0].properties.Name) {
+      msg += item[0].properties.Name;
+    } else if (item[0].properties.name) {
+      msg += item[0].properties.name;
+    } else if (item[0].properties.NBRHD_NAME) {
+      msg += item[0].properties.NBRHD_NAME;
+    } else {
+      msg += "Could not locate name field."
+    }
+
+    if (i < items.length - 1) {
+      msg += ", ";
+    }
+  });
+
+  d3.select("#nearby-neighborhoods").html(msg);
+}
+
 async function start() {
   await getAddress(searchPosition)
     .then(function (address) {
       var addr = address;
       setObjPath(address);
-      getFeaturesForLocation(addr.formatted_address, searchPosition);
+      getFeaturesForLocation(addr, searchPosition);
     })
     .catch(function (err) {
       console.error(err);
