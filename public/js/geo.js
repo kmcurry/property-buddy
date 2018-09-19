@@ -171,6 +171,8 @@ function getClosestThing(url, ll, thing, units) {
 
     var closest = getClosestItem(data.features, ll);
 
+    console.log(closest.item[0].properties);
+
     var msg = "";
 
     if (!closest.item || parseInt(closest.distance) === 9999) {
@@ -192,7 +194,12 @@ function getClosestThing(url, ll, thing, units) {
       }
     }
 
-    d3.select("#closest-" + thing).html(msg);
+    var mapUrl = "https://maps.google.com/?ll=" + closest.item[0].properties.LATI + "," + closest.item[0].properties.LONG_
+
+    var html = "<a href='" + mapUrl + "'>" + msg + "</a>"
+
+    d3.select("#closest-" + thing).html(html);
+
   });
 
 }
