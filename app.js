@@ -1,7 +1,6 @@
 var path = require('path'),
   bodyParser = require('body-parser'),
   express = require('express'),
-  fs = require('fs'),
   locations = require('./locations/locations');
 
   require('dotenv').config();
@@ -26,12 +25,11 @@ app.use(bodyParser.urlencoded({
 app.set('view engine', 'pug');
 app.set('views', path.resolve('public/views'));
 
-
-
 // default to port 3000, but allow custom env PORT to override
 var port = process.env.PORT || 3000;
 
 app.listen(port, function() {
+  // load routes
   require('./routes')(app);
   console.log('App listening on port ' + port);
 });

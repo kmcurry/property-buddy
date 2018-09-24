@@ -8,7 +8,8 @@ var routeLoader = function (app) {
 
     app.get('/', function (req, res) {
         res.render('index', {
-            locations: JSON.stringify(app.locations)
+            locations: JSON.stringify(app.locations),
+            GApisKey: process.env.GOOGLE_APIS_KEY
         });
     });
 
@@ -29,13 +30,15 @@ var routeLoader = function (app) {
 
         res.render('simple', {
             locations: JSON.stringify(app.locations),
-            position: position
+            position: position,
+            geoCoderKey: process.env.GEOCODER_KEY,
+            GApisKey: process.env.GOOGLE_APIS_KEY
         });
     });
 
-    // app.use(function (req, res, next) {
-    //     res.status(404).render('404');
-    // });
+    app.use(function (req, res, next) {
+        res.status(404).render('404');
+    });
     
 };
 

@@ -16,13 +16,16 @@ var supportedCities = [
   "Virginia Beach"
 ];
 
+var geoCoderKey = "";
+var GApisKey = "";
+
 function getAddress(searchPosition) {
   return new Promise(function (resolve, reject) {
     var request = new XMLHttpRequest();
     var method = "GET";
     var url =
       "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +
-      searchPosition + "&key=AIzaSyARkBbFV0fE_q9WkLN2PaM-7Ip2JltKy8s";
+      searchPosition + "&key="+geoCoderKey;
     var async = true;
 
     request.open(method, url, async);
@@ -139,8 +142,6 @@ function getAverageResponseTime(url, ll, d, type) {
     })
     .get(function (data) {
 
-      console.log("Response records: " + data.length);
-
       var msg = getAverageTime(data, ll);
       //var z = "<p>" + data.length + "</p>";
 
@@ -171,7 +172,7 @@ function getClosestThing(url, ll, thing, units) {
 
     var closest = getClosestItem(data.features, ll);
 
-    console.log(closest.item[0].properties);
+    //console.log(closest.item[0].properties);
 
     var msg = "";
 
@@ -243,9 +244,6 @@ function getCountWithinDays(url, ll, dist, days, type) {
       } else {
         count = data.length + " " + type + " in the past " + days + " days";
 
-        console.log(type + " " + data.length);
-
-
         d3.select("#" + type).html(count);
         deferred.resolve(data);
       }
@@ -275,10 +273,8 @@ function getEvacuationZone(url, ll) {
     }
 
     if (data) {
-      //console.log(data && data.features[0]);
       var evacZone = data.features[0].properties.Zone ? data.features[0].properties.Zone : "UNKNOWN";
       d3.select('#modal-body').html(evacZone);
-      console.log("Showing modal with: " + evacZone);
       $('#notice').modal('show');
       d3.select("#evacuation").html(evacZone);
     }
@@ -339,8 +335,6 @@ function getNearbyNeighborhoods(url, ll, d) {
     return;
   }
 
-  //console.log(url);
-
   if (url.indexOf(".geojson") > -1) {
     d3.request(url)
       .mimeType("application/json")
@@ -380,8 +374,6 @@ function getPropertySales(url, address) {
 
   url += "?$where=street_address=" + encodeURIComponent("'") + street_name + encodeURIComponent("'");
 
-  //console.log(url);
-
   d3.request(url)
     .mimeType("application/json")
     .response(function (xhr) {
@@ -393,7 +385,6 @@ function getPropertySales(url, address) {
         console.error(error);
         deferred.resolve(null);
       } else {
-        console.log(data);
 
         var last_record = data.length-1;
 
@@ -448,8 +439,8 @@ function getPoliceIncidents(incidents, ll, dist, days) {
 
   getCountWithinDays(incidents, ll, dist, days, "police-incidents").then(function (incidents) {
     if (incidents) {
-      console.log("Police Incidents")
-      console.log(incidents);
+      // console.log("Police Incidents")
+      // console.log(incidents);
       var html = "<table style='width:100%'>";
       $(incidents).each(function (index, incident) {
         var statusStyle = "unfounded";
@@ -499,7 +490,7 @@ function getRepresentation(url, address) {
     return;
   }
 
-  url = url + "?address=" + address + "&key=AIzaSyDnUIMupv7DsRZDPB0zkeSJrtn8hSE6uWk";
+  url = url + "?address=" + address + "&key="+GApisKey;
 
   d3.request(url)
     .mimeType("application/json")
@@ -765,7 +756,7 @@ function getClosestItem(features, ll) {
   closest.distance = closest.distance != 9999 ? parseFloat(closest.distance) * 3959 : 9999; // 3959 is Earth radius in miles
   closest.distance = closest.distance.toFixed(2);
 
-  console.log(closest.distance)
+  //console.log(closest.distance)
 
   return closest;
 }
@@ -935,7 +926,7 @@ function checkFeaturesForFloodZone(features, ll) {
 
   var msg = "";
 
-  console.log(features.length)
+  //console.log(features.length)
 
   $(features).each(function (i) {
     var f = $(this);
@@ -1021,6 +1012,8 @@ async function start() {
 $(document).ready(function () {
   locations = $("#locations").val();
   locations = JSON.parse(locations);
+  geoCoderKey = $("#geoCoderKey").val();
+  GApisKey = $("#GApisKey").val();
   //console.log(locations);
   searchPosition = $("#searchPosition").val();
   //console.log(searchPosition);
