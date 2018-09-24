@@ -4,7 +4,11 @@ var path = require('path'),
   fs = require('fs'),
   locations = require('./locations/locations');
 
+  require('dotenv').config();
+
 var app = express();
+
+app.locations = locations;
 
 // allow custom bower install location with default
 var bowerComponents = path.join(__dirname + '/bower_components');
@@ -22,36 +26,12 @@ app.use(bodyParser.urlencoded({
 app.set('view engine', 'pug');
 app.set('views', path.resolve('public/views'));
 
-app.get('/', function(req, res) {
-  res.render('index', {
-    locations: JSON.stringify(locations)
-  });
-});
 
-app.get('/about', function(req, res) {
-  res.render('about');
-});
-
-app.get('/eastereggs', function(req, res) {
-  res.render('easteregg');
-});
-
-app.get('/search/:loc', function(req, res) {
-  var position = null;
-  if (req.params.loc) {
-    // verify min format, i.e., comma separated values
-    position = req.params.loc.split(',');
-  }
-
-  res.render('simple', {
-    locations: JSON.stringify(locations),
-    position: position
-  });
-});
 
 // default to port 3000, but allow custom env PORT to override
 var port = process.env.PORT || 3000;
 
 app.listen(port, function() {
+  require('./routes')(app);
   console.log('App listening on port ' + port);
 });

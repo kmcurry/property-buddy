@@ -2,7 +2,7 @@ var locations = {};
 var searchPosition = [];
 //setting a value here can be used to handle errors with unmatched cities
 var cityStr = "Not Found";
-var objPath;
+var DataDirectory;
 //Used to filter address by city
 var supportedCities = [
   "Charlottesville",
@@ -42,7 +42,7 @@ function getAddress(searchPosition) {
   });
 }
 //Needs work for error handling unmatched cities or states
-function setObjPath(address) {
+function loadDataDirectory(address) {
   //console.log(address);
   formattedAddress = address.formatted_address;
   console.log("The address is: " + formattedAddress);
@@ -55,7 +55,7 @@ function setObjPath(address) {
   cityPath = cityStr.replace(/\s+/g, '');
   console.log("The city to search is: " + cityStr);
   //create object path to dynamically insert city into function parameters
-  objPath = cityPath.split('.').reduce((o, i) => o[i], locations.Virginia);
+  DataDirectory = cityPath.split('.').reduce((o, i) => o[i], locations.Virginia);
 }
 
 function getFeaturesForLocation(address, position) {
@@ -73,28 +73,28 @@ function getFeaturesForLocation(address, position) {
   var LL = L.latLng(ll[1], ll[0]);
   // use location to find out which census block they are inside.
 
-  getRepresentation(objPath.representatives, address.formatted_address);
+  getRepresentation(DataDirectory.representatives, address.formatted_address);
 
   L.esri.query({
-    url: objPath.boundary
+    url: DataDirectory.boundary
   }).intersects(LL).run(function (error, data) {
     d3.select("#city").html(cityStr);
-    getAICUZ(objPath.property.AICUZ, ll);
-    getEvacuationZone(objPath.evacuation, ll);
-    getSchools(objPath.schools, ll, 3);
-    getParks(objPath.recreation.parks, ll, 1);
-    getClosestThing(objPath.recreation.parks, ll, "park");
-    getClosestThing(objPath.recreation.libraries, ll, "library");
-    // getClosestThing(objPath.fire.hydrants.public, ll, "hydrant-public", "feet");
-    // getClosestThing(objPath.fire.hydrants.private, ll, "hydrant-private", "feet");
-    getClosestThing(objPath.recreation.centers, ll, "recCenter");
-    getNearbyNeighborhoods(objPath.neighborhoods, ll, 1, "neighborhoods")
-    getAverageResponseTime(objPath.medical.emergency.calls, ll, .25, "ems");
-    getAverageResponseTime(objPath.police.calls, ll, .25, "police");
-    getPoliceIncidents(objPath.police.incidents, ll, .5, 30);
-    //getCountWithinDays(objPath.police.calls, ll, 1, 30, "police-calls");
-    getFloodZone(objPath.property.FIRM, ll);
-    getPropertySales(objPath.property.sales, address)
+    getAICUZ(DataDirectory.property.AICUZ, ll);
+    getEvacuationZone(DataDirectory.evacuation, ll);
+    getSchools(DataDirectory.schools, ll, 3);
+    getParks(DataDirectory.recreation.parks, ll, 1);
+    getClosestThing(DataDirectory.recreation.parks, ll, "park");
+    getClosestThing(DataDirectory.recreation.libraries, ll, "library");
+    // getClosestThing(DataDirectory.fire.hydrants.public, ll, "hydrant-public", "feet");
+    // getClosestThing(DataDirectory.fire.hydrants.private, ll, "hydrant-private", "feet");
+    getClosestThing(DataDirectory.recreation.centers, ll, "recCenter");
+    getNearbyNeighborhoods(DataDirectory.neighborhoods, ll, 1, "neighborhoods")
+    getAverageResponseTime(DataDirectory.medical.emergency.calls, ll, .25, "ems");
+    getAverageResponseTime(DataDirectory.police.calls, ll, .25, "police");
+    getPoliceIncidents(DataDirectory.police.incidents, ll, .5, 30);
+    //getCountWithinDays(DataDirectory.police.calls, ll, 1, 30, "police-calls");
+    getFloodZone(DataDirectory.property.FIRM, ll);
+    getPropertySales(DataDirectory.property.sales, address)
   });
 }
 
@@ -1010,7 +1010,7 @@ async function start() {
   await getAddress(searchPosition)
     .then(function (address) {
       var addr = address;
-      setObjPath(address);
+      loadDataDirectory(address);
       getFeaturesForLocation(addr, searchPosition);
     })
     .catch(function (err) {
