@@ -39,11 +39,12 @@ function loadDataDirectory(address) {
   console.log(address.address_components);
 
   cityStr = address.address_components[3].long_name;
+  stateStr = locations[address.address_components[4].long_name];
+  console.log("The city to search is: " + cityStr);
   //remove whitespace
   cityPath = cityStr.replace(/\s+/g, '');
-  console.log("The city to search is: " + cityStr);
   //create object path to dynamically insert city into function parameters
-  DataDirectory = cityPath.split('.').reduce((o, i) => o[i], locations.Virginia);
+  DataDirectory = cityPath.split('.').reduce((o, i) => o[i], stateStr);
 }
 
 function getFeaturesForLocation(address, position) {
@@ -355,7 +356,7 @@ function getPropertySales(url, address) {
   }
 
   var street_name = address.formatted_address.split(",")[0];
-  console.log(street_name);
+  console.log("Street address is: " + street_name);
 
   url += "?$where=street_address=" + encodeURIComponent("'") + street_name + encodeURIComponent("'");
 
