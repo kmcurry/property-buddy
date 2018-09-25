@@ -17,7 +17,7 @@ var routeLoader = function (app) {
         res.render('about');
     });
 
-    app.get('/eastereggs', function (req, res) {
+    app.get('/easteregg', function (req, res) {
         res.render('easteregg');
     });
 
