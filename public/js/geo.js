@@ -16,7 +16,7 @@ function getAddress(searchPosition) {
     var method = "GET";
     var url =
       "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +
-      searchPosition + "&key="+geoCoderKey;
+      searchPosition + "&key=" + geoCoderKey;
     var async = true;
 
     request.open(method, url, async);
@@ -42,9 +42,10 @@ function loadDataDirectory(address) {
   console.log("The state is: " + stateStr);
   //remove whitespace
   cityPath = cityStr.replace(/\s+/g, '');
+  statePath = stateStr.replace(/\s+/g, '');
   console.log(cityPath);
   //create object path to dynamically insert city into function parameters
-  DataDirectory = cityPath.split('.').reduce((o, i) => o[i], locations[stateStr]);
+  DataDirectory = cityPath.split('.').reduce((o, i) => o[i], locations[statePath]);
 }
 
 function getFeaturesForLocation(address, position) {
@@ -64,12 +65,14 @@ function getFeaturesForLocation(address, position) {
 
   getRepresentation(locations.UnitedStates.representatives, address.formatted_address);
 
+  var statePath = stateStr.replace(/\s+/g, '');
+
   L.esri.query({
     url: DataDirectory.boundary
   }).intersects(LL).run(function (error, data) {
     d3.select("#city").html(cityStr);
     getAICUZ(DataDirectory.property.AICUZ, ll);
-    getEvacuationZone(locations[stateStr].evacuation, ll);
+    getEvacuationZone(locations[statePath].evacuation, ll);
     getSchools(DataDirectory.schools, ll, 3);
     getParks(DataDirectory.recreation.parks, ll, 1);
     getClosestThing(DataDirectory.recreation.parks, ll, "park");
@@ -375,21 +378,27 @@ function getPropertySales(url, address) {
         console.error(error);
         deferred.resolve(null);
       } else {
-
-        var last_record = data.length-1;
-
-        var dataLast = data[last_record];
-
-        var land_value = dataLast.land_value;
-        var improvement_value = dataLast.improvement_value;
-        var total_value = dataLast.total_value;
-        var sale_date = dataLast.sale_date;
-
         var html = "";
-        html += "<p> Last Sale: " + moment(sale_date).format('MM/DD/YYYY') + "</p>";
-        html += "<p>Land Value: $" + land_value + "</p>";
-        html += "<p>Improvement Value: $" + improvement_value + "</p>";
-        html += "<p>Total Value: $" + total_value + "</p>";
+
+        if (data.length > 0) {
+          var last_record = data.length - 1;
+
+          var dataLast = data[last_record];
+
+          var land_value = dataLast.land_value;
+          var improvement_value = dataLast.improvement_value;
+          var total_value = dataLast.total_value;
+          var sale_date = dataLast.sale_date;
+
+          html += "<p> Last Sale: " + moment(sale_date).format('MM/DD/YYYY') + "</p>";
+          html += "<p>Land Value: $" + land_value + "</p>";
+          html += "<p>Improvement Value: $" + improvement_value + "</p>";
+          html += "<p>Total Value: $" + total_value + "</p>";
+        } else {
+          html += "<p>No property sales data was found</p>";
+        }
+
+
 
         d3.select("#property-sales").html(html);
         deferred.resolve(data);
@@ -480,7 +489,7 @@ function getRepresentation(url, address) {
     return;
   }
 
-  url = url + "?address=" + address + "&key="+GApisKey;
+  url = url + "?address=" + address + "&key=" + GApisKey;
 
   d3.request(url)
     .mimeType("application/json")
@@ -936,6 +945,7 @@ function checkFeaturesForFloodZone(features, ll) {
           case "AH":
           case "AO":
           case "AR":
+          case "VE":
             {
               msg += " Insurance IS REQUIRED";
             }
@@ -943,7 +953,7 @@ function checkFeaturesForFloodZone(features, ll) {
           default:
             {
               if (fz && fz.indexOf("0.2") !== -1) {
-                msg += " Insurance is NOT REQUIRED"
+                msg += " Insurance requirement is UNKNOWN"
               } else {
                 msg = "Your flood zone could not be determined";
               }
@@ -989,25 +999,29 @@ function neighborhoodHelper(data, ll, d) {
 
 function parseAddress(address) {
   var address = address.address_components;
-  $(address).each(function(index, component) {
+  $(address).each(function (index, component) {
     switch (component.types[0]) {
-      case "neighborhood": {
-        neighborHoodStr = component.long_name;
-        d3.select("#neighborhood").html(neighborHoodStr);
-      }
-      break;
-      case "locality": {
-        cityStr = component.long_name;
-      }
-      break;
-      case "administrative_area_level_1": {
-        stateStr = component.long_name;
-      }
-      break;
-      default: {
-        // not parsing the others RN
-      }
-      break;
+      case "neighborhood":
+        {
+          neighborHoodStr = component.long_name;
+          d3.select("#neighborhood").html(neighborHoodStr);
+        }
+        break;
+      case "locality":
+        {
+          cityStr = component.long_name;
+        }
+        break;
+      case "administrative_area_level_1":
+        {
+          stateStr = component.long_name;
+        }
+        break;
+      default:
+        {
+          // not parsing the others RN
+        }
+        break;
     }
   })
 }
