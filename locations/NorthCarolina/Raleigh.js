@@ -3,7 +3,6 @@ var Raleigh = {
   boundary: "",
   neighorhoods: "http://data-ral.opendata.arcgis.com/datasets/7155aafedeec477d9a86e80223ba30ce_0.geojson",
   representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
-  evacuation: "",
 
   property: {
     AICUZ: "",
