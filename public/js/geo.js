@@ -45,7 +45,10 @@ function loadDataDirectory(address) {
   statePath = stateStr.replace(/\s+/g, '');
   console.log(cityPath);
   //create object path to dynamically insert city into function parameters
-  DataDirectory = cityPath.split('.').reduce((o, i) => o[i], locations[statePath]);
+  if (locations[statePath]) {
+    DataDirectory = cityPath.split('.').reduce((o, i) => o[i], locations[statePath]);
+  }
+
 }
 
 function getFeaturesForLocation(address, position) {
@@ -65,29 +68,32 @@ function getFeaturesForLocation(address, position) {
 
   getRepresentation(locations.UnitedStates.representatives, address.formatted_address);
 
-  var statePath = stateStr.replace(/\s+/g, '');
+  if (DataDirectory && DataDirectory.boundary) {
+    var statePath = stateStr.replace(/\s+/g, '');
 
-  L.esri.query({
-    url: DataDirectory.boundary
-  }).intersects(LL).run(function (error, data) {
-    d3.select("#city").html(cityStr);
-    getAICUZ(DataDirectory.property.AICUZ, ll);
-    getEvacuationZone(locations[statePath].evacuation, ll);
-    getSchools(DataDirectory.schools, ll, 3);
-    getParks(DataDirectory.recreation.parks, ll, 1);
-    getClosestThing(DataDirectory.recreation.parks, ll, "park");
-    getClosestThing(DataDirectory.recreation.libraries, ll, "library");
-    // getClosestThing(DataDirectory.fire.hydrants.public, ll, "hydrant-public", "feet");
-    // getClosestThing(DataDirectory.fire.hydrants.private, ll, "hydrant-private", "feet");
-    getClosestThing(DataDirectory.recreation.centers, ll, "recCenter");
-    getNearbyNeighborhoods(DataDirectory.neighborhoods, ll, 1, "neighborhoods")
-    getAverageResponseTime(DataDirectory.medical.emergency.calls, ll, .25, "ems");
-    getAverageResponseTime(DataDirectory.police.calls, ll, .25, "police");
-    getPoliceIncidents(DataDirectory.police.incidents, ll, .5, 30);
-    //getCountWithinDays(DataDirectory.police.calls, ll, 1, 30, "police-calls");
-    getFloodZone(DataDirectory.property.FIRM, ll);
-    getPropertySales(DataDirectory.property.sales, address)
-  });
+    L.esri.query({
+      url: DataDirectory.boundary
+    }).intersects(LL).run(function (error, data) {
+      getAICUZ(DataDirectory.property.AICUZ, ll);
+      getEvacuationZone(locations[statePath].evacuation, ll);
+      getSchools(DataDirectory.schools, ll, 3);
+      getParks(DataDirectory.recreation.parks, ll, 1);
+      getClosestThing(DataDirectory.recreation.parks, ll, "park");
+      getClosestThing(DataDirectory.recreation.libraries, ll, "library");
+      // getClosestThing(DataDirectory.fire.hydrants.public, ll, "hydrant-public", "feet");
+      // getClosestThing(DataDirectory.fire.hydrants.private, ll, "hydrant-private", "feet");
+      getClosestThing(DataDirectory.recreation.centers, ll, "recCenter");
+      getNearbyNeighborhoods(DataDirectory.neighborhoods, ll, 1, "neighborhoods")
+      getAverageResponseTime(DataDirectory.medical.emergency.calls, ll, .25, "ems");
+      getAverageResponseTime(DataDirectory.police.calls, ll, .25, "police");
+      getPoliceIncidents(DataDirectory.police.incidents, ll, .5, 30);
+      //getCountWithinDays(DataDirectory.police.calls, ll, 1, 30, "police-calls");
+      getFloodZone(DataDirectory.property.FIRM, ll);
+      getPropertySales(DataDirectory.property.sales, address)
+    });
+  }
+
+
 }
 
 function getAICUZ(url, ll) {
@@ -1010,6 +1016,7 @@ function parseAddress(address) {
       case "locality":
         {
           cityStr = component.long_name;
+          d3.select("#city").html(cityStr);
         }
         break;
       case "administrative_area_level_1":
