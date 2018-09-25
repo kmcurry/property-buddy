@@ -2,8 +2,7 @@ var Norfolk = {
 
   boundary: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Municipal/MapServer/2/",
   neighborhoods: "https://raw.githubusercontent.com/blackmad/neighborhoods/master/norfolk.geojson", // THIRD PARTY
-  evacuation: "https://services3.arcgis.com/qVupYidwzMKkDQzr/arcgis/rest/services/Hurricane_Evacuation_Zones_Expanded/FeatureServer/0",
-
+  
   property: {
     AICUZ: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/8/",
     FIRM: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/1",

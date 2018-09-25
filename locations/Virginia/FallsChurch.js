@@ -2,8 +2,7 @@ var FallsChurch = {
 
   boundary: "https://maps-fallschurch.opendata.arcgis.com/datasets/a5ad578107894319b75c8ea00fe0a987_0.geojson",
   neighborhoods: "",
-  evacuation: "https://services3.arcgis.com/qVupYidwzMKkDQzr/arcgis/rest/services/Hurricane_Evacuation_Zones_Expanded/FeatureServer/0",
-
+  
   property: {
     AICUZ: "",
     FIRM: "",

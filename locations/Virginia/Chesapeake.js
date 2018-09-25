@@ -2,8 +2,7 @@ var Chesapeake = {
 
   boundary: "https://public-chesva.opendata.arcgis.com/datasets/e68ee91297f448188ec30034b1ac27be_31.geojson",
   neighborhoods: "https://public-chesva.opendata.arcgis.com/datasets/e8a4bed38fdf403ca5479779884aadc2_3.geojson",
-  evacuation: "https://services3.arcgis.com/qVupYidwzMKkDQzr/arcgis/rest/services/Hurricane_Evacuation_Zones_Expanded/FeatureServer/0",
-
+  
   property: {
     AICUZ: "https://public-chesva.opendata.arcgis.com/datasets/77ba67c5fbc84d40a5002e3e02d046cb_3.geojson",
     FIRM: "",

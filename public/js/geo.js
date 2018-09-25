@@ -73,7 +73,7 @@ function getFeaturesForLocation(address, position) {
   }).intersects(LL).run(function (error, data) {
     d3.select("#city").html(cityStr);
     getAICUZ(DataDirectory.property.AICUZ, ll);
-    getEvacuationZone(DataDirectory.evacuation, ll);
+    getEvacuationZone(locations[stateStr].evacuation, ll);
     getSchools(DataDirectory.schools, ll, 3);
     getParks(DataDirectory.recreation.parks, ll, 1);
     getClosestThing(DataDirectory.recreation.parks, ll, "park");
