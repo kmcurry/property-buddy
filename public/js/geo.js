@@ -1,20 +1,10 @@
 var locations = {};
+var DataDirectory = {};
 var searchPosition = [];
-//setting a value here can be used to handle errors with unmatched cities
-var cityStr = "Not Found";
-var DataDirectory;
-//Used to filter address by city
-var supportedCities = [
-  "Charlottesville",
-  "Chesapeake",
-  "Falls Church",
-  "Hampton",
-  "Newport News",
-  "Norfolk",
-  "Portsmouth",
-  "Richmond",
-  "Virginia Beach"
-];
+
+var cityStr = "Unknown";
+var stateStr = "Unknown";
+var fedStr = "Unknown";
 
 var geoCoderKey = "";
 var GApisKey = "";
@@ -46,14 +36,9 @@ function getAddress(searchPosition) {
 }
 //Needs work for error handling unmatched cities or states
 function loadDataDirectory(address) {
-  //console.log(address);
-  formattedAddress = address.formatted_address;
-  console.log("The address is: " + formattedAddress);
-  for (i = 0; i < supportedCities.length; i++) {
-    if (formattedAddress.includes(supportedCities[i])) {
-      cityStr = supportedCities[i];
-    }
-  }
+  console.log(address.address_components);
+
+  cityStr = address.address_components[3].long_name;
   //remove whitespace
   cityPath = cityStr.replace(/\s+/g, '');
   console.log("The city to search is: " + cityStr);
