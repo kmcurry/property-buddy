@@ -190,9 +190,16 @@ function getClosestThing(url, ll, thing, units) {
       }
     }
 
-    var mapUrl = "https://maps.google.com/?ll=" + closest.item[0].properties.LATI + "," + closest.item[0].properties.LONG_
+    var html = "";
+    if (closest.item[0].properties.LATI) {
+      var mapUrl = "https://maps.google.com/?ll=" + closest.item[0].properties.LATI + "," + closest.item[0].properties.LONG_
 
-    var html = "<a href='" + mapUrl + "'>" + msg + "</a>"
+      var html = "<a href='" + mapUrl + "'>" + msg + "</a>"
+
+    } else {
+      html = msg;
+    }
+
 
     d3.select("#closest-" + thing).html(html);
 
@@ -259,8 +266,6 @@ function getEvacuationZone(url, ll) {
   L.esri.query({
     url: url
   }).intersects(LL).run(function (error, data) {
-
-    var msg = "";
 
     if (error) {
       console.log(error);
