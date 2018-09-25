@@ -2,7 +2,6 @@ var Chesapeake = {
 
   boundary: "https://public-chesva.opendata.arcgis.com/datasets/e68ee91297f448188ec30034b1ac27be_31.geojson",
   neighborhoods: "https://public-chesva.opendata.arcgis.com/datasets/e8a4bed38fdf403ca5479779884aadc2_3.geojson",
-  representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
   evacuation: "https://services3.arcgis.com/qVupYidwzMKkDQzr/arcgis/rest/services/Hurricane_Evacuation_Zones_Expanded/FeatureServer/0",
 
   property: {

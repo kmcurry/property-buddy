@@ -4,7 +4,6 @@ var Richmond = {
   neighborhoods: "https://data.richmondgov.com/resource/7juf-nwis.json",
   AICUZ: "",
   FIRM: "",
-  representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
   evacuation: "https://services3.arcgis.com/qVupYidwzMKkDQzr/arcgis/rest/services/Hurricane_Evacuation_Zones_Expanded/FeatureServer/0",
 
   property: {

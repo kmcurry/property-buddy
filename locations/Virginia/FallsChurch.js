@@ -2,7 +2,6 @@ var FallsChurch = {
 
   boundary: "https://maps-fallschurch.opendata.arcgis.com/datasets/a5ad578107894319b75c8ea00fe0a987_0.geojson",
   neighborhoods: "",
-  representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
   evacuation: "https://services3.arcgis.com/qVupYidwzMKkDQzr/arcgis/rest/services/Hurricane_Evacuation_Zones_Expanded/FeatureServer/0",
 
   property: {
@@ -33,14 +32,14 @@ var FallsChurch = {
 
   recreation: {
     centers: "",
-    parks: "https://maps-opendata.arcgis.com/datasets/83b0e306cfc447a19752cd391e17b348_0.geojson",
+    parks: "https://services1.arcgis.com/2hmXRAz4ofcdQP6p/arcgis/rest/services/Parks/FeatureServer/0/",
     libraries: "",
     trails: "",
     water: ""
   },
 
   schools: {
-    all: "",
+    all: "https://services1.arcgis.com/2hmXRAz4ofcdQP6p/arcgis/rest/services/Schools/FeatureServer/0/",
     pre: "",
     elementary: "",
     middle: "",

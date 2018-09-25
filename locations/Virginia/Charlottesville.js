@@ -2,7 +2,6 @@ var Charlottesville = {
 
   boundary: "https://opendata.arcgis.com/datasets/43253262b4da436bbac25d8cdb2f043b_44.geojson",
   neighborhoods: "",
-  representatives: "https://www.googleapis.com/civicinfo/v2/representatives",
   evacuation: "https://services3.arcgis.com/qVupYidwzMKkDQzr/arcgis/rest/services/Hurricane_Evacuation_Zones_Expanded/FeatureServer/0",
 
   property: {
