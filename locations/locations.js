@@ -1,5 +1,7 @@
 var locations = {};
 
+locations.UnitedStates = require('./UnitedStates.js')
+
 locations.NorthCarolina = {};
 locations.NorthCarolina.Raleigh  = require('./NorthCarolina/Raleigh');
 
