@@ -38,13 +38,17 @@ function getAddress(searchPosition) {
 function loadDataDirectory(address) {
   console.log(address.address_components);
 
-  cityStr = address.address_components[3].long_name;
-  stateStr = locations[address.address_components[4].long_name];
+  var cityNdx = address.address_components.length < 8 ? 2 : 3;
+  var stateNdx = address.address_components.length < 8 ? 3 : 4;
+
+  cityStr = address.address_components[cityNdx].long_name;
+  stateStr = address.address_components[stateNdx].long_name;
   console.log("The city to search is: " + cityStr);
+  console.log("The state is: " + stateStr);
   //remove whitespace
   cityPath = cityStr.replace(/\s+/g, '');
   //create object path to dynamically insert city into function parameters
-  DataDirectory = cityPath.split('.').reduce((o, i) => o[i], stateStr);
+  DataDirectory = cityPath.split('.').reduce((o, i) => o[i], locations[stateStr]);
 }
 
 function getFeaturesForLocation(address, position) {
@@ -62,7 +66,7 @@ function getFeaturesForLocation(address, position) {
   var LL = L.latLng(ll[1], ll[0]);
   // use location to find out which census block they are inside.
 
-  getRepresentation(DataDirectory.representatives, address.formatted_address);
+  getRepresentation(locations.UnitedStates.representatives, address.formatted_address);
 
   L.esri.query({
     url: DataDirectory.boundary
@@ -258,11 +262,13 @@ function getEvacuationZone(url, ll) {
       return;
     }
 
-    if (data) {
+    if (data && data.features && data.features[0]) {
       var evacZone = data.features[0].properties.Zone ? data.features[0].properties.Zone : "UNKNOWN";
       d3.select('#modal-body').html(evacZone);
       $('#notice').modal('show');
       d3.select("#evacuation").html(evacZone);
+    } else {
+      d3.select("#evacuation").html("No Features in Evacuation data set");
     }
 
   });
@@ -270,11 +276,12 @@ function getEvacuationZone(url, ll) {
 
 // TODO: update from 2009 to 2015. Something wrong with the 2015 API
 async function getFloodZone(url, ll) {
-
+  console.log("Flood Url: " + url);
   var promise = new Promise(function (resolve, reject) {
     if (!url || url == "") {
       d3.select("#flood").html("Needs data source");
       resolve;
+      return;
     }
 
     var LL = L.latLng(ll[1], ll[0]);
@@ -316,6 +323,7 @@ async function getFloodZone(url, ll) {
 }
 
 function getNearbyNeighborhoods(url, ll, d) {
+  console.log("Neighborhoods:" + url);
   if (!url || url == "") {
     d3.select("#nearby-neighborhoods").html("Needs data source");
     return;
@@ -350,7 +358,7 @@ function getPropertySales(url, address) {
   var deferred = D();
 
   if (!url || url == "") {
-    d3.select("#" + type).html("Needs data source");
+    d3.select("#property-sales").html("Needs data source");
     deferred.resolve(null);
     return;
   }
