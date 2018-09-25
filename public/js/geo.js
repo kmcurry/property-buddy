@@ -2,6 +2,7 @@ var locations = {};
 var DataDirectory = {};
 var searchPosition = [];
 
+var neighborhoodStr = "Unknown";
 var cityStr = "Unknown";
 var stateStr = "Unknown";
 var fedStr = "Unknown";
@@ -36,17 +37,12 @@ function getAddress(searchPosition) {
 }
 //Needs work for error handling unmatched cities or states
 function loadDataDirectory(address) {
-  console.log(address.address_components);
-
-  var cityNdx = address.address_components.length < 8 ? 2 : 3;
-  var stateNdx = address.address_components.length < 8 ? 3 : 4;
-
-  cityStr = address.address_components[cityNdx].long_name;
-  stateStr = address.address_components[stateNdx].long_name;
+  parseAddress(address);
   console.log("The city to search is: " + cityStr);
   console.log("The state is: " + stateStr);
   //remove whitespace
   cityPath = cityStr.replace(/\s+/g, '');
+  console.log(cityPath);
   //create object path to dynamically insert city into function parameters
   DataDirectory = cityPath.split('.').reduce((o, i) => o[i], locations[stateStr]);
 }
@@ -989,6 +985,31 @@ function neighborhoodHelper(data, ll, d) {
   });
 
   d3.select("#nearby-neighborhoods").html(msg);
+}
+
+function parseAddress(address) {
+  var address = address.address_components;
+  $(address).each(function(index, component) {
+    switch (component.types[0]) {
+      case "neighborhood": {
+        neighborHoodStr = component.long_name;
+        d3.select("#neighborhood").html(neighborHoodStr);
+      }
+      break;
+      case "locality": {
+        cityStr = component.long_name;
+      }
+      break;
+      case "administrative_area_level_1": {
+        stateStr = component.long_name;
+      }
+      break;
+      default: {
+        // not parsing the others RN
+      }
+      break;
+    }
+  })
 }
 
 async function start() {
