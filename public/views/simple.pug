@@ -127,12 +127,13 @@ head
       and (-webkit-min-device-pixel-ratio: 2)
       and (orientation: portrait) {
         body {
-          font-size: 40px !important;
+          font-size: 20px !important;
         }
         .container {
           margin: 10px !important;
           padding: 10px !important;
         }
+       
     }
     
 body
@@ -178,6 +179,11 @@ body
           <span class="fa fa-ambulance"></span> Response Time
         div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
           div(id="ems-response-avg") ...
+      div(class="row police")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-shield"></span> Patrol Zone
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          div(id="police-patrol")
       div(class="row police")
         div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
           <span class="fa fa-shield"></span> Response Time
