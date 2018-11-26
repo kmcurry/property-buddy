@@ -480,6 +480,7 @@ function getPoliceIncidents(incidents, ll, dist, days) {
       // console.log("Police Incidents")
       // console.log(incidents);
       var html = "<table style='width:100%;'>";
+      incidents = incidents.reverse(); // reverse the sort order
       $(incidents).each(function (index, incident) {
         var statusStyle = "unfounded";
         switch (incident.case_status) {
