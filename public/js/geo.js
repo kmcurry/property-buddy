@@ -76,6 +76,7 @@ function getFeaturesForLocation(address, position) {
     }).intersects(LL).run(function (error, data) {
       getAICUZ(DataDirectory.property.AICUZ, ll);
       getEvacuationZone(locations[statePath].evacuation, ll);
+      getPolicePrecinct(DataDirectory.police.precincts, ll);
       getPolicePatrolZone(DataDirectory.police.zones, ll);
       getSchools(DataDirectory.schools, ll, 3);
       getParks(DataDirectory.recreation.parks, ll, 1);
@@ -285,33 +286,6 @@ function getEvacuationZone(url, ll) {
   });
 }
 
-function getPolicePatrolZone(url, ll) {
-  if (!url || url == "") {
-    d3.select("#police-patrol").html("Needs data source");
-    return;
-  }
-
-  var LL = L.latLng(ll[1], ll[0]);
-  // use location to find out which census block they are inside.
-  L.esri.query({
-    url: url
-  }).intersects(LL).run(function (error, data) {
-
-    if (error) {
-      console.log(error);
-      return;
-    }
-
-    if (data && data.features && data.features[0]) {
-      var patrolZone = data.features[0].properties.BEAT ? data.features[0].properties.BEAT : "UNKNOWN";
-      d3.select("#police-patrol").html(patrolZone); //+ "<a href=''>Zone Map</a>");
-    } else {
-      d3.select("#police-patrol").html("No Features in Patrol Zone data set");
-    }
-
-  });
-}
-
 // TODO: update from 2009 to 2015. Something wrong with the 2015 API
 async function getFloodZone(url, ll) {
   console.log("Flood Url: " + url);
@@ -392,6 +366,31 @@ function getNearbyNeighborhoods(url, ll, d) {
   }
 }
 
+function getParks(url, ll, dist) {
+  if (!url || url == "") {
+    d3.select("#parks").html("Needs data source");
+    return;
+  }
+
+  var LL = L.latLng(ll[1], ll[0]);
+  // use location to find out which census block they are inside.
+  L.esri.query({
+    url: url
+  }).run(function (error, data) {
+    if (!data || !data.features) {
+      d3.select("#parks").html("No data returned!");
+      return;
+    }
+
+    var items = getItemsForFeatures(data.features, ll, dist);
+
+    var msg = items.length;
+
+    d3.select("#parks").html(msg);
+  });
+}
+
+
 function getPropertySales(url, address) {
   var deferred = D();
 
@@ -448,30 +447,6 @@ function getPropertySales(url, address) {
   return deferred.promise
 }
 
-function getParks(url, ll, dist) {
-  if (!url || url == "") {
-    d3.select("#parks").html("Needs data source");
-    return;
-  }
-
-  var LL = L.latLng(ll[1], ll[0]);
-  // use location to find out which census block they are inside.
-  L.esri.query({
-    url: url
-  }).run(function (error, data) {
-    if (!data || !data.features) {
-      d3.select("#parks").html("No data returned!");
-      return;
-    }
-
-    var items = getItemsForFeatures(data.features, ll, dist);
-
-    var msg = items.length;
-
-    d3.select("#parks").html(msg);
-  });
-}
-
 function getPoliceIncidents(incidents, ll, dist, days) {
   if (!incidents) return;
 
@@ -520,6 +495,60 @@ function getPoliceIncidents(incidents, ll, dist, days) {
     } else {
       console.log("No Data from getCountWithinDays")
     }
+  });
+}
+
+function getPolicePatrolZone(url, ll) {
+  if (!url || url == "") {
+    d3.select("#police-patrol").html("Needs data source");
+    return;
+  }
+
+  var LL = L.latLng(ll[1], ll[0]);
+  // use location to find out which census block they are inside.
+  L.esri.query({
+    url: url
+  }).intersects(LL).run(function (error, data) {
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    if (data && data.features && data.features[0]) {
+      var patrolZone = data.features[0].properties.BEAT ? data.features[0].properties.BEAT : "UNKNOWN";
+      d3.select("#police-patrol").html(patrolZone); //+ "<a href=''>Zone Map</a>");
+    } else {
+      d3.select("#police-patrol").html("No Features in Patrol Zone data set");
+    }
+
+  });
+}
+
+function getPolicePrecinct(url, ll) {
+  if (!url || url == "") {
+    d3.select("#police-precinct").html("Needs data source");
+    return;
+  }
+
+  var LL = L.latLng(ll[1], ll[0]);
+  // use location to find out which census block they are inside.
+  L.esri.query({
+    url: url
+  }).intersects(LL).run(function (error, data) {
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    if (data && data.features && data.features[0]) {
+      var precinct = data.features[0].properties.PRECINCT ? data.features[0].properties.PRECINCT : "UNKNOWN";
+      d3.select("#police-precinct").html(precinct); //+ "<a href=''>Zone Map</a>");
+    } else {
+      d3.select("#police-precinct").html("No Features in Precinct data set");
+    }
+
   });
 }
 
