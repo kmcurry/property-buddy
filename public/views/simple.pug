@@ -133,7 +133,7 @@ head
           margin: 4px !important;
           padding: 4px !important;
         }
-        #police-incidents-list {
+        .tr {
           font-size: 40px !important;
         }
        
@@ -286,10 +286,12 @@ body
             div(name='reps-state' id='reps-state')
             div(name='reps-federal' id='reps-federal')
     h1 Police Incident List
+    text Legend: 
     text(class="active") Active, 
     text(class="inactive") Inactive, 
     text(class="cleared")  Cleared, 
     text(class="unfounded") Unfounded/Other
+    p
     div(id="police-incidents-list") ...
   div(id="invisibleMap")
   input(type="hidden" id="locations" value=""+locations)

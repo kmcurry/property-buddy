@@ -479,7 +479,7 @@ function getPoliceIncidents(incidents, ll, dist, days) {
     if (incidents) {
       // console.log("Police Incidents")
       // console.log(incidents);
-      var html = "<table style='width:100%'>";
+      var html = "<table style='width:100%;'>";
       $(incidents).each(function (index, incident) {
         var statusStyle = "unfounded";
         switch (incident.case_status) {
@@ -507,7 +507,7 @@ function getPoliceIncidents(incidents, ll, dist, days) {
             }
             break;
         };
-        html += "<tr class='" + statusStyle + "'>";
+        html += "<tr class='" + statusStyle + "' style='font-size:22px;'>";
         html += "<td>" + moment(incident.date_occured).format("MM-DD-YYYY") + "</td>";
         html += "<td>" + incident.offense_description + "</td>";
         html += "<td>" + incident.location_1_address + "</td>";
