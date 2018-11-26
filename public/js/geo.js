@@ -224,6 +224,7 @@ function getCountWithinDays(url, ll, dist, days, type) {
   checkDate = new Date(checkDate.setDate(checkDate.getDate() - days)).toISOString();
   checkDate = checkDate.toString().substring(0, checkDate.lastIndexOf('Z'));
 
+  // WARNING: HARD-CODED FIELD
   var dateField = "";
   if (type.includes("calls")) {
     dateField = "call_date_time";
