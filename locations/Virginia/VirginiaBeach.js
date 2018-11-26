@@ -26,7 +26,8 @@ var VirginiaBeach = {
 
   police: {
     calls: "https://data.vbgov.com/resource/rqn2-9am9.json",
-    incidents: "https://data.vbgov.com/resource/r37t-tt64.json"
+    incidents: "https://data.vbgov.com/resource/r37t-tt64.json",
+    zones: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/Administrative_Boundaries/MapServer/9/"
   },
 
   recreation: {
