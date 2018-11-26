@@ -418,21 +418,30 @@ function getPropertySales(url, address) {
         deferred.resolve(null);
       } else {
         var html = "";
+        console.log(data);
 
         if (data.length > 0) {
-          var last_record = data.length - 1;
 
-          var dataLast = data[last_record];
+          // var land_value = dataLast.land_value;
+          // var improvement_value = dataLast.improvement_value;
+          // var total_value = dataLast.total_value;
+          // var sale_date = dataLast.sale_date;
+          // var sale_price = dataLast.sale_price;
 
-          var land_value = dataLast.land_value;
-          var improvement_value = dataLast.improvement_value;
-          var total_value = dataLast.total_value;
-          var sale_date = dataLast.sale_date;
+          data = data.sort(function(a,b){
+            return new Date(b.sale_date) - new Date(a.sale_date);
+          });
 
-          html += "<p> Last Sale: " + moment(sale_date).format('MM/DD/YYYY') + "</p>";
-          html += "<p>Land Value: $" + land_value + "</p>";
-          html += "<p>Improvement Value: $" + improvement_value + "</p>";
-          html += "<p>Total Value: $" + total_value + "</p>";
+
+          $(data).each(function (index, transaction) {
+            html += "<p>" + moment(transaction.sale_date).format('MM/DD/YYYY') + " $" + transaction.sale_price + "</p>";
+          });
+
+          // html += "<p> Last Sale: " + moment(sale_date).format('MM/DD/YYYY') + "</p>";
+          // html += "<p>Sale Price: $" + sale_price + "</p>";
+          // html += "<p>Land Value: $" + land_value + "</p>";
+          // html += "<p>Improvement Value: $" + improvement_value + "</p>";
+          // html += "<p>Total Value: $" + total_value + "</p>";
         } else {
           html += "<p>No property sales data was found</p>";
         }
