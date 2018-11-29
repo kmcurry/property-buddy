@@ -148,7 +148,7 @@ function getAverageResponseTime(url, ll, d, type) {
       var msg = getAverageTime(data, ll);
       //var z = "<p>" + data.length + "</p>";
 
-      msg += "<a title='1/4 mile search. Average response time based on " + data.length + " records.' href=''>*</a>";
+      msg += "<a title='Call or Incident reports within 1/4 mile. Average response time based on " + data.length + " records.' href=''>*</a>";
 
       d3.select("#" + type + "-response-avg").html(msg);
 
@@ -511,9 +511,11 @@ function getPoliceIncidents(incidents, ll, dist, days) {
   getCountWithinDays(incidents, ll, dist, days, "police-incidents").then(function (incidents) {
     if (incidents) {
       // console.log("Police Incidents")
-      // console.log(incidents);
+      console.log(incidents);
       var html = "<table style='width:100%;'>";
-      incidents = incidents.reverse(); // reverse the sort order
+      incidents = incidents.sort(function(a,b){
+        return new Date(b.date_occured) - new Date(a.date_occured);
+      });
       $(incidents).each(function (index, incident) {
         var statusStyle = "unfounded";
         switch (incident.case_status) {
