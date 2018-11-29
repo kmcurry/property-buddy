@@ -97,7 +97,10 @@ function getFeaturesForLocation(address, position) {
       getPoliceIncidents(DataDirectory.police.incidents, ll, .5, 30);
       //getCountWithinDays(DataDirectory.police.calls, ll, 1, 30, "police-calls");
       getPropertySales(DataDirectory.property.sales, address);
-      getFloodZone(locations.UnitedStates.FIRM, ll);
+
+      setTimeout(function() {
+        getFloodZone(locations.UnitedStates.FIRM, ll)
+      }, 1000);
       
     });
 
