@@ -707,7 +707,10 @@ function getNearbySchools(config, ll, dist) {
       L.esri.query({
         url: url
       }).run(function (error, data) {
-        var items = getItemsForFeatures(data.features, ll, dist);
+        if (error) {
+          console.log(error);
+        } else {
+          var items = getItemsForFeatures(data.features, ll, dist);
 
         var msg = "<p style='text-decoration:underline;'>" + items.length + " within " + dist + " miles</p><p>";
         switch (type.toString()) {
@@ -762,6 +765,8 @@ function getNearbySchools(config, ll, dist) {
         url = null;
         levels = null;
         msg = null;
+        }
+        
       });
     }
 
