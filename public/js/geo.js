@@ -84,11 +84,12 @@ function getFeaturesForLocation(address, position) {
       getPolicePatrolZone(DataDirectory.police.zones, ll);
       getSchools(DataDirectory.schools, ll, 3);
       getParks(DataDirectory.recreation.parks, ll, 1);
+      getClosestThing(DataDirectory.transportation.bus_stops, ll, "bus-stop");
       getClosestThing(DataDirectory.recreation.parks, ll, "park");
       getClosestThing(DataDirectory.recreation.libraries, ll, "library");
       // getClosestThing(DataDirectory.fire.hydrants.public, ll, "hydrant-public", "feet");
       // getClosestThing(DataDirectory.fire.hydrants.private, ll, "hydrant-private", "feet");
-      getClosestThing(DataDirectory.recreation.centers, ll, "recCenter");
+      getClosestThing(DataDirectory.recreation.centers, ll, "recreation-center");
       getNearbyNeighborhoods(DataDirectory.neighborhoods, ll, 1, "neighborhoods")
       getCouncilDistrict(DataDirectory.council, ll);
       getAverageResponseTime(DataDirectory.medical.emergency.calls, ll, .25, "ems");
@@ -192,7 +193,6 @@ function getClosestThing(url, ll, thing, units) {
       switch (units) {
         case "feet":
           {
-            console.log(closest.distance);
             msg = parseInt(closest.distance * 5280) + " feet";
           }
           break;
@@ -204,8 +204,11 @@ function getClosestThing(url, ll, thing, units) {
     }
 
     var html = "";
-    if (closest.item[0].properties.LATI) {
-      var mapUrl = "https://maps.google.com/?ll=" + closest.item[0].properties.LATI + "," + closest.item[0].properties.LONG_
+    if (closest.item[0].properties.LATI ||
+      closest.item[0].properties.stop_lat) {  // TODO: use regex
+        lat = closest.item[0].properties.stop_lat ? closest.item[0].properties.stop_lat : closest.item[0].properties.LATI;
+        lon = closest.item[0].properties.stop_lon ? closest.item[0].properties.stop_lon : closest.item[0].properties.LONG_;
+      var mapUrl = "https://maps.google.com/?ll=" + lat + "," + lon
 
       var html = "<a href='" + mapUrl + "'>" + msg + "</a>"
 
@@ -336,7 +339,6 @@ function getEvacuationZone(url, ll) {
 }
 
 async function getFloodZone(url, ll) {
-  console.log("Flood Url: " + url);
   var promise = new Promise(function (resolve, reject) {
     if (!url || url == "") {
       d3.select("#flood").html("Needs data source");
@@ -360,9 +362,8 @@ async function getFloodZone(url, ll) {
       if (data) {
 
         if (data && data.features && data.features[0]) {
-          console.log(data);
           var floodZone = data.features[0].properties.FLD_ZONE ? data.features[0].properties.FLD_ZONE : "UNKNOWN";
-          console.log(floodZone);
+          console.log("Flood Zone: " + floodZone);
           d3.select("#flood").html(floodZone); //+ "<a href=''>Zone Map</a>");
           LL = null;
           data = null;

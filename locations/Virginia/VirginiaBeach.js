@@ -54,6 +54,9 @@ var VirginiaBeach = {
       middle: "https://services5.arcgis.com/36soGIYKLrgDhHrr/ArcGIS/rest/services/VBCPS_2018_2019MSAttendanceZone/FeatureServer/0",
       high: "https://services5.arcgis.com/36soGIYKLrgDhHrr/ArcGIS/rest/services/20182019_HSAttendanceZone/FeatureServer/0"
     }
+  },
+  transportation: {
+    bus_stops: "https://gismaps.vbgov.com/arcgis/rest/services/Planning_and_Development/Public_Transportation/MapServer/0"
   }
 
 };
