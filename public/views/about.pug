@@ -6,12 +6,17 @@ head
   link(rel='stylesheet',  href="/bower_components/bootstrap/dist/css/bootstrap.min.css")
   link(rel='stylesheet',  href="/css/styles.css")
   style.
+    .p-xl {
+          font-size: 80px !important;
+          text-align: center !important;
+        }
     @media only screen 
       and (min-device-width: 320px) 
       and (max-device-width: 480px)
       and (-webkit-min-device-pixel-ratio: 2) {
-        h1 {
+        .p-xl {
           font-size: 80px !important;
+          text-align: center !important;
         }
         .p-md {
           font-size: 40px !important;
@@ -27,21 +32,22 @@ body(style="margin-top:20px;")
           h1(class="title") What is SpotFax?
             p(class="p-md") SpotFax uses open data to get useful information about a location.
             p(class="p-md") Open data is published by government and others for purposes like this.
-          h1 Tracking &amp; Cookies
+          p(class="p-xl") Tracking &amp; Cookies
             p(class="p-md") This site uses Google Analytics to track links. If you use this site to search the SpotFax, tracked links will include latitude and longitude only. 
             p(class="p-md") This site does not track property addresses. This site does not use personal information. This site does not use cookies or have a database.
             p(class="p-md") You may request reports of this site's Google Analytics. The email address is on the About page.
-          h1 Disclaimer
+          p(class="p-xl") Disclaimer
             p(class="p-md") Information through SpotFax is provided "as-is" and without warranty of any kind. SpotFax is not affiliated with the publishers of the data used in SpotFax.
             p(class="p-md") All issues and inquiries with SpotFax should be sent to Kevin Curry
             p(class="p-md")
               a(href="mailto:kmcurry@gmail.com") kmcurry@gmail.com
-          h1 Caveats
+          p(class="p-xl") Caveats
             p(class="p-md") Distance is "as the crow flies", i.e., over land.
       div(class="col-md-2 col-lg-2")
   div(class="row")
     center
-      a(class="p-lg" href="/") Back to Search
+      a(href="/")
+        p(class="p-xl") Back to Search
 script(src="/bower_components/jquery/dist/jquery.min.js")
 script(src="/bower_components/bootstrap/dist/js/bootstrap.min.js")
 script(src="/bower_components/jquery-ui/jquery-ui.min.js")
