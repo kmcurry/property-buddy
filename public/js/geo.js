@@ -74,6 +74,7 @@ function getFeaturesForLocation(address, position) {
     L.esri.query({
       url: DataDirectory.boundary
     }).intersects(LL).run(function (error, data) {
+
       getAICUZ(DataDirectory.property.AICUZ, ll);
       getEvacuationZone(locations[statePath].evacuation, ll);
       getPolicePrecinct(DataDirectory.police.precincts, ll);
@@ -86,15 +87,19 @@ function getFeaturesForLocation(address, position) {
       // getClosestThing(DataDirectory.fire.hydrants.private, ll, "hydrant-private", "feet");
       getClosestThing(DataDirectory.recreation.centers, ll, "recCenter");
       getNearbyNeighborhoods(DataDirectory.neighborhoods, ll, 1, "neighborhoods")
+      getCouncilDistrict(DataDirectory.council, ll);
       getAverageResponseTime(DataDirectory.medical.emergency.calls, ll, .25, "ems");
       getAverageResponseTime(DataDirectory.police.calls, ll, .25, "police");
       getPoliceIncidents(DataDirectory.police.incidents, ll, .5, 30);
       //getCountWithinDays(DataDirectory.police.calls, ll, 1, 30, "police-calls");
-      getFloodZone(DataDirectory.property.FIRM, ll);
       getPropertySales(DataDirectory.property.sales, address);
+      getFloodZone(DataDirectory.property.FIRM, ll);
+      
     });
+
   }
 
+  LL = null;
 
 }
 
@@ -118,6 +123,7 @@ function getAICUZ(url, ll) {
     }
 
     d3.select("#aicuz").html(msg);
+    LL = null;
   });
 }
 
@@ -146,6 +152,8 @@ function getAverageResponseTime(url, ll, d, type) {
 
       d3.select("#" + type + "-response-avg").html(msg);
 
+      msg = null;
+      url = null;
     });
 
 
@@ -205,8 +213,40 @@ function getClosestThing(url, ll, thing, units) {
 
     d3.select("#closest-" + thing).html(html);
 
+    LL = null;
+    msg = null;
+    mapUrl = null;
+    html = null;
+    closest = null;
+
   });
 
+}
+
+function getCouncilDistrict(url, ll) {
+
+  if (!url || url == "") {
+    d3.select("#council-district").html("Needs data source");
+    return;
+  }
+
+  var LL = L.latLng(ll[1], ll[0]);
+  // use location to find out which census block they are inside.
+  L.esri.query({
+    url: url
+  }).intersects(LL).run(function (error, data) {
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    if (data && data.features && data.features[0]) {
+      var councilDistrict = data.features[0].properties.NAME ? data.features[0].properties.NAME : "UNKNOWN";
+      d3.select("#council-district").html(councilDistrict);
+    } else {
+      d3.select("#council-district").html("No Features in Council District data set");
+    }
+  });
 }
 
 function getCountWithinDays(url, ll, dist, days, type) {
@@ -250,6 +290,9 @@ function getCountWithinDays(url, ll, dist, days, type) {
         count = data.length + " " + type + " in the past " + days + " days";
 
         d3.select("#" + type).html(count);
+        checkDate = null;
+        dataField = null;
+        url = null;
         deferred.resolve(data);
       }
 
@@ -284,10 +327,11 @@ function getEvacuationZone(url, ll) {
       d3.select("#evacuation").html("No Features in Evacuation data set");
     }
 
+    LL = null;
+
   });
 }
 
-// TODO: update from 2009 to 2015. Something wrong with the 2015 API
 async function getFloodZone(url, ll) {
   console.log("Flood Url: " + url);
   var promise = new Promise(function (resolve, reject) {
@@ -312,22 +356,21 @@ async function getFloodZone(url, ll) {
 
       if (data) {
 
-        checkFeaturesForFloodZone(data.features, ll).then(
-          function (data) {
-            msg += data;
-            d3.select("#flood").html(msg);
-            resolve;
-          },
-          function (err) {
-            console.log(err);
-            d3.select("#flood").html(err.message);
-            resolve;
-          }
-        );
+        if (data && data.features && data.features[0]) {
+          console.log(data);
+          var floodZone = data.features[0].properties.FLD_ZONE ? data.features[0].properties.FLD_ZONE : "UNKNOWN";
+          console.log(floodZone);
+          d3.select("#flood").html(floodZone); //+ "<a href=''>Zone Map</a>");
+          LL = null;
+          data = null;
+          resolve;
+        } else {
+          d3.select("#flood").html("No Features in Flood Zone data set");
+          LL = null;
+          data = null;
+          resolve;
+        }
       }
-
-      d3.select("#flood").html("Still searching. (This is taking a bit longer than usual.)");
-
 
     });
   });
@@ -363,6 +406,7 @@ function getNearbyNeighborhoods(url, ll, d) {
       } else {
         neighborhoodHelper(data, ll, d);
       }
+      LL = null;
     });
   }
 }
@@ -386,7 +430,8 @@ function getParks(url, ll, dist) {
     var items = getItemsForFeatures(data.features, ll, dist);
 
     var msg = items.length;
-
+    LL = null;
+    data = null;
     d3.select("#parks").html(msg);
   });
 }
@@ -442,13 +487,16 @@ function getPropertySales(url, address) {
           // html += "<p>Land Value: $" + land_value + "</p>";
           // html += "<p>Improvement Value: $" + improvement_value + "</p>";
           // html += "<p>Total Value: $" + total_value + "</p>";
+
         } else {
           html += "<p>No property sales data was found</p>";
         }
 
-
-
         d3.select("#property-sales").html(html);
+
+        LL = null;
+        data = null;
+
         deferred.resolve(data);
       }
 
@@ -502,6 +550,7 @@ function getPoliceIncidents(incidents, ll, dist, days) {
       })
       html += "</table>"
       $("#police-incidents-list").html(html);
+      incidents = null;
     } else {
       console.log("No Data from getCountWithinDays")
     }
@@ -532,6 +581,9 @@ function getPolicePatrolZone(url, ll) {
       d3.select("#police-patrol").html("No Features in Patrol Zone data set");
     }
 
+    LL = null;
+    data = null;
+
   });
 }
 
@@ -558,6 +610,9 @@ function getPolicePrecinct(url, ll) {
     } else {
       d3.select("#police-precinct").html("No Features in Precinct data set");
     }
+
+    LL = null;
+    data = null;
 
   });
 }
@@ -601,6 +656,9 @@ function getRepresentation(url, address) {
       }
 
       d3.select("#representatives").html(msg);
+
+      url = null;
+      msg = null;
     })
 }
 
@@ -683,6 +741,12 @@ function getNearbySchools(config, ll, dist) {
 
 
         d3.select("#school-location-" + type).html(msg);
+
+        LL = null;
+        items = null;
+        url = null;
+        levels = null;
+        msg = null;
       });
     }
 
@@ -763,6 +827,11 @@ function getZonedSchools(config, ll) {
         // }
 
         d3.select("#school-zone-" + type).html(msg);
+
+        LL = null;
+        url = null;
+        data = null;
+        msg = null;
       });
 
     }
@@ -809,11 +878,14 @@ function getClosestItem(features, ll) {
     item: null,
     distance: 9999
   };
+
+  var coords = null;
+  var dist = null;
+      
   $(features).each(function () {
     var f = $(this);
     //console.log(f[0]);
     if (f && f[0]) {
-      var coords = null;
       if (f[0].geometry.coordinates[0].length) {
         if (f[0].geometry.coordinates[0][0].length) {
           coords = f[0].geometry.coordinates[0][0][0];
@@ -823,7 +895,7 @@ function getClosestItem(features, ll) {
       } else {
         coords = f[0].geometry.coordinates;
       }
-      var dist = d3.geoDistance(coords, ll); // distance in radians
+      dist = d3.geoDistance(coords, ll); // distance in radians
       if (dist < closest.distance) {
         //console.log(dist);
         closest.distance = dist;
@@ -831,10 +903,13 @@ function getClosestItem(features, ll) {
       }
     }
   });
+
+  
   closest.distance = closest.distance != 9999 ? parseFloat(closest.distance) * 3959 : 9999; // 3959 is Earth radius in miles
   closest.distance = closest.distance.toFixed(2);
 
-  //console.log(closest.distance)
+  coords = null;
+  dist = null;
 
   return closest;
 }
@@ -923,6 +998,8 @@ function getItemsForFeatures(features, ll, d) {
 
   });
 
+  flags = null;
+
   return items;
 }
 
@@ -996,58 +1073,6 @@ function checkFeaturesForAICUZNoiseLevel(features, ll) {
   }
 
   return msg;
-}
-
-function checkFeaturesForFloodZone(features, ll) {
-
-  var deferred = D();
-
-  var msg = "";
-
-  //console.log(features.length)
-
-  $(features).each(function (i) {
-    var f = $(this);
-    if (f && f[0]) {
-      if (d3.geoContains(f[0], ll)) {
-        var fz = f[0].properties.FLD_ZONE;
-        msg = fz;
-        console.log("Flood Zone: " + fz);
-        switch (fz) {
-          case "X":
-            {
-              msg += " Insurance is NOT REQUIRED";
-            }
-            break;
-          case "A":
-          case "AE":
-          case "AH":
-          case "AO":
-          case "AR":
-          case "VE":
-            {
-              msg += " Insurance IS REQUIRED";
-            }
-            break;
-          default:
-            {
-              if (fz && fz.indexOf("0.2") !== -1) {
-                msg += " Insurance requirement is UNKNOWN"
-              } else {
-                msg = "Your flood zone could not be determined";
-              }
-            }
-            break;
-        }
-
-        deferred.resolve(msg);
-      } else if (i == features.length - 1) {
-        deferred.resolve(msg);
-      }
-    }
-  });
-
-  return deferred.promise;
 }
 
 function neighborhoodHelper(data, ll, d) {

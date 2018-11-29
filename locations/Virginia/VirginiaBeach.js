@@ -2,6 +2,7 @@ var VirginiaBeach = {
 
   boundary: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/Administrative_Boundaries/MapServer/0/",
   neighborhoods: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/PropertyInformation_VBgov/MapServer/13/",
+  council: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/VotingDistricts/MapServer/2/",
 
   property: {
     AICUZ: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/AICUZ/MapServer/3/",
