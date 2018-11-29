@@ -5,7 +5,19 @@ head
   meta(charset='utf-8')
   link(rel='stylesheet',  href="/bower_components/bootstrap/dist/css/bootstrap.min.css")
   link(rel='stylesheet',  href="/css/styles.css")
-
+  style.
+    @media only screen 
+      and (min-device-width: 320px) 
+      and (max-device-width: 480px)
+      and (-webkit-min-device-pixel-ratio: 2) {
+        h2 {
+          font-size: 40px !important;
+        }
+        .p-md {
+          font-size: 40px !important;
+        }
+       
+    }
 body
   div(class="container")
     div(class="row")
@@ -15,8 +27,8 @@ body
           div(id="locationField")
             center
               h1(class="title") SpotFax
-              h2 Get the facts for a spot.
-              p(style="font-size:18px !important;text-align:center")
+              h2 Get the facts for any spot.
+              p(class="p-md" style="text-align:center")
                 a(href="https://github.com/kmcurry/property-buddy/tree/master/locations" target='top') (where supported)
                 //- a(id="locations-list" href="" title="") *
               input(id="autocomplete" name="address" class="p-lg controls" placeholder="Enter any address" onFocus="geolocate()" type="text")
@@ -27,7 +39,12 @@ body
       div(class="col-md-2 col-lg-2")
     div(class="row")
       center
-        a(class="p-md" href="/about") About
+        a(class="p-md" href="/about") About this site
+    div(class="row")
+      center
+        h2 Tracking &amp; Cookies
+        p(class="p-md") This site uses Google Analytics to track links. If you use this site to search the SpotFax, tracked links will include latitude and longitude only. This site does not track property addresses. This site does not use personal information. This site does not use cookies or have a database.
+        p(class="p-md") You may request reports of this site's Google Analytics. The email address is on the About page.
   input(type="hidden" id="locations" value=""+locations)
 script(src="/bower_components/jquery/dist/jquery.min.js")
 script(src="/bower_components/bootstrap/dist/js/bootstrap.min.js")
