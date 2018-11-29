@@ -5,7 +5,6 @@ var Chesapeake = {
   
   property: {
     AICUZ: "https://public-chesva.opendata.arcgis.com/datasets/77ba67c5fbc84d40a5002e3e02d046cb_3.geojson",
-    FIRM: "",
     sales: ""
   },
 

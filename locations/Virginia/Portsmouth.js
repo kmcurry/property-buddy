@@ -5,7 +5,6 @@ var Portsmouth = {
     
     property: {
       AICUZ: "",
-      FIRM: "http://www2.portsmouthva.gov/arcgisweb/rest/services/Environment/MapServer/8",
       sales: ""
     },
   

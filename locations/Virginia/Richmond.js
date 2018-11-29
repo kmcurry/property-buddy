@@ -5,7 +5,6 @@ var Richmond = {
   
   property: {
     AICUZ: "",
-    FIRM: "",
     sales: ""
   },
 

@@ -5,7 +5,6 @@ var Hampton = {
   
   property: {
     AICUZ: "http://webgis.hampton.gov/ArcGIS/rest/services/Public/MapServer/18/",
-    FIRM: "http://webgis.hampton.gov/ArcGIS/rest/services/Public/MapServer/28/",
     sales: ""
   },
 

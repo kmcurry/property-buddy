@@ -93,7 +93,7 @@ function getFeaturesForLocation(address, position) {
       getPoliceIncidents(DataDirectory.police.incidents, ll, .5, 30);
       //getCountWithinDays(DataDirectory.police.calls, ll, 1, 30, "police-calls");
       getPropertySales(DataDirectory.property.sales, address);
-      getFloodZone(DataDirectory.property.FIRM, ll);
+      getFloodZone(locations.UnitedStates.FIRM, ll);
       
     });
 
@@ -479,7 +479,13 @@ function getPropertySales(url, address) {
 
 
           $(data).each(function (index, transaction) {
-            html += "<p>" + moment(transaction.sale_date).format('MM/DD/YYYY') + " $" + transaction.sale_price + "</p>";
+            var value = "";
+            if (transaction.sale_price > 0) {
+              value = transaction.sale_price;
+            } else {
+              value = transaction.improvement_value + " improvement"
+            }
+            html += "<p>" + moment(transaction.sale_date).format('MM/DD/YYYY') + " $" + value + "</p>";
           });
 
           // html += "<p> Last Sale: " + moment(sale_date).format('MM/DD/YYYY') + "</p>";

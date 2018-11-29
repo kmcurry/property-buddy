@@ -5,7 +5,6 @@ var Norfolk = {
   
   property: {
     AICUZ: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/8/",
-    FIRM: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Planning_and_Zoning/MapServer/1",
     sales: ""
   },
 

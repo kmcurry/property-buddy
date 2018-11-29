@@ -5,7 +5,6 @@ var FallsChurch = {
   
   property: {
     AICUZ: "",
-    FIRM: "",
     sales: ""
   },
 

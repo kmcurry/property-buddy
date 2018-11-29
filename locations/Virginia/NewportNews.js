@@ -5,7 +5,6 @@ var NewportNews = {
   
   property: {
     AICUZ: "",
-    FIRM: "",  
     sales: ""
   },
 

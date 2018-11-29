@@ -6,7 +6,6 @@ var VirginiaBeach = {
 
   property: {
     AICUZ: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/AICUZ/MapServer/3/",
-    FIRM: "https://gismaps.vbgov.com/arcgis/rest/services/Public_Safety/Flood_Zones_2015/MapServer/2/",
     sales: "https://data.vbgov.com/resource/p3zb-bkwc.json"
   },
 

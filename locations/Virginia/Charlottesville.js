@@ -5,7 +5,6 @@ var Charlottesville = {
   
   property: {
     AICUZ: "",
-    FIRM: "",
     sales: ""
   },
 
