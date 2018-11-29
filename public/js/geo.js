@@ -52,6 +52,9 @@ function loadDataDirectory(address) {
 }
 
 function getFeaturesForLocation(address, position) {
+  
+  d3.select("#address").html(address.formatted_address);
+
   var ll = null;
 
   // LON LAT unless locally manipulated b/c D3 is LON LAT
@@ -483,7 +486,11 @@ function getPropertySales(url, address) {
             if (transaction.sale_price > 0) {
               value = transaction.sale_price;
             } else {
-              value = transaction.improvement_value + " improvement"
+              if (transaction.improvement_value > 0) {
+                value = transaction.improvement_value + " improvement"
+              } else {
+                value = "";
+              }
             }
             html += "<p>" + moment(transaction.sale_date).format('MM/DD/YYYY') + " $" + value + "</p>";
           });
