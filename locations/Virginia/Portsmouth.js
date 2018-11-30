@@ -55,6 +55,9 @@ var Portsmouth = {
         middle: "",
         pre: ""
       }
+    },
+    transportation: {
+      bus_stops: ""
     }
   };
   

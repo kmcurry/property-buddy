@@ -42,6 +42,9 @@ var Chesapeake = {
     elementary: "",
     middle: "",
     high: ""
+  },
+  transportation: {
+    bus_stops: ""
   }
 
 };

@@ -54,6 +54,9 @@ var Hampton = {
       middle: "",
       pre: ""
     }
+  },
+  transportation: {
+    bus_stops: ""
   }
 };
 

@@ -62,6 +62,9 @@ var LocationName = {
       middle: "",
       pre: ""
     }
+  },
+  transportation: {
+    bus_stops: ""
   }
 };
 
