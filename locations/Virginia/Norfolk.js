@@ -50,6 +50,9 @@ var Norfolk = {
       high: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Arts_and_Education/MapServer/3/"
     }
 
+  },
+  transportation: {
+    bus_stops: ""
   }
 
 };
