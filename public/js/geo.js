@@ -52,7 +52,7 @@ function loadDataDirectory(address) {
 }
 
 function getFeaturesForLocation(address, position) {
-  
+
   d3.select("#address").html(address.formatted_address);
 
   var ll = null;
@@ -98,10 +98,10 @@ function getFeaturesForLocation(address, position) {
       //getCountWithinDays(DataDirectory.police.calls, ll, 1, 30, "police-calls");
       getPropertySales(DataDirectory.property.sales, address);
 
-      setTimeout(function() {
+      setTimeout(function () {
         getFloodZone(locations.UnitedStates.FIRM, ll)
       }, 1000);
-      
+
     });
 
   }
@@ -207,17 +207,13 @@ function getClosestThing(url, ll, thing, units) {
     }
 
     var html = "";
-    if (closest.item[0].properties.LATI ||
-      closest.item[0].properties.stop_lat) {  // TODO: use regex
-        lat = closest.item[0].properties.stop_lat ? closest.item[0].properties.stop_lat : closest.item[0].properties.LATI;
-        lon = closest.item[0].properties.stop_lon ? closest.item[0].properties.stop_lon : closest.item[0].properties.LONG_;
-      var mapUrl = "https://maps.google.com/?ll=" + lat + "," + lon
+    var lat = null;
+    var lon = null;
+    var mapUrl = "https://maps.google.com/maps/?q=";
 
-      var html = "<a href='" + mapUrl + "'>" + msg + "</a>"
+    mapUrl += closest.item[0].properties.ADDRESS;
 
-    } else {
-      html = msg;
-    }
+    var html = "<a href='" + mapUrl + "'>" + msg + "</a>"
 
 
     d3.select("#closest-" + thing).html(html);
@@ -480,7 +476,7 @@ function getPropertySales(url, address) {
           // var sale_date = dataLast.sale_date;
           // var sale_price = dataLast.sale_price;
 
-          data = data.sort(function(a,b){
+          data = data.sort(function (a, b) {
             return new Date(b.sale_date) - new Date(a.sale_date);
           });
 
@@ -530,7 +526,7 @@ function getPoliceIncidents(incidents, ll, dist, days) {
       // console.log("Police Incidents")
       console.log(incidents);
       var html = "<table style='width:100%;'>";
-      incidents = incidents.sort(function(a,b){
+      incidents = incidents.sort(function (a, b) {
         return new Date(b.date_occured) - new Date(a.date_occured);
       });
       $(incidents).each(function (index, incident) {
@@ -594,7 +590,8 @@ function getPolicePatrolZone(url, ll) {
     }
 
     if (data && data.features && data.features[0]) {
-      var patrolZone = data.features[0].properties.BEAT ? data.features[0].properties.BEAT : "UNKNOWN";
+      //console.log(data.features[0]);
+      var patrolZone = data.features[0].properties.BEAT ? data.features[0].properties.BEAT : data.features[0].properties.Car_Sector;
       d3.select("#police-patrol").html(patrolZone); //+ "<a href=''>Zone Map</a>");
     } else {
       d3.select("#police-patrol").html("No Features in Patrol Zone data set");
@@ -624,7 +621,8 @@ function getPolicePrecinct(url, ll) {
     }
 
     if (data && data.features && data.features[0]) {
-      var precinct = data.features[0].properties.PRECINCT ? data.features[0].properties.PRECINCT : "UNKNOWN";
+      console.log(data.features[0]);
+      var precinct = data.features[0].properties.PRECINCT ? data.features[0].properties.PRECINCT : data.features[0].properties.Precinct;
       d3.select("#police-precinct").html(precinct); //+ "<a href=''>Zone Map</a>");
     } else {
       d3.select("#police-precinct").html("No Features in Precinct data set");
@@ -716,61 +714,61 @@ function getNearbySchools(config, ll, dist) {
         } else {
           var items = getItemsForFeatures(data.features, ll, dist);
 
-        var msg = "<p style='text-decoration:underline;'>" + items.length + " within " + dist + " miles</p><p>";
-        switch (type.toString()) {
-          case "elementary":
-            {
-              typeStr = " Elementary School";
-            }
-            break;
-          case "middle":
-            {
-              typeStr = " Middle School";
-            }
-            break;
-          case "high":
-            {
-              typeStr = " High School";
-            }
-            break;
-          default:
-            {
-              typeStr = "";
-            }
-        }
-        $(items).each(function (i) {
-          var item = $(this);
-          var len = 0;
-          if (item[0].properties.NAME) {
-            len = item[0].properties.NAME.indexOf(typeStr) > 0 ? item[0].properties.NAME.indexOf(typeStr) : item[0].properties.NAME.length;
-            msg += item[0].properties.NAME.substring(0, len);
-          } else if (item[0].properties.Name) {
-            len = item[0].properties.Name.indexOf(typeStr) > 0 ? item[0].properties.Name.indexOf(typeStr) : item[0].properties.Name.length;
-            msg += item[0].properties.Name.substring(0, len);
-          } else if (item[0].properties.name) {
-            len = item[0].properties.name.indexOf(typeStr) > 0 ? item[0].properties.name.indexOf(typeStr) : item[0].properties.name.length;
-            msg += item[0].properties.name.substring(0, len);
-          } else {
-            msg += "Could not locate name field."
+          var msg = "<p style='text-decoration:underline;'>" + items.length + " within " + dist + " miles</p><p>";
+          switch (type.toString()) {
+            case "elementary":
+              {
+                typeStr = " Elementary School";
+              }
+              break;
+            case "middle":
+              {
+                typeStr = " Middle School";
+              }
+              break;
+            case "high":
+              {
+                typeStr = " High School";
+              }
+              break;
+            default:
+              {
+                typeStr = "";
+              }
           }
+          $(items).each(function (i) {
+            var item = $(this);
+            var len = 0;
+            if (item[0].properties.NAME) {
+              len = item[0].properties.NAME.indexOf(typeStr) > 0 ? item[0].properties.NAME.indexOf(typeStr) : item[0].properties.NAME.length;
+              msg += item[0].properties.NAME.substring(0, len);
+            } else if (item[0].properties.Name) {
+              len = item[0].properties.Name.indexOf(typeStr) > 0 ? item[0].properties.Name.indexOf(typeStr) : item[0].properties.Name.length;
+              msg += item[0].properties.Name.substring(0, len);
+            } else if (item[0].properties.name) {
+              len = item[0].properties.name.indexOf(typeStr) > 0 ? item[0].properties.name.indexOf(typeStr) : item[0].properties.name.length;
+              msg += item[0].properties.name.substring(0, len);
+            } else {
+              msg += "Could not locate name field."
+            }
 
-          if (i < items.length - 1) {
-            msg += ", ";
-          }
-        });
-        msg += "</p>";
+            if (i < items.length - 1) {
+              msg += ", ";
+            }
+          });
+          msg += "</p>";
 
 
 
-        d3.select("#school-location-" + type).html(msg);
+          d3.select("#school-location-" + type).html(msg);
 
-        LL = null;
-        items = null;
-        url = null;
-        levels = null;
-        msg = null;
+          LL = null;
+          items = null;
+          url = null;
+          levels = null;
+          msg = null;
         }
-        
+
       });
     }
 
@@ -905,7 +903,7 @@ function getClosestItem(features, ll) {
 
   var coords = null;
   var dist = null;
-      
+
   $(features).each(function () {
     var f = $(this);
     //console.log(f[0]);
@@ -928,7 +926,7 @@ function getClosestItem(features, ll) {
     }
   });
 
-  
+
   closest.distance = closest.distance != 9999 ? parseFloat(closest.distance) * 3959 : 9999; // 3959 is Earth radius in miles
   closest.distance = closest.distance.toFixed(2);
 

@@ -25,7 +25,9 @@ var Norfolk = {
 
   police: {
     calls: "",
-    incidents: "" //"https://data.norfolk.gov/resource/6vsy-ykpv.json"
+    incidents: "https://data.norfolk.gov/resource/6vsy-ykpv.json",
+    precincts: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Public_Safety/MapServer/6/",
+    zones: "https://orfmaps.norfolk.gov/orfgis/rest/services/OpenData/Public_Safety/MapServer/6/"
   },
 
   recreation: {
