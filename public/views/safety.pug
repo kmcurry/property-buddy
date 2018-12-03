@@ -156,7 +156,6 @@ body
   div(class="about")
     center
         a(class="p-md" href="/about") About            
-        span(style="width:200px;")
         a(class="p-md" href="/") Search
   div(class="report")
     div(name="location" id="location")
@@ -175,27 +174,6 @@ body
           <span class="fa fa-home"></span> Address
         div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
           div(id="address") ...
-    div(name="environment" id="environment")
-      div(class="row aicuz")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-plane"></span> AICUZ Noise
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          div(id="aicuz") ...
-      div(class="row flood")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-life-ring"></span> Flood Zone
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          div(id="flood") ...(this can take some time)
-      div(class="row evacuation")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-life-ring"></span> Evacuation Zone
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          div(id="evacuation")
-      div(class="row property property-sales")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-home"></span> Property Sales
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          div(id="property-sales") 
     div(name="safety" id="safety")
       div(class="row ems")
         div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
@@ -236,90 +214,6 @@ body
       //-     div(id="closest-hydrant-public") ...
       //-     <span class="fa fa-fire"></span> Private
       //-     div(id="closest-hydrant-private") ...
-    div(name="neighborhood" id="neighborhood")
-      div(class="row schools")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-graduation-cap"></span> Zoned Schools
-        div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
-          p(id="school-zone-all")
-      div(class="row schools-zoned")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-graduation-cap"></span> Elementary
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          p(id="school-zone-elementary")
-      div(class="row schools-zoned")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-graduation-cap"></span> Middle
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          p(id="school-zone-middle")
-      div(class="row schools-zoned")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-graduation-cap"></span> High
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          p(id="school-zone-high")
-      div(class="row schools")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-graduation-cap"></span> Nearby Schools
-        div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
-          p(id="school-location-all")
-      div(class="row schools-nearby")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-graduation-cap"></span> Elementary
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          p(id="school-location-elementary")
-      div(class="row schools-nearby")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-graduation-cap"></span> Middle
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          p(id="school-location-middle")
-      div(class="row schools-nearby")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-graduation-cap"></span> High
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          p(id="school-location-high")
-      div(class="row parks")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-tree"></span> Parks within 1 mile
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          div(id="parks") ...
-      div(class="row parks")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-tree"></span> Closest Park
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          div(id="closest-park") ...
-      div(class="row libraries")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-book"></span> Closest Library
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          div(id="closest-library") ...
-      div(class="row bus-stop")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-book"></span> Closest Bus Stop
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          div(id="closest-bus-stop") ...
-      div(class="row recreation")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-soccer-ball-o"></span> Closest Recreation Center
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          div(id="closest-recreation-center") ...
-      div(class="row neighborhoods")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-home"></span> Nearby Neighborhoods
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          div(id="nearby-neighborhoods") ...
-      div(class="row council")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-home"></span> Council District
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          div(id="council-district") ...
-      div(name='representation' id='representation' class='row row-border representation')
-        div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
-          <span class="fa fa-user" aria-hidden="true"></span> Representation
-        div(class="col-xs-12 col-sm-12 col-md-6 col-lg-6")
-          div(name='representatives' id='representatives')
-            div(name='reps-municipal' id='reps-municipal')
-            div(name='reps-state' id='reps-state')
-            div(name='reps-federal' id='reps-federal')
     h1 Police Incident List
     h2 NOTE: A STREET NUMBER REPRESENTS A BLOCK NOT A HOUSE
     text Legend: 
