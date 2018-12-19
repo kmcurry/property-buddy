@@ -6,7 +6,8 @@ var VirginiaBeach = {
 
   property: {
     AICUZ: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/AICUZ/MapServer/3/",
-    sales: "https://data.vbgov.com/resource/p3zb-bkwc.json"
+    sales: "https://data.vbgov.com/resource/p3zb-bkwc.json",
+    code_enforcement: "https://data.vbgov.com/resource/s5fx-f3pf.json"
   },
 
   fire: {

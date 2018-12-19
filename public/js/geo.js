@@ -95,6 +95,7 @@ function getFeaturesForLocation(address, position) {
       getAverageResponseTime(DataDirectory.medical.emergency.calls, ll, .25, "ems");
       getAverageResponseTime(DataDirectory.police.calls, ll, .25, "police");
       //getCountWithinDays(DataDirectory.police.calls, ll, 1, 30, "police-calls");
+      getCountWithinDays(DataDirectory.property.code_enforcement, ll, 1, 30, "code-enforcement");
       getPropertySales(DataDirectory.property.sales, address);
       getFloodZone(locations.UnitedStates.FIRM, ll)
 
@@ -267,14 +268,17 @@ function getCountWithinDays(url, ll, dist, days, type) {
 
   // WARNING: HARD-CODED FIELD
   var dateField = "";
+  var locField = "location_1";
   if (type.includes("calls")) {
     dateField = "call_date_time";
-  }
-  if (type.includes("incidents")) {
+  } else if (type.includes("incidents")) {
     dateField = "date_occured";
+  } else {
+    dateField = "open_date";
+    locField = "location1";
   }
 
-  url += "?$where=within_circle(location_1," + ll[1] + "," + ll[0] + "," + dist + encodeURIComponent(") and " + dateField + " > '") + encodeURIComponent(checkDate) + encodeURIComponent("'");
+  url += "?$where=within_circle(" + locField + "," + ll[1] + "," + ll[0] + "," + dist + encodeURIComponent(") and " + dateField + " > '") + encodeURIComponent(checkDate) + encodeURIComponent("'");
   
   console.log(url);
 
