@@ -82,6 +82,16 @@ function getSpotSafety() {
   }
 }
 
+function getSpotPrices() {
+  if (navigator.geolocation) {
+    $("#autocomplete").attr("placeholder", "Fetching location...");
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = [position.coords.latitude, position.coords.longitude];
+      document.location.href = "/search/prices/" + pos.join(',');
+    });
+  }
+}
+
 $(document).ready(function() {
   $(document).tooltip();
 })
