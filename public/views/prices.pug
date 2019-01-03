@@ -63,12 +63,15 @@ head
     
     /* Portrait */
     @media only screen 
-      and (min-device-width: 320px) 
-      and (max-device-width: 480px)
+      and ((min-device-width: 320px) 
+      and (max-device-width: 480px))
       and (-webkit-min-device-pixel-ratio: 2)
       and (orientation: portrait) {
         body {
           font-size: 40px !important;
+        }
+        p {
+            font-size: 24px !important;
         }
         .container {
           margin: 4px !important;
@@ -78,6 +81,30 @@ head
           font-size: 40px !important;
         }
        
+    }
+
+    @media only screen 
+    and (min-device-width : 414px) 
+    and (max-device-width : 736px)
+    and (device-width : 414px)
+    and (device-height : 736px)
+    and (orientation : portrait) 
+    and (-webkit-min-device-pixel-ratio : 3) 
+    and (-webkit-device-pixel-ratio : 3)
+    {
+        body {
+          font-size: 40px !important;
+        }
+        p {
+            font-size: 24px !important;
+        }
+        .container {
+          margin: 4px !important;
+          padding: 4px !important;
+        }
+        .tr {
+          font-size: 40px !important;
+        }
     }
     
 body
