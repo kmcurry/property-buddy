@@ -15,6 +15,10 @@ p {
   font-size: 24px;
   text-align: center;
 }
+.report {
+  margin: 10px;
+  padding: 10px;
+}
 .title {
   font-size: 90px;
 }

@@ -53,7 +53,7 @@ function loadDataDirectory(address) {
 
 function getFeaturesForLocation(address, position) {
 
-  d3.select("#address").html(address.formatted_address);
+  console.log("GETTING FEATURES FOR LOCATION");
 
   var ll = null;
 
@@ -92,8 +92,7 @@ function getFeaturesForLocation(address, position) {
       getClosestThing(DataDirectory.recreation.centers, ll, "recreation-center");
       getNearbyNeighborhoods(DataDirectory.neighborhoods, ll, 1, "neighborhoods")
       getCouncilDistrict(DataDirectory.council, ll);
-      getAverageResponseTime(DataDirectory.medical.emergency.calls, ll, .25, "ems");
-      getAverageResponseTime(DataDirectory.police.calls, ll, .25, "police");
+
       //getCountWithinDays(DataDirectory.police.calls, ll, 1, 30, "police-calls");
       getCountWithinDays(DataDirectory.property.code_enforcement, ll, 1, 30, "code-enforcement");
       getPropertySales(DataDirectory.property.sales, address);
@@ -963,28 +962,3 @@ function parseAddress(address) {
     }
   })
 }
-
-async function start() {
-  await getAddress(searchPosition)
-    .then(function (address) {
-      var addr = address;
-      loadDataDirectory(address);
-      getFeaturesForLocation(addr, searchPosition);
-    })
-    .catch(function (err) {
-      console.error(err);
-    });
-}
-
-$(document).ready(function () {
-  locations = $("#locations").val();
-  locations = JSON.parse(locations);
-  geoCoderKey = $("#geoCoderKey").val();
-  GApisKey = $("#GApisKey").val();
-  //console.log(locations);
-  searchPosition = $("#searchPosition").val();
-  //console.log(searchPosition);
-  searchPosition = searchPosition.split(',');
-  start();
-  $(document).tooltip();
-})

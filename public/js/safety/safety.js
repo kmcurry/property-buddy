@@ -3,6 +3,8 @@ function getSafetyData(DataDirectory, ll) {
     getPolicePrecinct(DataDirectory.police.precincts, ll);
     getPolicePatrolZone(DataDirectory.police.zones, ll);
     getPoliceIncidents(DataDirectory.police.incidents, ll, .5, 30);
+    getAverageResponseTime(DataDirectory.medical.emergency.calls, ll, .25, "ems");
+    getAverageResponseTime(DataDirectory.police.calls, ll, .25, "police");
 }
 
 function getEvacuationZone(url, ll) {

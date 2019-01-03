@@ -36,8 +36,22 @@ var routeLoader = function (app) {
         });
     });
 
-    app.get('search/environment/:loc', function(req, res) {
+    app.get('/search/environment/:loc', function(req, res) {
 
+    });
+
+    app.get('/search/prices/:loc', function(req, res) {
+        var position = null;
+        if (req.params.loc) {
+            // verify min format, i.e., comma separated values
+            position = req.params.loc.split(',');
+        }
+
+        res.render('prices', {
+            position: position,
+            geoCoderKey: process.env.GEOCODER_KEY,
+            GApisKey: process.env.GOOGLE_APIS_KEY
+        });
     });
 
     app.get('/search/safety/:loc', function(req, res) {
