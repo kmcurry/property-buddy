@@ -3,16 +3,158 @@ head
   title SpotFax - Prices
   meta(charset='utf-8')
   link(rel='stylesheet',  href="/bower_components/bootstrap/dist/css/bootstrap.min.css")
+    
+body
+  div
+    center
+        h1 Today's Prices        
+  div(class="report")
+    div(name="location" id="location")
+      div(class="row")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-map-marker"></span> City
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          div(id="city") ...
+      div(class="row")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-home"></span> Neighborhood
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          div(id="neighborhood") ...
+      div(class="row")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-home"></span> Address
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          div(id="address") ...
+    hr
+    div(class="prices row" name="prices" id="prices")
+        div(class="row")
+            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
+                center(class="Seafood ")
+                    h1 Seafood
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+                    p Blue Crabs
+                    p Clams
+                    p Scallops
+                    p Shrimp
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+                    p Bluefish
+                    p Flounder
+                    p Speckled Trout
+                    p Rockfish
+                    p Tuna
+            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
+                center(class="Meat")
+                    h1 Meat
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+                    p Bison
+                    p Beef
+                    p Pork
+                    p Poultry
+                    p Venison
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
+                center(class="Dairy")
+                    h1 Dairy
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+                    p Butter
+                    p Cheese
+                    p Eggs
+                    p Milk
+                    p Yogurt
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+        div(class="row")
+            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
+                center(class="Fruit")
+                    h1 Fruit
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+                    p Apples
+                    p Cherries
+                    p Peaches
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+                    p Blackberries
+                    p Blueberries
+                    p Raspberries
+                    p Strawberries
+            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
+                center(class="Vegetable")
+                    h1 Vegetable
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+                    p Asparagus
+                    p Peanuts
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
+                center(class="Beer")
+                    h1 Beer
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+                    p Back Bay
+                    p Commonwealth
+                    p Pleasure House
+                    p Reaver Beach
+                    p Young Veterans
+                    p Wasserhund
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+                    p Big Ugly
+                    p Bold Mariner
+                    p Coelacanth
+                    p O'Connor
+                    p Smartmouth
+        div(class="row")
+            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
+                center(class="Coffee")
+                    h1 Coffee
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+                    p Fathom
+                    p Jolly Roasters
+                    p Lynnhaven
+                    p Three Ships
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
+                center(class="")
+                    h1 
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
+                center(class="")
+                    h1 
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
+  input(type="hidden" id="locations" value=""+locations)
+  input(type="hidden" id="searchPosition" value=""+position)
+  input(type="hidden" id="geoCoderKey" value=""+geoCoderKey)
+  input(type="hidden" id="GApisKey" value=""+GApisKey)
+  link(rel='stylesheet',  href="/bower_components/font-awesome/css/font-awesome.min.css")
+  script(src="//d3js.org/d3.v3.min.js")
+  script(src="//d3js.org/d3-collection.v1.min.js")
+  script(src="//d3js.org/d3-dispatch.v1.min.js")
+  script(src="//d3js.org/d3-dsv.v1.min.js")
+  script(src="//d3js.org/d3-request.v1.min.js")
+  script(src="//d3js.org/d3-array.v1.min.js")
+  script(src="//d3js.org/d3-geo.v1.min.js")
+  script(src="/bower_components/D.js/lib/D.min.js")
+  script(src="/bower_components/jquery/dist/jquery.min.js")
+  script(src="/bower_components/bootstrap/dist/js/bootstrap.min.js")
+  script(src="/bower_components/jquery-ui/jquery-ui.min.js")
+  script(src="/bower_components/moment/min/moment.min.js")
+  link(rel="stylesheet"     
+      href="/bower_components/jquery-ui/themes/smoothness/jquery-ui.css")
+  link(rel="stylesheet"     
+      href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css",
+      integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw==",
+      crossorigin="")
+  script(src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js",
+  integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA==",
+  crossorigin="")
+  script(src="https://unpkg.com/esri-leaflet@2.1.0/dist/esri-leaflet.js",
+  integrity="sha512-Tojl3UMd387f6DdAJlo+fKfJZiP55fYT+6Y58yKbHydnueOdSFOxrgLPuUxm7VW1szEt3hZVwv3V2sSUCuT35w==",
+  crossorigin="")
+  script(src="/js/geo.js")
+  script(src="/js/google.js")
+  script(src="/js/prices/index.js")
   style.
     body {
       font-family: sans-serif;
-      font-size: 24px !important;
       color: #383838;
       margin: 1%;
-    }
-
-    .row {
-        margin: 1%;
     }
 
     p {
@@ -51,27 +193,21 @@ head
         background: #b9faad;
     }
 
-
-    @media only screen 
-      and (min-device-width: 320px) 
-      and (max-device-width: 480px)
-      and (-webkit-min-device-pixel-ratio: 2) {
-        .p-md {
-          font-size: 40px !important;
-        }
-    }
     
     /* Portrait */
     @media only screen 
-      and ((min-device-width: 320px) 
-      and (max-device-width: 480px))
+      and (min-device-width: 320px) 
+      and (max-device-width: 480px)
       and (-webkit-min-device-pixel-ratio: 2)
       and (orientation: portrait) {
         body {
-          font-size: 30px !important;
+          font-size: 50px !important;
+        }
+        h1 {
+            font-size: 60px !important;
         }
         p {
-            font-size: 30px !important;
+            font-size: 50px !important;
         }
         .container {
           margin: 4px !important;
@@ -83,169 +219,22 @@ head
     @media only screen 
     and (min-device-width : 414px) 
     and (max-device-width : 736px)
-    and (device-width : 414px)
-    and (device-height : 736px)
+    and (-webkit-min-device-pixel-ratio : 3)
     and (orientation : portrait) 
-    and (-webkit-min-device-pixel-ratio : 3) 
-    and (-webkit-device-pixel-ratio : 3)
     {
         body {
-          font-size: 30px !important;
+          font-size: 50px !important;
+        }
+        h1 {
+            font-size: 60px !important;
         }
         p {
-            font-size: 30px !important;
+            font-size: 50px !important;
         }
         .container {
           margin: 4px !important;
           padding: 4px !important;
         }
     }
-    
-body
-  div
-    center
-        h1 Today's Prices        
-  div(class="report")
-    div(name="location" id="location")
-      div(class="row")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-map-marker"></span> City
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          div(id="city") ...
-      div(class="row")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-home"></span> Neighborhood
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          div(id="neighborhood") ...
-      div(class="row")
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          <span class="fa fa-home"></span> Address
-        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
-          div(id="address") ...
-    hr
-    div(class="prices row" name="prices" id="prices")
-        div(class="row")
-            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
-                center(class="Seafood ")
-                    h3 Seafood
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-                    p Blue Crabs
-                    p Clams
-                    p Scallops
-                    p Shrimp
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-                    p Bluefish
-                    p Flounder
-                    p Speckled Trout
-                    p Rockfish
-                    p Tuna
-            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
-                center(class="Meat")
-                    h3 Meat
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-                    p Bison
-                    p Beef
-                    p Pork
-                    p Poultry
-                    p Venison
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
-                center(class="Dairy")
-                    h3 Dairy
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-                    p Butter
-                    p Cheese
-                    p Eggs
-                    p Milk
-                    p Yogurt
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-        div(class="row")
-            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
-                center(class="Fruit")
-                    h3 Fruit
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-                    p Apples
-                    p Cherries
-                    p Peaches
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-                    p Blackberries
-                    p Blueberries
-                    p Raspberries
-                    p Strawberries
-            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
-                center(class="Vegetable")
-                    h3 Vegetable
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-                    p Asparagus
-                    p Peanuts
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
-                center(class="Beer")
-                    h3 Beer
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-                    p Back Bay
-                    p Commonwealth
-                    p Pleasure House
-                    p Reaver Beach
-                    p Young Veterans
-                    p Wasserhund
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-                    p Big Ugly
-                    p Bold Mariner
-                    p Coelacanth
-                    p O'Connor
-                    p Smartmouth
-        div(class="row")
-            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
-                center(class="Coffee")
-                    h3 Coffee
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-                    p Fathom
-                    p Jolly Roasters
-                    p Lynnhaven
-                    p Three Ships
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
-                center(class="")
-                    h3 
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-            div(class="col-xs-12 col-sm-12 col-md-4 col-lg-4")
-                center(class="")
-                    h3 
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-                div(class="col-xs-12 col-sm-6 col-md-6 col-lg-6")
-  input(type="hidden" id="locations" value=""+locations)
-  input(type="hidden" id="searchPosition" value=""+position)
-  input(type="hidden" id="geoCoderKey" value=""+geoCoderKey)
-  input(type="hidden" id="GApisKey" value=""+GApisKey)
-  link(rel='stylesheet',  href="/bower_components/font-awesome/css/font-awesome.min.css")
-  script(src="//d3js.org/d3.v3.min.js")
-  script(src="//d3js.org/d3-collection.v1.min.js")
-  script(src="//d3js.org/d3-dispatch.v1.min.js")
-  script(src="//d3js.org/d3-dsv.v1.min.js")
-  script(src="//d3js.org/d3-request.v1.min.js")
-  script(src="//d3js.org/d3-array.v1.min.js")
-  script(src="//d3js.org/d3-geo.v1.min.js")
-  script(src="/bower_components/D.js/lib/D.min.js")
-  script(src="/bower_components/jquery/dist/jquery.min.js")
-  script(src="/bower_components/bootstrap/dist/js/bootstrap.min.js")
-  script(src="/bower_components/jquery-ui/jquery-ui.min.js")
-  script(src="/bower_components/moment/min/moment.min.js")
-  link(rel="stylesheet"     
-      href="/bower_components/jquery-ui/themes/smoothness/jquery-ui.css")
-  link(rel="stylesheet"     
-      href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css",
-      integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw==",
-      crossorigin="")
-  script(src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js",
-  integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA==",
-  crossorigin="")
-  script(src="https://unpkg.com/esri-leaflet@2.1.0/dist/esri-leaflet.js",
-  integrity="sha512-Tojl3UMd387f6DdAJlo+fKfJZiP55fYT+6Y58yKbHydnueOdSFOxrgLPuUxm7VW1szEt3hZVwv3V2sSUCuT35w==",
-  crossorigin="")
-  script(src="/js/geo.js")
-  script(src="/js/google.js")
-  script(src="/js/prices/index.js")
   
       
