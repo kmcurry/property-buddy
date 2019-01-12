@@ -32,9 +32,9 @@ body
               p(class="p-md" style="text-align:center")
                 a(href="https://github.com/kmcurry/property-buddy/tree/master/locations" target='top') (where supported)
                 //- a(id="locations-list" href="" title="") *
-              input(id="autocomplete" name="address" class="p-lg controls" placeholder="Type an address" onFocus="geolocate()" type="text")
-              p(class="p-lg") or
-              p(class="p-lg") Use Your Location
+              input(id="autocomplete" name="address" class="p-lg controls" style="text-align:center" placeholder="Type an address" onFocus="geolocate()" type="text")
+              p(class="p-lg" style="text-align:center") or
+              p(class="p-lg" style="text-align:center") Use Your Location
               div(class="row")
                 div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
                   button(type="button" name="loc" class="glyphicon glyphicon-map-marker btn btn-lg btn-primary p-lg" onclick="getSpotFax()")
@@ -45,9 +45,9 @@ body
       div(class="col-md-2 col-lg-2")
     div(class="row")
       center
-        a(class="p-md" href="/about") About this site
-        p(class="p-md") See About page for information on tracking.
-        p(class="p-md") Experimental
+        a(class="p-md") About this site
+        p(class="p-md" style="text-align:center") See About page for information on tracking.
+        p(class="p-md" style="text-align:center") Experimental
         button(type="button" name="loc" class="glyphicon glyphicon-usd btn btn-lg btn-success p-lg" onclick="getSpotPrices()")
   input(type="hidden" id="locations" value=""+locations)
 script(src="/bower_components/jquery/dist/jquery.min.js")
