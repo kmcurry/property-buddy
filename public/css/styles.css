@@ -9,11 +9,12 @@ p {
 }
 .p-lg {
   font-size: 56px;
-  text-align: center;
 }
 .p-md {
   font-size: 24px;
-  text-align: center;
+}
+.p-sm {
+  font-size: 14px;
 }
 .report {
   margin: 10px;
