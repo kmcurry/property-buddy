@@ -151,7 +151,9 @@ function getAverageResponseTime(url, ll, d, type) {
       var msg = getAverageTime(data, ll);
       //var z = "<p>" + data.length + "</p>";
 
-      msg += "<a title='Call or Incident reports within 1/4 mile. Average response time based on " + data.length + " records.' href=''>*</a>";
+      //console.log(data);
+
+      msg += "<a title='Call or Incident reports within 1 mile. Average response time based on " + data.length + " records.' href=''>*</a>";
 
       d3.select("#" + type + "-response-avg").html(msg);
 
@@ -272,6 +274,8 @@ function getCountWithinDays(url, ll, dist, days, type) {
     dateField = "call_date_time";
   } else if (type.includes("incidents")) {
     dateField = "date_occured";
+  } else if (type.includes("crash")) {
+    dateField = "accident_date";
   } else {
     dateField = "open_date";
     locField = "location1";
@@ -293,7 +297,7 @@ function getCountWithinDays(url, ll, dist, days, type) {
         console.error(error);
         deferred.resolve(null);
       } else {
-        count = data.length + " " + type + " in the past " + days + " days";
+        count = data.length + /*" " + type +*/ " in the past " + days + " days";
 
         d3.select("#" + type).html(count);
         checkDate = null;
@@ -392,8 +396,7 @@ function getPropertySales(url, address) {
         deferred.resolve(null);
       } else {
         var html = "";
-        console.log(data);
-
+        
         if (data.length > 0) {
 
           // var land_value = dataLast.land_value;
@@ -689,7 +692,6 @@ function getAverageTime(data) {
       }
 
       var duration = onSceneTime.getTime() - callTime.getTime();
-      //console.log(duration);
       if (!isNaN(duration) && duration > 0 && duration < 999999) { // throw out unreasonable numbers
         avg += duration;
       }

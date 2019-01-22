@@ -2,9 +2,11 @@ function getSafetyData(DataDirectory, ll) {
     getEvacuationZone(locations[statePath].evacuation, ll);
     getPolicePrecinct(DataDirectory.police.precincts, ll);
     getPolicePatrolZone(DataDirectory.police.zones, ll);
-    getPoliceIncidents(DataDirectory.police.incidents, ll, .5, 30);
-    getAverageResponseTime(DataDirectory.medical.emergency.calls, ll, .25, "ems");
-    getAverageResponseTime(DataDirectory.police.calls, ll, .25, "police");
+    getPoliceIncidents(DataDirectory.police.incidents, ll, 1, 30);
+    getAverageResponseTime(DataDirectory.medical.emergency.calls, ll, 1, "ems");
+    getAverageResponseTime(DataDirectory.police.calls, ll, 1, "police");
+    //getCountWithinDays(DataDirectory.police.crashes, ll, 1, 30, "crash-count" );
+    getCrashes(DataDirectory.police.crashes, ll, 1, 30);
 }
 
 function getEvacuationZone(url, ll) {
@@ -38,18 +40,65 @@ function getEvacuationZone(url, ll) {
     });
 }
 
+function getCrashes(crashes, ll, dist, days) {
+    if (!crashes) return;
+
+    getCountWithinDays(crashes, ll, dist, days, "crash-count").then(function (crashes) {
+        if (crashes) {
+            var html = "<table style='width:100%;'>";
+            crashes = crashes.sort(function (a, b) {
+                return new Date(b.accident_date) - new Date(a.accident_date);
+            });
+            html += "<tr style='font-size:20px;font-weight:600;'>";
+            html += "<td>DATE</td>";
+            html += "<td>BLOCK ADDRESS</td>";
+            html += "<td>NEAR</td>";
+            html += "<td>TIME</td>";
+            html += "<td>DAY</td>";
+            html += "</tr>";
+            var _time;
+            var HH;
+            var MM;
+            $(crashes).each(function (index, crash) {
+                html += "<tr style='font-size:20px;'>";
+                html += "<td>" + moment(crash.accident_date).format("MM-DD-YYYY") + "</td>";
+                html += "<td>" + crash.location_1_address + "</td>";
+                html += "<td>" + crash.nearest_street + "</td>";
+                _time = crash.accident_time.toString();
+                if (_time.length === 3) {   // time is 24HR but times that start with 0 are stored as 3 digits
+                    _time = "0" + _time;
+                }
+                HH = _time.substring(0,2);
+                MM = _time.substring(1,3);
+                html += "<td>" + HH + ":" + MM + "</td>";
+                html += "<td>" + crash.day_of_week + "</td>";
+                html += "</tr>";
+            })
+            html += "</table>"
+            $("#crash-list").html(html);
+            crashes = null;
+        } else {
+            console.log("No Data from getCountWithinDays")
+        }
+    });
+}
+
 function getPoliceIncidents(incidents, ll, dist, days) {
     if (!incidents) return;
 
     getCountWithinDays(incidents, ll, dist, days, "police-incidents").then(function (incidents) {
         if (incidents) {
             // console.log("Police Incidents")
-            console.log(incidents);
             var html = "<table style='width:100%;'>";
             incidents = incidents.sort(function (a, b) {
                 return new Date(b.date_occured) - new Date(a.date_occured);
             });
-            console.log(incidents);
+            html += "<tr style='font-size:20px;font-weight:600;'>";
+            html += "<td>DATE</td>";
+            html += "<td>DESCRIPTION</td>";
+            html += "<td>BLOCK ADDRESS</td>";
+            html += "<td>STATUS</td>"
+            html += "</tr>";
             $(incidents).each(function (index, incident) {
                 var statusStyle = "unfounded";
                 switch (incident.case_status) {
@@ -77,7 +126,7 @@ function getPoliceIncidents(incidents, ll, dist, days) {
                         }
                         break;
                 };
-                html += "<tr class='" + statusStyle + "' style='font-size:22px;'>";
+                html += "<tr class='" + statusStyle + "' style='font-size:20px;'>";
                 html += "<td>" + moment(incident.date_occured).format("MM-DD-YYYY") + "</td>";
                 html += "<td>" + incident.offense_description + "</td>";
                 html += "<td>" + incident.location_1_address + "</td>";

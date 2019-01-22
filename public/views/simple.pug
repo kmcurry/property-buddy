@@ -8,6 +8,7 @@ head
       font-family: sans-serif;
       font-size: 24px !important;
       color: #383838;
+      margin: 1%;
     }
 
     .council {
@@ -156,7 +157,7 @@ body
   div(class="about")
     center
         a(class="p-md" href="/about") About            
-        span(style="width:200px;")
+        text  - 
         a(class="p-md" href="/") Search
   div(class="report")
     div(name="location" id="location")
@@ -222,6 +223,12 @@ body
           <span class="fa fa-shield"></span> Response Time
         div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
           div(id="police-response-avg") ...
+      div(class="row police")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-shield"></span> Crashes <a href="" title="Crashes, accidents">*</a>
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          a(href="#crash-list")
+            div(id="crash-count") ...
       //- div(class="row police")
       //-   div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
       //-     <span class="fa fa-shield"></span> Service Calls <a href="" title="Non-emergency">*</a>
@@ -334,6 +341,9 @@ body
     text(class="unfounded") Unfounded/Other
     p
     div(id="police-incidents-list") ...
+    h1 Crash List
+    p
+    div(id="crash-list") ...
   div(id="invisibleMap")
   input(type="hidden" id="locations" value=""+locations)
   input(type="hidden" id="searchPosition" value=""+position)
@@ -370,4 +380,5 @@ body
   script(src="/js/google.js")
   script(src="/js/simple.js")
   include notice.pug
+  link(rel='stylesheet',  href="/css/styles.css")
       
