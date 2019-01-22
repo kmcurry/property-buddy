@@ -32,6 +32,7 @@ var LocationName = {
 
   police: {
     calls: "",
+    crashes: "",
     incidents: "",
     districtis: "",
     stations: ""
