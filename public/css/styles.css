@@ -140,7 +140,6 @@ input {
   and (orientation: portrait) {
     body {
       font-size: 60px !important;
-      text-align: center;
     }
     #AICUZ0 {
       display: none;
