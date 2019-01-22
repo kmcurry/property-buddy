@@ -1,8 +1,8 @@
 body {
-  text-align: justify !important;
   font-family: sans-serif;
-  font-size: 40px !important;
+  font-size: 30px !important;
   color: #383838;
+  margin: 1%;
 }
 p {
   text-align: justify;
@@ -36,6 +36,14 @@ p {
   border: 1px solid gray;
 }
 
+.code-enforcement {
+  background:  #f68906;
+}
+
+.council {
+  background:   #f5bd91;
+}
+
 .ems {
   background: #ffb3ec;
 }
@@ -66,11 +74,23 @@ p {
   background: #b3c6ff;
 }
 
+.property {
+  background:  #a2ec72;
+}
+
 .recreation {
   background: #ffffb3;
 }
 
 .schools {
+  background: #f1daf1;
+}
+
+.schools-nearby {
+  background: #f1daf1;
+}
+
+.schools-zoned {
   background: #f1daf1;
 }
 
