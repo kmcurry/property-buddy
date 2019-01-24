@@ -20,6 +20,10 @@ head
       color: purple;
     }
 
+    td {
+      padding: 6px;
+    }
+
     @media only screen 
       and (min-device-width: 320px) 
       and (max-device-width: 480px)
@@ -109,6 +113,12 @@ body
         div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
           a(href="#police-incidents-list")
             div(id="police-incidents") ...
+      div(class="row police")
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          <span class="fa fa-shield"></span> Calls <a href="" title="Call for information, service, complaint, possible crime">*</a>
+        div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
+          a(href="#police-calls-list")
+            div(id="police-calls") ...
       //- div(class="row fire")
       //-   div(class="col-xs-6 col-sm-6 col-md-6 col-lg-6")
       //-     <span class="fa fa-fire"></span> Closest Hydrant
@@ -126,6 +136,9 @@ body
     text(class="unfounded") Unfounded/Other
     p
     div(id="police-incidents-list") ...
+    h1 Police Calls List
+    p
+    div(id="police-calls-list") ...
     h1 Crash List
     p
     div(id="crash-list") ...
@@ -159,9 +172,12 @@ body
   script(src="https://unpkg.com/esri-leaflet@2.1.0/dist/esri-leaflet.js",
   integrity="sha512-Tojl3UMd387f6DdAJlo+fKfJZiP55fYT+6Y58yKbHydnueOdSFOxrgLPuUxm7VW1szEt3hZVwv3V2sSUCuT35w==",
   crossorigin="")
+  //- link(rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css")
+  //- script(type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js")
   script(src="/js/safety/safety.js")
   script(src="/js/geo.js")
   script(src="/js/google.js")
   script(src="/js/safety/index.js")
   link(rel='stylesheet',  href="/css/styles.css")
+  
 

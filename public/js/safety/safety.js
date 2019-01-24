@@ -3,10 +3,11 @@ function getSafetyData(DataDirectory, ll) {
     getPolicePrecinct(DataDirectory.police.precincts, ll);
     getPolicePatrolZone(DataDirectory.police.zones, ll);
     getPoliceIncidents(DataDirectory.police.incidents, ll, 1, 30);
+    getPoliceCalls(DataDirectory.police.calls, ll, 1, 30);
     getAverageResponseTime(DataDirectory.medical.emergency.calls, ll, 1, "ems");
     getAverageResponseTime(DataDirectory.police.calls, ll, 1, "police");
-    //getCountWithinDays(DataDirectory.police.crashes, ll, 1, 30, "crash-count" );
     getCrashes(DataDirectory.police.crashes, ll, 1, 30);
+    //$('#policeIncidentList').DataTable();
 }
 
 function getEvacuationZone(url, ll) {
@@ -49,7 +50,7 @@ function getCrashes(crashes, ll, dist, days) {
             crashes = crashes.sort(function (a, b) {
                 return new Date(b.accident_date) - new Date(a.accident_date);
             });
-            html += "<tr style='font-size:20px;font-weight:600;'>";
+            html += "<tr style='font-size:18px;font-weight:600;'>";
             html += "<td>DATE</td>";
             html += "<td>BLOCK ADDRESS</td>";
             html += "<td>NEAR</td>";
@@ -60,7 +61,7 @@ function getCrashes(crashes, ll, dist, days) {
             var HH;
             var MM;
             $(crashes).each(function (index, crash) {
-                html += "<tr style='font-size:20px;'>";
+                html += "<tr style='font-size:18px;'>";
                 html += "<td>" + moment(crash.accident_date).format("MM-DD-YYYY") + "</td>";
                 html += "<td>" + crash.location_1_address + "</td>";
                 html += "<td>" + crash.nearest_street + "</td>";
@@ -83,18 +84,87 @@ function getCrashes(crashes, ll, dist, days) {
     });
 }
 
+function getPoliceCalls(calls, ll, dist, days) {
+    if (!calls) return;
+
+    getCountWithinDays(calls, ll, dist, days, "police-calls").then(function (calls) {
+        if (calls) {
+            // console.log("Police Incidents")
+            var html = "<table style='width:100%;'>";
+            calls = calls.sort(function (a, b) {
+                return new Date(b.call_date_time) - new Date(a.call_date_time);
+            });
+            html += "<tr style='font-size:18px;font-weight:600;'>";
+            html += "<td>DAY</td>";
+            html += "<td>DATE</td>";
+            html += "<td>TIME</td>";
+            html += "<td>TYPE</td>";
+            html += "<td>BLOCK ADDRESS</td>";
+            html += "<td>DISPOSITION</td>"
+            html += "</tr>";
+            $(calls).each(function (index, call) {
+                /*
+                var statusStyle = "unfounded";
+                switch (call.case_disposition) {
+                    case "ACTIVE - PENDING":
+                    case "ACTIVE PENDING WARRANT OBTAINED":
+                        {
+                            statusStyle = "active";
+                        }
+                        break;
+                    case "INACTIVE - PENDING":
+                        {
+                            statusStyle = "inactive";
+                        }
+                        break;
+                    case "EXCEPTIONALLY CLEARED":
+                    case "CLEARED BY ARREST":
+                        {
+                            statusStyle = "cleared";
+                        }
+                        break;
+                    case "UNFOUNDED, NO FURTHER ACTION NEEDED":
+                    case "OTHER":
+                        {
+                            statusStyle = "unfounded";
+                        }
+                        break;
+                };
+                */
+                html += "<tr style='font-size:18px;'>";
+                var dayDateTime = moment(call.call_date_time);
+                html += "<td>" + dayDateTime.format("dddd") + "</td>";
+                html += "<td>" + dayDateTime.format("l") + "</td>";
+                html += "<td>" + dayDateTime.format("LT") + "</td>";
+                html += "<td>" + call.call_type + "</td>";
+                html += "<td>" + call.location_1_address + "</td>";
+                html += "<td>" + call.case_disposition + "</td>"
+                html += "</tr>";
+            })
+            html += "</table>"
+            $("#police-calls-list").html(html);
+            calls = null;
+        } else {
+            console.log("No Data from getCountWithinDays")
+        }
+    });
+}
+
+
 function getPoliceIncidents(incidents, ll, dist, days) {
     if (!incidents) return;
 
     getCountWithinDays(incidents, ll, dist, days, "police-incidents").then(function (incidents) {
         if (incidents) {
             // console.log("Police Incidents")
-            var html = "<table style='width:100%;'>";
+            var html = "<table id='policeIncidentList' style='width:100%;'>";
             incidents = incidents.sort(function (a, b) {
                 return new Date(b.date_occured) - new Date(a.date_occured);
             });
-            html += "<tr style='font-size:20px;font-weight:600;'>";
+            html += "<tr style='font-size:18px;font-weight:600;'>";
+            html += "<td>DAY</td>";
             html += "<td>DATE</td>";
+            html += "<td>TIME</td>";
             html += "<td>DESCRIPTION</td>";
             html += "<td>BLOCK ADDRESS</td>";
             html += "<td>STATUS</td>"
@@ -126,8 +196,11 @@ function getPoliceIncidents(incidents, ll, dist, days) {
                         }
                         break;
                 };
-                html += "<tr class='" + statusStyle + "' style='font-size:20px;'>";
-                html += "<td>" + moment(incident.date_occured).format("MM-DD-YYYY") + "</td>";
+                html += "<tr class='" + statusStyle + "' style='font-size:18px;'>";
+                var dayDateTime = moment(incident.date_occured);
+                html += "<td>" + dayDateTime.format("dddd") + "</td>";
+                html += "<td>" + dayDateTime.format("l") + "</td>";
+                html += "<td>" + dayDateTime.format("LT") + "</td>";
                 html += "<td>" + incident.offense_description + "</td>";
                 html += "<td>" + incident.location_1_address + "</td>";
                 html += "<td>" + incident.case_status + "</td>"
@@ -191,7 +264,7 @@ function getPolicePrecinct(url, ll) {
         }
 
         if (data && data.features && data.features[0]) {
-            console.log(data.features[0]);
+            //console.log(data.features[0]);
             var precinct = data.features[0].properties.PRECINCT ? data.features[0].properties.PRECINCT : data.features[0].properties.Precinct;
             d3.select("#police-precinct").html(precinct); //+ "<a href=''>Zone Map</a>");
         } else {
