@@ -7,7 +7,9 @@ function getSafetyData(DataDirectory, ll) {
     getAverageResponseTime(DataDirectory.medical.emergency.calls, ll, 1, "ems");
     getAverageResponseTime(DataDirectory.police.calls, ll, 1, "police");
     getCrashes(DataDirectory.police.crashes, ll, 1, 30);
-    //$('#policeIncidentList').DataTable();
+    setTimeout(function(){$('#police-incidents-table').DataTable({
+        paging:false
+    })}, 1000);
 }
 
 function getEvacuationZone(url, ll) {
@@ -157,10 +159,10 @@ function getPoliceIncidents(incidents, ll, dist, days) {
     getCountWithinDays(incidents, ll, dist, days, "police-incidents").then(function (incidents) {
         if (incidents) {
             // console.log("Police Incidents")
-            var html = "<table id='policeIncidentList' style='width:100%;'>";
             incidents = incidents.sort(function (a, b) {
                 return new Date(b.date_occured) - new Date(a.date_occured);
             });
+            var html = "<thead>";
             html += "<tr style='font-size:18px;font-weight:600;'>";
             html += "<td>DAY</td>";
             html += "<td>DATE</td>";
@@ -169,6 +171,8 @@ function getPoliceIncidents(incidents, ll, dist, days) {
             html += "<td>BLOCK ADDRESS</td>";
             html += "<td>STATUS</td>"
             html += "</tr>";
+            html += "<thead>";
+            html += "<tbody>";
             $(incidents).each(function (index, incident) {
                 var statusStyle = "unfounded";
                 switch (incident.case_status) {
@@ -205,9 +209,9 @@ function getPoliceIncidents(incidents, ll, dist, days) {
                 html += "<td>" + incident.location_1_address + "</td>";
                 html += "<td>" + incident.case_status + "</td>"
                 html += "</tr>";
-            })
-            html += "</table>"
-            $("#police-incidents-list").html(html);
+            });
+            html += "</tbody>";
+            $("#police-incidents-table").append(html);
             incidents = null;
         } else {
             console.log("No Data from getCountWithinDays")
