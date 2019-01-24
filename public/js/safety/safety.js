@@ -7,9 +7,18 @@ function getSafetyData(DataDirectory, ll) {
     getAverageResponseTime(DataDirectory.medical.emergency.calls, ll, 1, "ems");
     getAverageResponseTime(DataDirectory.police.calls, ll, 1, "police");
     getCrashes(DataDirectory.police.crashes, ll, 1, 30);
-    setTimeout(function(){$('#police-incidents-table').DataTable({
-        paging:false
-    })}, 1000);
+    setTimeout(
+        function(){
+            $('#police-incidents-table').DataTable({
+                paging:false
+            });
+            $('#police-calls-table').DataTable({
+                paging:false
+            });
+            $('#police-crash-table').DataTable({
+                paging:false
+            });
+        }, 1000);
 }
 
 function getEvacuationZone(url, ll) {
@@ -48,10 +57,10 @@ function getCrashes(crashes, ll, dist, days) {
 
     getCountWithinDays(crashes, ll, dist, days, "crash-count").then(function (crashes) {
         if (crashes) {
-            var html = "<table style='width:100%;'>";
             crashes = crashes.sort(function (a, b) {
                 return new Date(b.accident_date) - new Date(a.accident_date);
             });
+            var html = "<thead>";
             html += "<tr style='font-size:18px;font-weight:600;'>";
             html += "<td>DATE</td>";
             html += "<td>BLOCK ADDRESS</td>";
@@ -59,6 +68,8 @@ function getCrashes(crashes, ll, dist, days) {
             html += "<td>TIME</td>";
             html += "<td>DAY</td>";
             html += "</tr>";
+            html += "<thead>";
+            html += "<tbody>";
             var _time;
             var HH;
             var MM;
@@ -77,8 +88,8 @@ function getCrashes(crashes, ll, dist, days) {
                 html += "<td>" + crash.day_of_week + "</td>";
                 html += "</tr>";
             })
-            html += "</table>"
-            $("#crash-list").html(html);
+            html += "</tbody>"
+            $("#police-crash-table").append(html);
             crashes = null;
         } else {
             console.log("No Data from getCountWithinDays")
@@ -92,10 +103,10 @@ function getPoliceCalls(calls, ll, dist, days) {
     getCountWithinDays(calls, ll, dist, days, "police-calls").then(function (calls) {
         if (calls) {
             // console.log("Police Incidents")
-            var html = "<table style='width:100%;'>";
             calls = calls.sort(function (a, b) {
                 return new Date(b.call_date_time) - new Date(a.call_date_time);
             });
+            var html = "<thead>";
             html += "<tr style='font-size:18px;font-weight:600;'>";
             html += "<td>DAY</td>";
             html += "<td>DATE</td>";
@@ -104,6 +115,8 @@ function getPoliceCalls(calls, ll, dist, days) {
             html += "<td>BLOCK ADDRESS</td>";
             html += "<td>DISPOSITION</td>"
             html += "</tr>";
+            html += "<thead>";
+            html += "<tbody>";
             $(calls).each(function (index, call) {
                 /*
                 var statusStyle = "unfounded";
@@ -143,8 +156,8 @@ function getPoliceCalls(calls, ll, dist, days) {
                 html += "<td>" + call.case_disposition + "</td>"
                 html += "</tr>";
             })
-            html += "</table>"
-            $("#police-calls-list").html(html);
+            html += "</tbody>"
+            $("#police-calls-table").append(html);
             calls = null;
         } else {
             console.log("No Data from getCountWithinDays")
