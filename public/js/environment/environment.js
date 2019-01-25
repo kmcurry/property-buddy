@@ -9,7 +9,8 @@ async function getFloodZone(url, ll) {
       var LL = L.latLng(ll[1], ll[0]);
       // use location to find out which census block they are inside.
       L.esri.query({
-        url: url
+        url: url,
+        returnGeometry: false
       }).intersects(LL).run(function (error, data) {
   
         var msg = "";
