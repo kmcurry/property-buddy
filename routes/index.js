@@ -69,6 +69,12 @@ var routeLoader = function (app) {
         });
     });
 
+    app.get('/maps/safety/', function(req, res) {
+        res.render('maps/safety', {
+            locations: JSON.stringify(app.locations)
+        });
+    });
+
     app.use(function (req, res, next) {
         res.status(404).render('404');
     });

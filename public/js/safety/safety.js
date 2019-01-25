@@ -7,6 +7,9 @@ function getSafetyData(DataDirectory, ll) {
     getAverageResponseTime(DataDirectory.medical.emergency.calls, ll, 1, "ems");
     getAverageResponseTime(DataDirectory.police.calls, ll, 1, "police");
     getCrashes(DataDirectory.police.crashes, ll, 1, 30);
+    //getClosestThing(DataDirectory.fire.hydrants.public, ll, "hydrant-public", "feet");
+    // getClosestThing(DataDirectory.fire.hydrants.private, ll, "hydrant-private", "feet");
+      
     setTimeout(
         function(){
             $('#police-incidents-table').DataTable({
@@ -30,7 +33,8 @@ function getEvacuationZone(url, ll) {
     var LL = L.latLng(ll[1], ll[0]);
     // use location to find out which census block they are inside.
     L.esri.query({
-        url: url
+        url: url,
+        returnGeometry: false
     }).intersects(LL).run(function (error, data) {
 
         if (error) {
@@ -241,7 +245,8 @@ function getPolicePatrolZone(url, ll) {
     var LL = L.latLng(ll[1], ll[0]);
     // use location to find out which census block they are inside.
     L.esri.query({
-        url: url
+        url: url,
+        returnGeometry: false
     }).intersects(LL).run(function (error, data) {
 
         if (error) {
@@ -272,7 +277,8 @@ function getPolicePrecinct(url, ll) {
     var LL = L.latLng(ll[1], ll[0]);
     // use location to find out which census block they are inside.
     L.esri.query({
-        url: url
+        url: url,
+        returnGeometry: false
     }).intersects(LL).run(function (error, data) {
 
         if (error) {

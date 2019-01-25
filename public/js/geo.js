@@ -43,7 +43,6 @@ function loadDataDirectory(address) {
   //remove whitespace
   cityPath = cityStr.replace(/\s+/g, '');
   statePath = stateStr.replace(/\s+/g, '');
-  console.log(cityPath);
   //create object path to dynamically insert city into function parameters
   if (locations[statePath]) {
     DataDirectory = cityPath.split('.').reduce((o, i) => o[i], locations[statePath]);
@@ -75,7 +74,8 @@ function getFeaturesForLocation(address, position) {
     var statePath = stateStr.replace(/\s+/g, '');
 
     L.esri.query({
-      url: DataDirectory.boundary
+      url: DataDirectory.boundary,
+      returnGeometry: false
     }).intersects(LL).run(function (error, data) {
 
       getSafetyData(DataDirectory, ll);
@@ -87,8 +87,6 @@ function getFeaturesForLocation(address, position) {
       getClosestThing(DataDirectory.transportation.bus_stops, ll, "bus-stop");
       getClosestThing(DataDirectory.recreation.parks, ll, "park");
       getClosestThing(DataDirectory.recreation.libraries, ll, "library");
-      // getClosestThing(DataDirectory.fire.hydrants.public, ll, "hydrant-public", "feet");
-      // getClosestThing(DataDirectory.fire.hydrants.private, ll, "hydrant-private", "feet");
       getClosestThing(DataDirectory.recreation.centers, ll, "recreation-center");
       getNearbyNeighborhoods(DataDirectory.neighborhoods, ll, 1, "neighborhoods")
       getCouncilDistrict(DataDirectory.council, ll);
@@ -116,7 +114,8 @@ function getAICUZ(url, ll) {
   var LL = L.latLng(ll[1], ll[0]);
   // use location to find out which census block they are inside.
   L.esri.query({
-    url: url
+    url: url,
+    returnGeometry: false
   }).intersects(LL).run(function (error, data) {
     var msg = "";
     if (data) {
@@ -173,7 +172,8 @@ function getClosestThing(url, ll, thing, units) {
   var LL = L.latLng(ll[1], ll[0]);
   // use location to find out which census block they are inside.
   L.esri.query({
-    url: url
+    url: url,
+    returnGeometry: false
   }).run(function (error, data) {
     if (!data || !data.features) {
       d3.select("#closest-" + thing).html("No data returned");
@@ -182,7 +182,7 @@ function getClosestThing(url, ll, thing, units) {
 
     var closest = getClosestItem(data.features, ll);
 
-    //console.log(closest.item[0].properties);
+    console.log(closest.item[0].properties);
 
     var msg = "";
 
@@ -236,7 +236,8 @@ function getCouncilDistrict(url, ll) {
   var LL = L.latLng(ll[1], ll[0]);
   // use location to find out which census block they are inside.
   L.esri.query({
-    url: url
+    url: url,
+    returnGeometry: false
   }).intersects(LL).run(function (error, data) {
     if (error) {
       console.log(error);
@@ -332,7 +333,8 @@ function getNearbyNeighborhoods(url, ll, d) {
     var LL = L.latLng(ll[1], ll[0]);
     // use location to find out which census block they are inside.
     L.esri.query({
-      url: url
+      url: url,
+      returnGeometry: false
     }).run(function (error, data) {
       if (error) {
         console.error(error);
@@ -353,7 +355,8 @@ function getParks(url, ll, dist) {
   var LL = L.latLng(ll[1], ll[0]);
   // use location to find out which census block they are inside.
   L.esri.query({
-    url: url
+    url: url,
+    returnGeometry: false
   }).run(function (error, data) {
     if (!data || !data.features) {
       d3.select("#parks").html("No data returned!");
@@ -741,6 +744,8 @@ function getClosestItem(features, ll) {
 
   closest.distance = closest.distance != 9999 ? parseFloat(closest.distance) * 3959 : 9999; // 3959 is Earth radius in miles
   closest.distance = closest.distance.toFixed(2);
+
+  console.log(closest.distance);
 
   coords = null;
   dist = null;

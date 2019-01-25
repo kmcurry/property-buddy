@@ -235,10 +235,12 @@ body
     text(class="cleared")  Cleared, 
     text(class="unfounded") Unfounded/Other
     p
-    div(id="police-incidents-list") ...
+    div(id="police-incidents-list")
+      table(id="police-incidents-table")
     h1 Crash List
     p
-    div(id="crash-list") ...
+    div(id="crash-list")
+      table(id="police-crash-table")
   div(id="invisibleMap")
   input(type="hidden" id="locations" value=""+locations)
   input(type="hidden" id="searchPosition" value=""+position)
@@ -269,6 +271,8 @@ body
   script(src="https://unpkg.com/esri-leaflet@2.1.0/dist/esri-leaflet.js",
   integrity="sha512-Tojl3UMd387f6DdAJlo+fKfJZiP55fYT+6Y58yKbHydnueOdSFOxrgLPuUxm7VW1szEt3hZVwv3V2sSUCuT35w==",
   crossorigin="")
+  link(rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css")
+  script(type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js")
   script(src="/js/environment/environment.js")
   script(src="/js/safety/safety.js")
   script(src="/js/geo.js")
