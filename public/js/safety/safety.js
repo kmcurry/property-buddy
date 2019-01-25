@@ -1,5 +1,5 @@
 function getSafetyData(DataDirectory, ll) {
-    getEvacuationZone(locations[statePath].evacuation, ll);
+    //getEvacuationZone(locations[statePath].evacuation, ll);
     getPolicePrecinct(DataDirectory.police.precincts, ll);
     getPolicePatrolZone(DataDirectory.police.zones, ll);
     getPoliceIncidents(DataDirectory.police.incidents, ll, 1, 30);
