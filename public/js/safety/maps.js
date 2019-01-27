@@ -1,4 +1,4 @@
-var mapboxAccessToken = '';
+var mapboxAccessToken = $("#mapboxKey").val();;
 var map = L.map('crimeMap').setView([36.78, -76.00], 10);
 
 
