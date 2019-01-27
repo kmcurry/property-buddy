@@ -71,7 +71,8 @@ var routeLoader = function (app) {
 
     app.get('/maps/safety/', function(req, res) {
         res.render('maps/safety', {
-            locations: JSON.stringify(app.locations)
+            locations: JSON.stringify(app.locations),
+            mapboxKey: process.env.MAPBOX
         });
     });
 
