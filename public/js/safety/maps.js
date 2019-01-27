@@ -57,7 +57,7 @@ info.onAdd = function (map) {
 
 // method that we will use to update the control based on feature properties passed
 info.update = function (props) {
-    this._div.innerHTML = '<h4>Police Incidents by Patrol Zone</h4>' +  (props ?
+    this._div.innerHTML = '<h4>Police Incidents by Patrol Zone (past 30 days)</h4>' +  (props ?
         '<b>' + props.BEAT + '</b><br />' + props.incidents.length + ' incidents'
         : '');
 };
