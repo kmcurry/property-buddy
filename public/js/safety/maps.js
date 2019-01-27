@@ -1,4 +1,4 @@
-var mapboxAccessToken = 'pk.eyJ1Ijoia21jdXJyeSIsImEiOiJjanJjMjhzY2ExOTVwNDRwZzN3MmlseW0zIn0.Fjle-Wpb4DTEhN_AaY-xXg';
+var mapboxAccessToken = '';
 var map = L.map('crimeMap').setView([36.78, -76.00], 10);
 
 
