@@ -1,10 +1,11 @@
 var mapboxAccessToken = $("#mapboxKey").val();;
 var map = L.map('callsMap').setView([36.78, -76.00], 10);
 
+var patrol_zone_boundary = null;
 
 function getColor(d) {
     
-    return  d > 80 ? '#993404' :
+    return  d >=70 ? '#993404' :
         d > 50 ? '#d95f0e' :
         d > 20 ? '#fe9929' :
         d > 10 ? '#fed98e' :
@@ -32,7 +33,7 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 10, 20, 50, 80],
+        grades = [0, 10, 20, 50, 70],
         labels = [];
 
     // loop through our density intervals and generate a label with a colored square for each interval
@@ -57,8 +58,8 @@ info.onAdd = function (map) {
 
 // method that we will use to update the control based on feature properties passed
 info.update = function (props) {
-    this._div.innerHTML = '<h4>Police Incidents by Patrol Zone (past 30 days)</h4>' +  (props ?
-        '<b>' + props.BEAT + '</b><br />' + props.calls.length + ' calls'
+    this._div.innerHTML = '<h4>Police Calls by Patrol Zone (past 30 days)</h4>' +  (props ?
+        '<b>Patrol Zone: ' + props.BEAT + '<br />' + props.calls.length + ' calls</b>'
         : '');
 };
 
@@ -82,12 +83,14 @@ function highlightFeature(e) {
 }
 
 function resetHighlight(e) {
-    geojson.resetStyle(e.target);
-    info.update();
+    if (patrol_zone_boundary)
+    {
+        patrol_zone_boundary.resetStyle(e.target);
+        info.update();
+    }  
 }
 
 function onEachFeature(feature, layer) {
-    console.log("nnnnnn")
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight
@@ -115,14 +118,17 @@ $.ajax({
         getCountWithinDays(DataDirectory.police.calls, [-76.00, 36.78], 40, 30, "police-calls").then(function (calls) {
             if (calls) {
                 $(data.features).each(function (key, data) {
-                    //console.log(data.properties.BEAT);
                     var callsInBeat = $(calls).filter(function(index) {
-                        return calls[index].zone_id == data.properties.BEAT;
+                        return calls[index].zone == data.properties.BEAT;
                     })
                     data.properties.calls = callsInBeat;
-                    patrol_zone_boundary.addData(data);
+  
+                    patrol_zone_boundary = new L.geoJson(data, {
+                        style: style,
+                        onEachFeature: onEachFeature
+                    });
+                    patrol_zone_boundary.addTo(map);
                 });
-                patrol_zone_boundary.setStyle(style);
             }
         });
     }

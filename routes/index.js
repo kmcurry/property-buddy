@@ -69,8 +69,19 @@ var routeLoader = function (app) {
         });
     });
 
-    app.get('/maps/safety/', function(req, res) {
-        res.render('maps/safety', {
+    app.get('/maps/safety', function(req, res) {
+        res.redirect('/maps/safety/incidents');
+    });
+
+    app.get('/maps/safety/incidents', function(req, res) {
+        res.render('maps/safety/incidents', {
+            locations: JSON.stringify(app.locations),
+            mapboxKey: process.env.MAPBOX
+        });
+    });
+
+    app.get('/maps/safety/calls', function(req, res) {
+        res.render('maps/safety/calls', {
             locations: JSON.stringify(app.locations),
             mapboxKey: process.env.MAPBOX
         });

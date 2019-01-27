@@ -6,7 +6,7 @@ var patrol_zone_boundary = null;
 
 function getColor(d) {
     
-    return  d > 80 ? '#993404' :
+    return  d >= 70 ? '#993404' :
         d > 50 ? '#d95f0e' :
         d > 20 ? '#fe9929' :
         d > 10 ? '#fed98e' :
@@ -33,7 +33,7 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 10, 20, 50, 80],
+        grades = [0, 10, 20, 50, 70],
         labels = [];
 
     // loop through our density intervals and generate a label with a colored square for each interval
