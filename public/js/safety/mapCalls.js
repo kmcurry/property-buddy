@@ -1,5 +1,5 @@
 var mapboxAccessToken = $("#mapboxKey").val();;
-var map = L.map('crimeMap').setView([36.78, -76.00], 10);
+var map = L.map('callsMap').setView([36.78, -76.00], 10);
 
 
 function getColor(d) {
@@ -12,9 +12,9 @@ function getColor(d) {
 }
 
 function style(feature) {
-    console.log(feature.properties.incidents.length);
+    console.log(feature.properties.calls.length);
     return {
-        fillColor: getColor(feature.properties.incidents.length),
+        fillColor: getColor(feature.properties.calls.length),
         weight: 2,
         opacity: 1,
         color: 'white',
@@ -58,7 +58,7 @@ info.onAdd = function (map) {
 // method that we will use to update the control based on feature properties passed
 info.update = function (props) {
     this._div.innerHTML = '<h4>Police Incidents by Patrol Zone (past 30 days)</h4>' +  (props ?
-        '<b>' + props.BEAT + '</b><br />' + props.incidents.length + ' incidents'
+        '<b>' + props.BEAT + '</b><br />' + props.calls.length + ' calls'
         : '');
 };
 
@@ -112,14 +112,14 @@ $.ajax({
             DataDirectory = 'VirginiaBeach'.split('.').reduce((o, i) => o[i], locations['Virginia']);
         }
 
-        getCountWithinDays(DataDirectory.police.incidents, [-76.00, 36.78], 40, 30, "police-incidents").then(function (incidents) {
-            if (incidents) {
+        getCountWithinDays(DataDirectory.police.calls, [-76.00, 36.78], 40, 30, "police-calls").then(function (calls) {
+            if (calls) {
                 $(data.features).each(function (key, data) {
                     //console.log(data.properties.BEAT);
-                    var incidentsInBeat = $(incidents).filter(function(index) {
-                        return incidents[index].zone_id == data.properties.BEAT;
+                    var callsInBeat = $(calls).filter(function(index) {
+                        return calls[index].zone_id == data.properties.BEAT;
                     })
-                    data.properties.incidents = incidentsInBeat;
+                    data.properties.calls = callsInBeat;
                     patrol_zone_boundary.addData(data);
                 });
                 patrol_zone_boundary.setStyle(style);

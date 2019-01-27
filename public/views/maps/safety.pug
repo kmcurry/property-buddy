@@ -51,7 +51,11 @@ head
       padding: 6px;
     }
 
-    #crimeMap { 
+    #callsMap { 
+      height: 580px;
+    }
+
+    #incidentsMap { 
       height: 580px;
     }
 
@@ -89,7 +93,8 @@ body
             a(class="p-md" href="/about") About
             text  -             
             a(class="p-md" href="/") Search
-    div(id="crimeMap")
+    div(id="incidentsMap")
+    hr
     input(type="hidden" id="locations" value=""+locations)
     input(type="hidden" id="mapboxKey" value=""+mapboxKey)
     link(rel='stylesheet',  href="/bower_components/font-awesome/css/font-awesome.min.css")
@@ -118,7 +123,8 @@ body
     script(src="/js/safety/safety.js")
     script(src="/js/geo.js")
     script(src="/js/google.js")
-    script(src="/js/safety/maps.js")
+    script(src="/js/safety/mapIncidents.js")
+    //- script(src="/js/safety/mapCalls.js")
     link(rel='stylesheet',  href="/css/styles.css")
   
 
