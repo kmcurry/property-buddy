@@ -101,6 +101,13 @@ var routeLoader = function (app) {
         });
     });
 
+    app.get('/maps/property/sales', function(req, res) {
+        res.render('maps/property/sales', {
+            locations: JSON.stringify(app.locations),
+            mapboxKey: process.env.MAPBOX
+        });
+    });
+
     app.use(function (req, res, next) {
         res.status(404).render('404');
     });

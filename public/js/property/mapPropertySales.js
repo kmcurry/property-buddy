@@ -1,5 +1,5 @@
 var mapboxAccessToken = $("#mapboxKey").val();;
-var map = L.map('codeEnforcementMap').setView([36.78, -76.00], 11);
+var map = L.map('propertySalesMap').setView([36.78, -76.00], 11);
 
 var zipCode_boundary = null;
 
@@ -14,19 +14,18 @@ if (locations['Virginia']) {
 
 function getColor(d) {
     
-    return d>=50 ? '#990000' : 
-        d >40 ? '#d7301f' :
-        d > 20 ? '#ef6548' :
-        d > 15 ? '#fc8d59' :
-        d > 10 ? '#fdbb84' :
-        d > 1 ? '#fdd49e' :
+    return d >=25 ? '#54278f' :
+        d > 20 ? '#756bb1' :
+        d > 15 ? '#9e9ac8' :
+        d > 10 ? '#bcbddc' :
+        d > 5 ? '#dadaeb' :
         '#eeeeee';
 }
 
 function style(feature) {
-    console.log(feature.properties.enforcements.length);
+    console.log(feature.properties.sales.length);
     return {
-        fillColor: getColor(feature.properties.enforcements.length),
+        fillColor: getColor(feature.properties.sales.length),
         weight: 2,
         opacity: 1,
         color: 'white',
@@ -44,7 +43,7 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 1, 10, 15, 20, 40, 50],
+        grades = [0, 5, 10, 15, 20, 25],
         labels = [];
 
     // loop through our density intervals and generate a label with a colored square for each interval
@@ -69,8 +68,8 @@ info.onAdd = function (map) {
 
 // method that we will use to update the control based on feature properties passed
 info.update = function (props) {
-    this._div.innerHTML = '<h4>Code Enforcements by Subdivision (past 180 days)</h4>' +  (props ?
-        '<b>Subdvision: ' + props.SUBD_DESC + '<br />' + props.enforcements.length + ' enforcements</b>'
+    this._div.innerHTML = '<h4>Property Sales by Zip Code (past 30 days)</h4>' +  (props ?
+        '<b>Zip Code: ' + props.ZIP_CODE + '<br />' + props.sales.length + ' sales</b>'
         : '');
 };
 
@@ -110,18 +109,20 @@ function onEachFeature(feature, layer) {
 
 $.ajax({
     dataType: "json",
-    url: "https://gis.data.vbgov.com/datasets/759ad66064974eab9a556d3a90efa1a1_23.geojson",
+    url: "https://gis.data.vbgov.com/datasets/82ada480c5344220b2788154955ce5f0_1.geojson",
     success: function (data) {
 
-        getCountWithinDays(DataDirectory.property.code_enforcement, [-76.00, 36.78], 40, 180, "code-enforcement").then(function (enforcements) {
-            if (enforcements) {
+        getCountWithinDays(DataDirectory.property.sales, [-76.00, 36.78], 40, 30, "property-sales").then(function (sales) {
+            if (sales) {
                 $(data.features).each(function (key, data) {
-                    var enforcementsInZipCode = $(enforcements).filter(function(index) {
-                        //return enforcements[index].zip_code.startsWith(data.properties.ZIP_CODE);
-                        //console.log(enforcements[index].sub_division);
-                        return enforcements[index].sub_division == data.properties.SUBD_DESC;
+                    var salesInZipCode = $(sales).filter(function(index) {
+                        //console.log(sales[index].zip_code);
+                        if(sales[index].zip_code) {
+                            return sales[index].zip_code.startsWith(data.properties.ZIP_CODE);
+                        }
+                        
                     })
-                    data.properties.enforcements = enforcementsInZipCode;
+                    data.properties.sales = salesInZipCode;
                 });
                 zipCode_boundary = new L.geoJson(data, {
                     style: style,

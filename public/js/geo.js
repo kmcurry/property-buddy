@@ -278,7 +278,10 @@ function getCountWithinDays(url, ll, dist, days, type) {
     dateField = "date_occured";
   } else if (type.includes("crash")) {
     dateField = "accident_date";
-  } else {
+  } else if (type.includes("sales")) {
+    dateField = "sale_date";
+  } 
+  else {
     dateField = "open_date";
     locField = "location1";
   }
