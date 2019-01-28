@@ -1,5 +1,5 @@
 var mapboxAccessToken = $("#mapboxKey").val();;
-var map = L.map('codeEnforcementMap').setView([36.78, -76.00], 10);
+var map = L.map('codeEnforcementMap').setView([36.78, -76.00], 11);
 
 var zipCode_boundary = null;
 
