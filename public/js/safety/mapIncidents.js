@@ -69,8 +69,8 @@ function highlightFeature(e) {
     var layer = e.target;
 
     layer.setStyle({
-        weight: 5,
-        color: '#666',
+        weight: 3,
+        color: '#339',
         dashArray: '',
         fillOpacity: 0.7
     });
@@ -117,13 +117,12 @@ $.ajax({
                         return incidents[index].zone_id == data.properties.BEAT;
                     })
                     data.properties.incidents = incidentsInBeat;
-  
-                    patrol_zone_boundary = new L.geoJson(data, {
-                        style: style,
-                        onEachFeature: onEachFeature
-                    });
-                    patrol_zone_boundary.addTo(map);
                 });
+                patrol_zone_boundary = new L.geoJson(data, {
+                    style: style,
+                    onEachFeature: onEachFeature
+                });
+                patrol_zone_boundary.addTo(map);
             }
         });
     }

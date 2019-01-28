@@ -3,6 +3,15 @@ var map = L.map('callsMap').setView([36.78, -76.00], 10);
 
 var patrol_zone_boundary = null;
 
+var locations = $("#locations").val();
+//console.log(locations);
+locations = JSON.parse(locations);
+
+if (locations['Virginia']) {
+    DataDirectory = 'VirginiaBeach'.split('.').reduce((o, i) => o[i], locations['Virginia']);
+}
+
+
 function getColor(d) {
     
     return  d >=70 ? '#993404' :
@@ -69,8 +78,8 @@ function highlightFeature(e) {
     var layer = e.target;
 
     layer.setStyle({
-        weight: 5,
-        color: '#666',
+        weight: 3,
+        color: '#339',
         dashArray: '',
         fillOpacity: 0.7
     });
@@ -97,23 +106,10 @@ function onEachFeature(feature, layer) {
     });
 }
 
-var patrol_zone_boundary = new L.geoJson();
-patrol_zone_boundary.addTo(map, {
-    onEachFeature: onEachFeature
-});
-
 $.ajax({
     dataType: "json",
     url: "https://gis.data.vbgov.com/datasets/82ada480c5344220b2788154955ce5f0_9.geojson",
     success: function (data) {
-
-        var locations = $("#locations").val();
-        //console.log(locations);
-        locations = JSON.parse(locations);
-
-        if (locations['Virginia']) {
-            DataDirectory = 'VirginiaBeach'.split('.').reduce((o, i) => o[i], locations['Virginia']);
-        }
 
         getCountWithinDays(DataDirectory.police.calls, [-76.00, 36.78], 40, 30, "police-calls").then(function (calls) {
             if (calls) {
@@ -122,14 +118,13 @@ $.ajax({
                         return calls[index].zone == data.properties.BEAT;
                     })
                     data.properties.calls = callsInBeat;
-  
-                    patrol_zone_boundary = new L.geoJson(data, {
-                        style: style,
-                        onEachFeature: onEachFeature
-                    });
-                    patrol_zone_boundary.addTo(map);
                 });
+                patrol_zone_boundary = new L.geoJson(data, {
+                    style: style,
+                    onEachFeature: onEachFeature
+                });
+                patrol_zone_boundary.addTo(map);
             }
         });
     }
-}).error(function () {});
+});

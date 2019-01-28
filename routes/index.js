@@ -87,6 +87,13 @@ var routeLoader = function (app) {
         });
     });
 
+    app.get('/maps/property/code-enforcement', function(req, res) {
+        res.render('maps/property/codeEnforcement', {
+            locations: JSON.stringify(app.locations),
+            mapboxKey: process.env.MAPBOX
+        });
+    });
+
     app.use(function (req, res, next) {
         res.status(404).render('404');
     });
