@@ -90,7 +90,8 @@ function getFeaturesForLocation(address, position) {
       getClosestThing(DataDirectory.recreation.centers, ll, "recreation-center");
       getNearbyNeighborhoods(DataDirectory.neighborhoods, ll, 1, "neighborhoods")
       getCouncilDistrict(DataDirectory.council, ll);
-
+      getEvacuationZone(locations[statePath].evacuation, ll);
+    
       //getCountWithinDays(DataDirectory.police.calls, ll, 1, 30, "police-calls");
       getCountWithinDays(DataDirectory.property.code_enforcement, ll, 1, 30, "code-enforcement");
       getPropertySales(DataDirectory.property.sales, address);
