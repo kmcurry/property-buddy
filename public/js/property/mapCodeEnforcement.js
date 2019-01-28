@@ -14,13 +14,13 @@ if (locations['Virginia']) {
 
 function getColor(d) {
     
-    return d>=180 ? '#990000' : 
-        d >140 ? '#d7301f' :
-        d > 100 ? '#ef6548' :
-        d > 80 ? '#fc8d59' :
-        d > 40 ? '#fdbb84' :
-        d > 10 ? '#fdd49e' :
-        '#fef0d9';
+    return d>=50 ? '#990000' : 
+        d >40 ? '#d7301f' :
+        d > 20 ? '#ef6548' :
+        d > 15 ? '#fc8d59' :
+        d > 10 ? '#fdbb84' :
+        d > 1 ? '#fdd49e' :
+        '#eeeeee';
 }
 
 function style(feature) {
@@ -44,7 +44,7 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 10, 40, 80, 100, 140, 180],
+        grades = [0, 5, 10, 15, 20, 40, 50],
         labels = [];
 
     // loop through our density intervals and generate a label with a colored square for each interval
@@ -69,8 +69,8 @@ info.onAdd = function (map) {
 
 // method that we will use to update the control based on feature properties passed
 info.update = function (props) {
-    this._div.innerHTML = '<h4>Code Enforcements by Zip Code (past 180 days)</h4>' +  (props ?
-        '<b>Zip Code: ' + props.ZIP_CODE + '<br />' + props.enforcements.length + ' enforcements</b>'
+    this._div.innerHTML = '<h4>Code Enforcements by Subdivision (past 180 days)</h4>' +  (props ?
+        '<b>Zip Code: ' + props.SUBD_DESC + '<br />' + props.enforcements.length + ' enforcements</b>'
         : '');
 };
 
@@ -110,14 +110,16 @@ function onEachFeature(feature, layer) {
 
 $.ajax({
     dataType: "json",
-    url: "https://gis.data.vbgov.com/datasets/82ada480c5344220b2788154955ce5f0_1.geojson",
+    url: "https://gis.data.vbgov.com/datasets/759ad66064974eab9a556d3a90efa1a1_23.geojson",
     success: function (data) {
 
         getCountWithinDays(DataDirectory.property.code_enforcement, [-76.00, 36.78], 40, 180, "code-enforcement").then(function (enforcements) {
             if (enforcements) {
                 $(data.features).each(function (key, data) {
                     var enforcementsInZipCode = $(enforcements).filter(function(index) {
-                        return enforcements[index].zip_code.startsWith(data.properties.ZIP_CODE);
+                        //return enforcements[index].zip_code.startsWith(data.properties.ZIP_CODE);
+                        //console.log(enforcements[index].sub_division);
+                        return enforcements[index].sub_division == data.properties.SUBD_DESC;
                     })
                     data.properties.enforcements = enforcementsInZipCode;
                 });
