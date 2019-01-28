@@ -1,21 +1,32 @@
 var mapboxAccessToken = $("#mapboxKey").val();;
-var map = L.map('incidentsMap').setView([36.78, -76.00], 10);
+var map = L.map('codeEnforcementMap').setView([36.78, -76.00], 10);
 
-var patrol_zone_boundary = null;
+var zipCode_boundary = null;
+
+var locations = $("#locations").val();
+//console.log(locations);
+locations = JSON.parse(locations);
+
+if (locations['Virginia']) {
+    DataDirectory = 'VirginiaBeach'.split('.').reduce((o, i) => o[i], locations['Virginia']);
+}
 
 
 function getColor(d) {
     
-    return  d >= 70 ? '#993404' :
-        d > 50 ? '#d95f0e' :
-        d > 20 ? '#fe9929' :
-        d > 10 ? '#fed98e' :
-        '#ffffd4';
+    return d>=180 ? '#990000' : 
+        d >140 ? '#d7301f' :
+        d > 100 ? '#ef6548' :
+        d > 80 ? '#fc8d59' :
+        d > 40 ? '#fdbb84' :
+        d > 10 ? '#fdd49e' :
+        '#fef0d9';
 }
 
 function style(feature) {
+    console.log(feature.properties.enforcements.length);
     return {
-        fillColor: getColor(feature.properties.incidents.length),
+        fillColor: getColor(feature.properties.enforcements.length),
         weight: 2,
         opacity: 1,
         color: 'white',
@@ -33,7 +44,7 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 10, 20, 50, 70],
+        grades = [0, 10, 40, 80, 100, 140, 180],
         labels = [];
 
     // loop through our density intervals and generate a label with a colored square for each interval
@@ -58,8 +69,8 @@ info.onAdd = function (map) {
 
 // method that we will use to update the control based on feature properties passed
 info.update = function (props) {
-    this._div.innerHTML = '<h4>Police Incidents by Patrol Zone (past 30 days)</h4>' +  (props ?
-        '<b>Patrol Zone: ' + props.BEAT + '<br />' + props.incidents.length + ' incidents</b>'
+    this._div.innerHTML = '<h4>Code Enforcements by Zip Code (past 180 days)</h4>' +  (props ?
+        '<b>Zip Code: ' + props.ZIP_CODE + '<br />' + props.enforcements.length + ' enforcements</b>'
         : '');
 };
 
@@ -83,9 +94,9 @@ function highlightFeature(e) {
 }
 
 function resetHighlight(e) {
-    if (patrol_zone_boundary)
+    if (zipCode_boundary)
     {
-        patrol_zone_boundary.resetStyle(e.target);
+        zipCode_boundary.resetStyle(e.target);
         info.update();
     }  
 }
@@ -99,30 +110,22 @@ function onEachFeature(feature, layer) {
 
 $.ajax({
     dataType: "json",
-    url: "https://gis.data.vbgov.com/datasets/82ada480c5344220b2788154955ce5f0_9.geojson",
+    url: "https://gis.data.vbgov.com/datasets/82ada480c5344220b2788154955ce5f0_1.geojson",
     success: function (data) {
 
-        var locations = $("#locations").val();
-        //console.log(locations);
-        locations = JSON.parse(locations);
-
-        if (locations['Virginia']) {
-            DataDirectory = 'VirginiaBeach'.split('.').reduce((o, i) => o[i], locations['Virginia']);
-        }
-
-        getCountWithinDays(DataDirectory.police.incidents, [-76.00, 36.78], 40, 30, "police-incidents").then(function (incidents) {
-            if (incidents) {
+        getCountWithinDays(DataDirectory.property.code_enforcement, [-76.00, 36.78], 40, 180, "code-enforcement").then(function (enforcements) {
+            if (enforcements) {
                 $(data.features).each(function (key, data) {
-                    var incidentsInBeat = $(incidents).filter(function(index) {
-                        return incidents[index].zone_id == data.properties.BEAT;
+                    var enforcementsInZipCode = $(enforcements).filter(function(index) {
+                        return enforcements[index].zip_code.startsWith(data.properties.ZIP_CODE);
                     })
-                    data.properties.incidents = incidentsInBeat;
+                    data.properties.enforcements = enforcementsInZipCode;
                 });
-                patrol_zone_boundary = new L.geoJson(data, {
+                zipCode_boundary = new L.geoJson(data, {
                     style: style,
                     onEachFeature: onEachFeature
                 });
-                patrol_zone_boundary.addTo(map);
+                zipCode_boundary.addTo(map);
             }
         });
     }

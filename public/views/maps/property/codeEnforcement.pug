@@ -4,22 +4,6 @@ head
   meta(charset='utf-8')
   link(rel='stylesheet',  href="/bower_components/bootstrap/dist/css/bootstrap.min.css")
   style.
-    .active {
-      color: orange;
-    }
-
-    .inactive {
-      color: gray;
-    }
-
-    .cleared {
-      color: blue;
-    }
-
-    .unfounded {
-      color: purple;
-    }
-
     .info {
         padding: 6px 8px;
         font: 14px/16px Arial, Helvetica, sans-serif;
@@ -51,11 +35,7 @@ head
       padding: 6px;
     }
 
-    #callsMap { 
-      height: 580px;
-    }
-
-    #incidentsMap { 
+    #codeEnforcementMap { 
       height: 580px;
     }
 
@@ -93,7 +73,7 @@ body
             a(class="p-md" href="/about") About
             text  -             
             a(class="p-md" href="/") Search
-    div(id="incidentsMap")
+    div(id="codeEnforcementMap")
     hr
     input(type="hidden" id="locations" value=""+locations)
     input(type="hidden" id="mapboxKey" value=""+mapboxKey)
@@ -122,7 +102,7 @@ body
     script(type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js")
     script(src="/js/geo.js")
     script(src="/js/google.js")
-    script(src="/js/safety/mapIncidents.js")
+    script(src="/js/property/mapCodeEnforcement.js")
     link(rel='stylesheet',  href="/css/styles.css")
   
 
