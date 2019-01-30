@@ -14,11 +14,12 @@ if (locations['Virginia']) {
 
 function getColor(d) {
     
-    return d >=25 ? '#54278f' :
-        d > 20 ? '#756bb1' :
-        d > 15 ? '#9e9ac8' :
-        d > 10 ? '#bcbddc' :
-        d > 5 ? '#dadaeb' :
+    return d >=45 ? '#4a1486' :
+        d > 40 ? '#6a51a3' :
+        d > 35 ? '#807dba' :
+        d > 30 ? '#9e9ac8' :
+        d > 25 ? '#bcbddc' :
+        d > 10 ? '#dadaeb' :
         '#eeeeee';
 }
 
@@ -43,7 +44,7 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 5, 10, 15, 20, 25],
+        grades = [0, 10, 25, 30, 35, 40, 45],
         labels = [];
 
     // loop through our density intervals and generate a label with a colored square for each interval
