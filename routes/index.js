@@ -65,7 +65,8 @@ var routeLoader = function (app) {
             locations: JSON.stringify(app.locations),
             position: position,
             geoCoderKey: process.env.GEOCODER_KEY,
-            GApisKey: process.env.GOOGLE_APIS_KEY
+            GApisKey: process.env.GOOGLE_APIS_KEY,
+            mapboxKey: process.env.MAPBOX
         });
     });
 

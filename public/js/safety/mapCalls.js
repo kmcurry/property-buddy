@@ -1,7 +1,7 @@
 var mapboxAccessToken = $("#mapboxKey").val();;
-var map = L.map('callsMap').setView([36.78, -76.00], 10);
+var mapCalls = L.map('callsMap').setView([36.78, -76.00], 10);
 
-var patrol_zone_boundary = null;
+var patrol_zone_boundary_calls = null;
 
 var locations = $("#locations").val();
 //console.log(locations);
@@ -21,8 +21,7 @@ function getColor(d) {
         '#ffffd4';
 }
 
-function style(feature) {
-    console.log(feature.properties.calls.length);
+function styleCalls(feature) {
     return {
         fillColor: getColor(feature.properties.calls.length),
         weight: 2,
@@ -35,13 +34,13 @@ function style(feature) {
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + mapboxAccessToken, {
     id: 'mapbox.light'
-}).addTo(map);
+}).addTo(mapCalls);
 
-var legend = L.control({position: 'bottomright'});
+var mapCallsLegend = L.control({position: 'bottomright'});
 
-legend.onAdd = function (map) {
+mapCallsLegend.onAdd = function (mapCalls) {
 
-    var div = L.DomUtil.create('div', 'info legend'),
+    var div = L.DomUtil.create('div', 'mapCallsInfo mapCallsLegend'),
         grades = [0, 10, 20, 50, 70],
         labels = [];
 
@@ -55,26 +54,26 @@ legend.onAdd = function (map) {
     return div;
 };
 
-legend.addTo(map);
+mapCallsLegend.addTo(mapCalls);
 
-var info = L.control();
+var mapCallsInfo = L.control();
 
-info.onAdd = function (map) {
-    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+mapCallsInfo.onAdd = function (mapCalls) {
+    this._div = L.DomUtil.create('div', 'mapCallsInfo'); // create a div with a class "mapCallsInfo"
     this.update();
     return this._div;
 };
 
 // method that we will use to update the control based on feature properties passed
-info.update = function (props) {
+mapCallsInfo.update = function (props) {
     this._div.innerHTML = '<h4>Police Calls by Patrol Zone (past 30 days)</h4>' +  (props ?
         '<b>Patrol Zone: ' + props.BEAT + '<br />' + props.calls.length + ' calls</b>'
         : '');
 };
 
-info.addTo(map);
+mapCallsInfo.addTo(mapCalls);
 
-function highlightFeature(e) {
+function highlightCallsFeature(e) {
     var layer = e.target;
 
     layer.setStyle({
@@ -88,21 +87,21 @@ function highlightFeature(e) {
         layer.bringToFront();
     }
 
-    info.update(layer.feature.properties);
+    mapCallsInfo.update(layer.feature.properties);
 }
 
-function resetHighlight(e) {
-    if (patrol_zone_boundary)
+function resetCallsHighlight(e) {
+    if (patrol_zone_boundary_calls)
     {
-        patrol_zone_boundary.resetStyle(e.target);
-        info.update();
+        patrol_zone_boundary_calls.resetStyle(e.target);
+        mapCallsInfo.update();
     }  
 }
 
-function onEachFeature(feature, layer) {
+function onEachCallsFeature(feature, layer) {
     layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight
+        mouseover: highlightCallsFeature,
+        mouseout: resetCallsHighlight
     });
 }
 
@@ -119,11 +118,11 @@ $.ajax({
                     })
                     data.properties.calls = callsInBeat;
                 });
-                patrol_zone_boundary = new L.geoJson(data, {
-                    style: style,
-                    onEachFeature: onEachFeature
+                patrol_zone_boundary_calls = new L.geoJson(data, {
+                    style: styleCalls,
+                    onEachFeature: onEachCallsFeature
                 });
-                patrol_zone_boundary.addTo(map);
+                patrol_zone_boundary_calls.addTo(mapCalls);
             }
         });
     }

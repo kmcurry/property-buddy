@@ -1,7 +1,7 @@
 var mapboxAccessToken = $("#mapboxKey").val();;
-var map = L.map('incidentsMap').setView([36.78, -76.00], 10);
+var mapIncidents = L.map('incidentsMap').setView([36.78, -76.00], 10);
 
-var patrol_zone_boundary = null;
+var patrol_zone_boundary_incidents_incidents = null;
 
 
 function getColor(d) {
@@ -26,13 +26,13 @@ function style(feature) {
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + mapboxAccessToken, {
     id: 'mapbox.light'
-}).addTo(map);
+}).addTo(mapIncidents);
 
-var legend = L.control({position: 'bottomright'});
+var mapIncidentsLegend = L.control({position: 'bottomright'});
 
-legend.onAdd = function (map) {
+mapIncidentsLegend.onAdd = function (mapIncidents) {
 
-    var div = L.DomUtil.create('div', 'info legend'),
+    var div = L.DomUtil.create('div', 'mapIncidentsInfo mapIncidentsLegend'),
         grades = [0, 10, 20, 50, 70],
         labels = [];
 
@@ -46,24 +46,24 @@ legend.onAdd = function (map) {
     return div;
 };
 
-legend.addTo(map);
+mapIncidentsLegend.addTo(mapIncidents);
 
-var info = L.control();
+var mapIncidentsInfo = L.control();
 
-info.onAdd = function (map) {
-    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+mapIncidentsInfo.onAdd = function (mapIncidents) {
+    this._div = L.DomUtil.create('div', 'mapIncidentsInfo'); // create a div with a class "mapIncidentsInfo"
     this.update();
     return this._div;
 };
 
 // method that we will use to update the control based on feature properties passed
-info.update = function (props) {
+mapIncidentsInfo.update = function (props) {
     this._div.innerHTML = '<h4>Police Incidents by Patrol Zone (past 30 days)</h4>' +  (props ?
         '<b>Patrol Zone: ' + props.BEAT + '<br />' + props.incidents.length + ' incidents</b>'
         : '');
 };
 
-info.addTo(map);
+mapIncidentsInfo.addTo(mapIncidents);
 
 function highlightFeature(e) {
     var layer = e.target;
@@ -79,14 +79,14 @@ function highlightFeature(e) {
         layer.bringToFront();
     }
 
-    info.update(layer.feature.properties);
+    mapIncidentsInfo.update(layer.feature.properties);
 }
 
 function resetHighlight(e) {
-    if (patrol_zone_boundary)
+    if (patrol_zone_boundary_incidents)
     {
-        patrol_zone_boundary.resetStyle(e.target);
-        info.update();
+        patrol_zone_boundary_incidents.resetStyle(e.target);
+        mapIncidentsInfo.update();
     }  
 }
 
@@ -118,11 +118,11 @@ $.ajax({
                     })
                     data.properties.incidents = incidentsInBeat;
                 });
-                patrol_zone_boundary = new L.geoJson(data, {
+                patrol_zone_boundary_incidents = new L.geoJson(data, {
                     style: style,
                     onEachFeature: onEachFeature
                 });
-                patrol_zone_boundary.addTo(map);
+                patrol_zone_boundary_incidents.addTo(mapIncidents);
             }
         });
     }
