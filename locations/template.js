@@ -1,10 +1,13 @@
 var LocationName = {
 
   boundary: "",
-  neighborhoods: "",
-  representatives: "",
+  council: "",
   evacuation: "",
-
+  neighborhoods: "",
+  shelters: "",
+  subdivisions: "",
+  zipCodes: "",
+  
   property: {
     AICUZ: "",
     FIRM: "",

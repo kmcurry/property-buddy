@@ -57,7 +57,7 @@ function geolocate() {
         center: geolocation,
         radius: position.coords.accuracy
       });
-      autocomplete.setBounds(circle.getBounds());
+      //autocomplete.setBounds(circle.getBounds());
     });
   }
 }

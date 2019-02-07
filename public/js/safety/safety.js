@@ -6,21 +6,11 @@ function getSafetyData(DataDirectory, ll) {
     getAverageResponseTime(DataDirectory.medical.emergency.calls, ll, 1, "ems");
     getAverageResponseTime(DataDirectory.police.calls, ll, 1, "police");
     getCrashes(DataDirectory.police.crashes, ll, 1, 30);
+    getEvacuationZone(locations[statePath].evacuation, ll);
+    getClosestThing(DataDirectory.shelters, ll, "emergency-shelter", "miles");
+    
     //getClosestThing(DataDirectory.fire.hydrants.public, ll, "hydrant-public", "feet");
     // getClosestThing(DataDirectory.fire.hydrants.private, ll, "hydrant-private", "feet");
-      
-    setTimeout(
-        function(){
-            $('#police-incidents-table').DataTable({
-                paging:false
-            });
-            $('#police-calls-table').DataTable({
-                paging:false
-            });
-            $('#police-crash-table').DataTable({
-                paging:false
-            });
-        }, 1000);
 }
 
 function getEvacuationZone(url, ll) {
@@ -94,6 +84,9 @@ function getCrashes(crashes, ll, dist, days) {
             html += "</tbody>"
             $("#police-crash-table").append(html);
             crashes = null;
+            $('#police-crash-table').DataTable({
+                paging:false
+            });
         } else {
             console.log("No Data from getCountWithinDays")
         }
@@ -105,7 +98,6 @@ function getPoliceCalls(calls, ll, dist, days) {
 
     getCountWithinDays(calls, ll, dist, days, "police-calls").then(function (calls) {
         if (calls) {
-            // console.log("Police Incidents")
             calls = calls.sort(function (a, b) {
                 return new Date(b.call_date_time) - new Date(a.call_date_time);
             });
@@ -162,6 +154,9 @@ function getPoliceCalls(calls, ll, dist, days) {
             html += "</tbody>"
             $("#police-calls-table").append(html);
             calls = null;
+            $('#police-calls-table').DataTable({
+                paging:false
+            });
         } else {
             console.log("No Data from getCountWithinDays")
         }
@@ -174,7 +169,6 @@ function getPoliceIncidents(incidents, ll, dist, days) {
 
     getCountWithinDays(incidents, ll, dist, days, "police-incidents").then(function (incidents) {
         if (incidents) {
-            // console.log("Police Incidents")
             incidents = incidents.sort(function (a, b) {
                 return new Date(b.date_occured) - new Date(a.date_occured);
             });
@@ -229,6 +223,9 @@ function getPoliceIncidents(incidents, ll, dist, days) {
             html += "</tbody>";
             $("#police-incidents-table").append(html);
             incidents = null;
+            $('#police-incidents-table').DataTable({
+                paging:false
+            });
         } else {
             console.log("No Data from getCountWithinDays")
         }
@@ -254,7 +251,6 @@ function getPolicePatrolZone(url, ll) {
         }
 
         if (data && data.features && data.features[0]) {
-            //console.log(data.features[0]);
             var patrolZone = data.features[0].properties.BEAT ? data.features[0].properties.BEAT : data.features[0].properties.Car_Sector;
             d3.select("#police-patrol").html(patrolZone); //+ "<a href=''>Zone Map</a>");
         } else {
@@ -286,7 +282,6 @@ function getPolicePrecinct(url, ll) {
         }
 
         if (data && data.features && data.features[0]) {
-            //console.log(data.features[0]);
             var precinct = data.features[0].properties.PRECINCT ? data.features[0].properties.PRECINCT : data.features[0].properties.Precinct;
             d3.select("#police-precinct").html(precinct); //+ "<a href=''>Zone Map</a>");
         } else {

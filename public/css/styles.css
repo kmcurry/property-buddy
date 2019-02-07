@@ -35,6 +35,14 @@ body {
   background: #ffb3ec;
 }
 
+.emergency-shelter {
+  background: #d9f9a8;
+}
+
+.evacuation {
+  background: #d9b7f1;
+}
+
 .flood {
   background: #C1ECFA;
   padding-left: 2px !important;

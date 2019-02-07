@@ -4,7 +4,6 @@ var map = L.map('callsMap').setView([36.78, -76.00], 11);
 var subdivision_boundary = null;
 
 var locations = $("#locations").val();
-//console.log(locations);
 locations = JSON.parse(locations);
 
 if (locations['Virginia']) {
@@ -24,7 +23,6 @@ function getColor(d) {
 }
 
 function style(feature) {
-    console.log(feature.properties.calls.length);
     return {
         fillColor: getColor(feature.properties.calls.length),
         weight: 2,

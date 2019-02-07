@@ -3,9 +3,10 @@ var VirginiaBeach = {
   boundary: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/Administrative_Boundaries/MapServer/0/",
   council: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/VotingDistricts/MapServer/2/",
   neighborhoods: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/PropertyInformation_VBgov/MapServer/13/",
+  shelters: "https://gismaps.vbgov.com/arcgis/rest/services/Public_Safety/Emergency_Preparedness/MapServer/0/",
   subdivisions: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/PropertyInformation_VBgov/MapServer/23/",
   zipCodes: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/Administrative_Boundaries/MapServer/1/",
-
+  
   property: {
     AICUZ: "https://gismaps.vbgov.com/arcgis/rest/services/Basemaps/AICUZ/MapServer/3/",
     sales: "https://data.vbgov.com/resource/p3zb-bkwc.json",

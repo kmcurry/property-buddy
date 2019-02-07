@@ -4,7 +4,6 @@ var map = L.map('propertySalesMap').setView([36.78, -76.00], 10);
 var zipCode_boundary = null;
 
 var locations = $("#locations").val();
-//console.log(locations);
 locations = JSON.parse(locations);
 
 if (locations['Virginia']) {
@@ -24,7 +23,6 @@ function getColor(d) {
 }
 
 function style(feature) {
-    console.log(feature.properties.sales.length);
     return {
         fillColor: getColor(feature.properties.sales.length),
         weight: 2,
@@ -117,7 +115,6 @@ $.ajax({
             if (sales) {
                 $(data.features).each(function (key, data) {
                     var salesInZipCode = $(sales).filter(function(index) {
-                        //console.log(sales[index].zip_code);
                         if(sales[index].zip_code) {
                             return sales[index].zip_code.startsWith(data.properties.ZIP_CODE);
                         }

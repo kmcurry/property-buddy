@@ -4,7 +4,6 @@ var map = L.map('codeEnforcementMap').setView([36.78, -76.00], 11);
 var zipCode_boundary = null;
 
 var locations = $("#locations").val();
-//console.log(locations);
 locations = JSON.parse(locations);
 
 if (locations['Virginia']) {
@@ -24,7 +23,6 @@ function getColor(d) {
 }
 
 function style(feature) {
-    console.log(feature.properties.enforcements.length);
     return {
         fillColor: getColor(feature.properties.enforcements.length),
         weight: 2,
@@ -118,7 +116,6 @@ $.ajax({
                 $(data.features).each(function (key, data) {
                     var enforcementsInZipCode = $(enforcements).filter(function(index) {
                         //return enforcements[index].zip_code.startsWith(data.properties.ZIP_CODE);
-                        //console.log(enforcements[index].sub_division);
                         return enforcements[index].sub_division == data.properties.SUBD_DESC;
                     })
                     data.properties.enforcements = enforcementsInZipCode;

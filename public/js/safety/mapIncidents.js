@@ -103,7 +103,6 @@ $.ajax({
     success: function (data) {
 
         var locations = $("#locations").val();
-        //console.log(locations);
         locations = JSON.parse(locations);
 
         if (locations['Virginia']) {
@@ -123,6 +122,9 @@ $.ajax({
                     onEachFeature: onEachFeature
                 });
                 patrol_zone_boundary_incidents.addTo(mapIncidents);
+
+                mapIncidents.scrollWheelZoom.disable();
+
             }
         });
     }

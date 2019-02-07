@@ -24,7 +24,6 @@ function getAddress(searchPosition) {
       if (request.readyState == 4) {
         if (request.status == 200) {
           var data = JSON.parse(request.responseText);
-          //console.log(data);
           var address = data.results[0];
           resolve(address);
         } else {
@@ -90,8 +89,7 @@ function getFeaturesForLocation(address, position) {
       getClosestThing(DataDirectory.recreation.centers, ll, "recreation-center");
       getNearbyNeighborhoods(DataDirectory.neighborhoods, ll, 1, "neighborhoods")
       getCouncilDistrict(DataDirectory.council, ll);
-      getEvacuationZone(locations[statePath].evacuation, ll);
-    
+      
       //getCountWithinDays(DataDirectory.police.calls, ll, 1, 30, "police-calls");
       getCountWithinDays(DataDirectory.property.code_enforcement, ll, 1, 30, "code-enforcement");
       getPropertySales(DataDirectory.property.sales, address);
@@ -151,8 +149,6 @@ function getAverageResponseTime(url, ll, d, type) {
       var msg = getAverageTime(data, ll);
       //var z = "<p>" + data.length + "</p>";
 
-      //console.log(data);
-
       msg += "<a title='Call or Incident reports within 1 mile. Average response time based on " + data.length + " records.' href=''>*</a>";
 
       d3.select("#" + type + "-response-avg").html(msg);
@@ -185,6 +181,9 @@ function getClosestThing(url, ll, thing, units) {
 
     console.log(closest.item[0].properties);
 
+    // TODO: filter attributes that contain substring 'name'
+    var name = closest.item[0].properties.stop_name ? closest.item[0].properties.stop_name : closest.item[0].properties.NAME;
+
     var msg = "";
 
     if (!closest.item || parseInt(closest.distance) === 9999) {
@@ -212,7 +211,7 @@ function getClosestThing(url, ll, thing, units) {
 
     mapUrl += closest.item[0].properties.ADDRESS;
 
-    var html = "<a href='" + mapUrl + "'>" + msg + "</a>"
+    var html = "<a href='" + mapUrl + "'>" + msg + "</a><br/>" + name;
 
 
     d3.select("#closest-" + thing).html(html);
@@ -288,8 +287,6 @@ function getCountWithinDays(url, ll, dist, days, type) {
 
   url += "?$where=within_circle(" + locField + "," + ll[1] + "," + ll[0] + "," + dist + encodeURIComponent(") and " + dateField + " > '") + encodeURIComponent(checkDate) + encodeURIComponent("'");
   
-  console.log(url);
-
   d3.request(url)
     .mimeType("application/json")
     .response(function (xhr) {
@@ -481,7 +478,6 @@ function getRepresentation(url, address) {
         var offices = data.offices;
 
         $(offices).each(function (index, office) {
-          //console.log(office);
           msg += "<p style='background-color:LightBlue'>" + office.name + "</p>";
 
 
@@ -725,7 +721,6 @@ function getClosestItem(features, ll) {
 
   $(features).each(function () {
     var f = $(this);
-    //console.log(f[0]);
     if (f && f[0]) {
       if (f[0].geometry.coordinates[0].length) {
         if (f[0].geometry.coordinates[0][0].length) {
@@ -738,7 +733,6 @@ function getClosestItem(features, ll) {
       }
       dist = d3.geoDistance(coords, ll); // distance in radians
       if (dist < closest.distance) {
-        //console.log(dist);
         closest.distance = dist;
         closest.item = f;
       }
@@ -748,8 +742,6 @@ function getClosestItem(features, ll) {
 
   closest.distance = closest.distance != 9999 ? parseFloat(closest.distance) * 3959 : 9999; // 3959 is Earth radius in miles
   closest.distance = closest.distance.toFixed(2);
-
-  console.log(closest.distance);
 
   coords = null;
   dist = null;
@@ -776,7 +768,6 @@ function getItemsForFeatures(features, ll, d) {
       var dist = d3.geoDistance(coords, ll);
       var max = d / 3959;
       if (dist <= max) {
-        //console.log(f[0]);
         return f[0];
       }
     }

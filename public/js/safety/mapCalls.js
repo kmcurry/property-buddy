@@ -4,7 +4,6 @@ var mapCalls = L.map('callsMap').setView([36.78, -76.00], 10);
 var patrol_zone_boundary_calls = null;
 
 var locations = $("#locations").val();
-//console.log(locations);
 locations = JSON.parse(locations);
 
 if (locations['Virginia']) {
@@ -123,6 +122,8 @@ $.ajax({
                     onEachFeature: onEachCallsFeature
                 });
                 patrol_zone_boundary_calls.addTo(mapCalls);
+
+                mapCalls.scrollWheelZoom.disable();
             }
         });
     }
