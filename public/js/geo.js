@@ -303,7 +303,73 @@ function getCountWithinDays(url, ll, dist, days, type) {
 
         d3.select("#" + type).html(count);
         checkDate = null;
-        dataField = null;
+        dateField = null;
+        url = null;
+        deferred.resolve(data);
+      }
+
+    });
+
+  return deferred.promise
+}
+
+function getCountWithinRange(url, range, type) {
+
+  var deferred = D();
+
+  if (!url || url == "") {
+    return;
+  }
+
+  var startDate = new Date(range[0]);
+  var endDate = new Date(range[1]);
+
+  startDate = moment(startDate).format('YYYY-MM-DD');
+  endDate =  moment(endDate).format('YYYY-MM-DD');
+
+  console.log(startDate);
+  console.log(endDate);
+
+  // startDate = startDate.toString().substring(0, startDate.lastIndexOf('Z'));
+  // endDate = endDate.toString().substring(0, endDate.lastIndexOf('Z'));
+
+  // WARNING: HARD-CODED FIELD
+  var dateField = "";
+  if (type.includes("calls")) {
+    dateField = "call_date_time";
+  } else if (type.includes("incidents")) {
+    dateField = "date_occured";
+  } else if (type.includes("crash")) {
+    dateField = "accident_date";
+  } else if (type.includes("sales")) {
+    dateField = "sale_date";
+  } 
+  else {
+    dateField = "open_date";
+  }
+
+  url += "?$where=" + dateField + " >= '" + startDate + "' AND " + dateField + " < '" + endDate + "'";
+
+  console.log(url)
+  
+  d3.request(url)
+    .mimeType("application/json")
+    .response(function (xhr) {
+      return JSON.parse(xhr.responseText);
+    })
+    .get(function (error, data) {
+      var count = "";
+      if (error) {
+        console.error("Error getting count within range");
+        console.error(error);
+        deferred.resolve(null);
+      } else {
+        count = data.length + /*" " + type +*/ " in the range " + startDate + " - " + endDate;
+
+        console.log(count);
+        startDate = null;
+        endDate = null;
+        dateField = null;
         url = null;
         deferred.resolve(data);
       }
