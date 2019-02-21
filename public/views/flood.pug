@@ -1,0 +1,80 @@
+html
+head
+  title SpotFax | Code Enforcement Map
+  meta(charset='utf-8')
+  link(rel='stylesheet',  href="/bower_components/bootstrap/dist/css/bootstrap.min.css")
+  style.
+    td {
+      padding: 6px;
+    }
+
+    #floodReportMap { 
+      height: 580px;
+    }
+
+    @media only screen 
+      and (min-device-width: 320px) 
+      and (max-device-width: 480px)
+      and (-webkit-min-device-pixel-ratio: 2) {
+        .p-md {
+          font-size: 40px !important;
+        }
+    }
+    
+    /* Portrait */
+    @media only screen 
+      and (min-device-width: 320px) 
+      and (max-device-width: 480px)
+      and (-webkit-min-device-pixel-ratio: 2)
+      and (orientation: portrait) {
+        body {
+          font-size: 40px !important;
+        }
+        .container {
+          margin: 4px !important;
+          padding: 4px !important;
+        }
+        .tr {
+          font-size: 40px !important;
+        }
+       
+    }
+    
+body
+    div(id="floodReportMap")
+    hr
+    div(class="about")
+        center
+            a(class="p-md" href="/about") About
+            text  -             
+            a(class="p-md" href="/") Search
+    input(type="hidden" id="mapboxKey" value=""+mapboxKey)
+    link(rel='stylesheet',  href="/bower_components/font-awesome/css/font-awesome.min.css")
+    script(src="/bower_components/jquery/dist/jquery.min.js")
+    script(src="//d3js.org/d3.v3.min.js")
+    script(src="//d3js.org/d3-collection.v1.min.js")
+    script(src="//d3js.org/d3-dispatch.v1.min.js")
+    script(src="//d3js.org/d3-dsv.v1.min.js")
+    script(src="//d3js.org/d3-request.v1.min.js")
+    script(src="//d3js.org/d3-array.v1.min.js")
+    script(src="//d3js.org/d3-geo.v1.min.js")
+    script(src="/bower_components/D.js/lib/D.min.js")
+    script(src="/bower_components/bootstrap/dist/js/bootstrap.min.js")
+    script(src="/bower_components/jquery-ui/jquery-ui.min.js")
+    script(src="/bower_components/moment/min/moment.min.js")
+    link(rel="stylesheet"     
+      href="/bower_components/jquery-ui/themes/smoothness/jquery-ui.css")
+    link(rel="stylesheet"     
+      href="/bower_components/leaflet/dist/leaflet.css")
+    script(src="/bower_components/leaflet/dist/leaflet.js")
+    script(src="https://unpkg.com/esri-leaflet@2.1.0/dist/esri-leaflet.js",
+    integrity="sha512-Tojl3UMd387f6DdAJlo+fKfJZiP55fYT+6Y58yKbHydnueOdSFOxrgLPuUxm7VW1szEt3hZVwv3V2sSUCuT35w==",
+    crossorigin="")
+    link(rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css")
+    script(type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js")
+    script(src="/js/geo.js")
+    script(src="/js/google.js")
+    script(src="/js/environment/flood.js")
+    link(rel='stylesheet',  href="/css/styles.css")
+  
+
