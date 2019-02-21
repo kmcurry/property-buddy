@@ -21,6 +21,13 @@ var routeLoader = function (app) {
         res.render('easteregg');
     });
 
+    app.get('/flood', function (req, res) {
+        res.render('flood', {
+            geoCoderKey: process.env.GEOCODER_KEY,
+            GApisKey: process.env.GOOGLE_APIS_KEY
+        });
+    });
+
     app.get('/search/:loc', function (req, res) {
         var position = null;
         if (req.params.loc) {
@@ -50,7 +57,8 @@ var routeLoader = function (app) {
         res.render('prices', {
             position: position,
             geoCoderKey: process.env.GEOCODER_KEY,
-            GApisKey: process.env.GOOGLE_APIS_KEY
+            GApisKey: process.env.GOOGLE_APIS_KEY,
+            mapboxKey: process.env.MAPBOX
         });
     });
 
