@@ -11,7 +11,6 @@ $(document).ready(function () {
     var ll = [36.78, -76.00];
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
-            console.log(position);
             ll[0] = position.coords.latitude;
             ll[1] = position.coords.longitude;
             map.setView(ll, 20);
