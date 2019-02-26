@@ -1,4 +1,5 @@
 function getSafetyData(DataDirectory, ll) {
+    console.log("Determining SpotSafety...")
     getPolicePrecinct(DataDirectory.police.precincts, ll);
     getPolicePatrolZone(DataDirectory.police.zones, ll);
     getPoliceIncidents(DataDirectory.police.incidents, ll, 1, 30);
@@ -50,6 +51,9 @@ function getCrashes(crashes, ll, dist, days) {
 
     getCountWithinDays(crashes, ll, dist, days, "crash-count").then(function (crashes) {
         if (crashes) {
+
+            d3.select("#crash-count").html(crashes.length);
+
             crashes = crashes.sort(function (a, b) {
                 return new Date(b.accident_date) - new Date(a.accident_date);
             });
@@ -98,6 +102,9 @@ function getPoliceCalls(calls, ll, dist, days) {
 
     getCountWithinDays(calls, ll, dist, days, "police-calls").then(function (calls) {
         if (calls) {
+
+            d3.select("#police-calls").html(calls.length);
+
             calls = calls.sort(function (a, b) {
                 return new Date(b.call_date_time) - new Date(a.call_date_time);
             });
@@ -167,11 +174,17 @@ function getPoliceCalls(calls, ll, dist, days) {
 function getPoliceIncidents(incidents, ll, dist, days) {
     if (!incidents) return;
 
+    console.log("Getting Police Incidents...");
+
     getCountWithinDays(incidents, ll, dist, days, "police-incidents").then(function (incidents) {
         if (incidents) {
+
+            d3.select("#police-incidents").html(incidents.length);
+
             incidents = incidents.sort(function (a, b) {
                 return new Date(b.date_occured) - new Date(a.date_occured);
             });
+            console.log("Got incidents: " + incidents.length)
             var html = "<thead>";
             html += "<tr style='font-size:18px;font-weight:600;'>";
             html += "<td>DAY</td>";

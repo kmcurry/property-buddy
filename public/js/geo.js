@@ -90,8 +90,12 @@ function getFeaturesForLocation(address, position) {
       getNearbyNeighborhoods(DataDirectory.neighborhoods, ll, 1, "neighborhoods")
       getCouncilDistrict(DataDirectory.council, ll);
       
-      //getCountWithinDays(DataDirectory.police.calls, ll, 1, 30, "police-calls");
-      getCountWithinDays(DataDirectory.property.code_enforcement, ll, 1, 30, "code-enforcement");
+      //getCountWithinDays(DataDirectory.police.calls, ll, 1, 30, "police-calls").then(function() {
+      //   d3.select("#code-enforcement").html(count);
+      // });
+      getCountWithinDays(DataDirectory.property.code_enforcement, ll, 1, 30, "code-enforcement").then(function() {
+        d3.select("#code-enforcement").html(count);
+      });
       getPropertySales(DataDirectory.property.sales, address);
       getFloodZone(locations.UnitedStates.FIRM, ll)
 
@@ -259,8 +263,11 @@ function getCountWithinDays(url, ll, dist, days, type) {
 
   if (!url || url == "") {
     d3.select("#" + type).html("Needs data source");
-    return;
+    deferred.resolve(null);
+    return deferred.promise;
   }
+
+  console.log("Getting count for: " + type);
 
   dist = dist * 1609.35; // 1609.35 is 1 mile in meters
 
@@ -301,7 +308,6 @@ function getCountWithinDays(url, ll, dist, days, type) {
       } else {
         count = data.length + /*" " + type +*/ " in the past " + days + " days";
 
-        d3.select("#" + type).html(count);
         checkDate = null;
         dateField = null;
         url = null;
