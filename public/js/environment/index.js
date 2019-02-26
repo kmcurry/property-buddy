@@ -8,22 +8,33 @@ async function getFloodZone(url, ll) {
   
       var LL = L.latLng(ll[1], ll[0]);
       // use location to find out which census block they are inside.
-      L.esri.query({
+      var query = L.esri.query({
         url: url,
-        returnGeometry: false
-      }).intersects(LL).run(function (error, data) {
-  
-        var msg = "";
+        returnGeometry: false,
+        timeout: 5000
+      });
+      query.intersects(LL);
+      query.run(function (error, data) {
+        
+        var floodZone = "";
   
         if (error) {
           console.log(error);
+          if (error.code == 500) {
+            floodZone = "X"
+          } else {
+            floodZone = "Could not determine flood zone";
+          }
+          LL = null;
+          console.log("Flood Zone Determined by Timeout: " + floodZone);
+          d3.select("#flood").html(floodZone); //+ "<a href=''>Zone Map</a>");
           resolve;
         }
   
         if (data) {
   
           if (data && data.features && data.features[0]) {
-            var floodZone = data.features[0].properties.FLD_ZONE ? data.features[0].properties.FLD_ZONE : "UNKNOWN";
+            floodZone = data.features[0].properties.FLD_ZONE ? data.features[0].properties.FLD_ZONE : "UNKNOWN";
             console.log("Flood Zone: " + floodZone);
             d3.select("#flood").html(floodZone); //+ "<a href=''>Zone Map</a>");
             LL = null;
