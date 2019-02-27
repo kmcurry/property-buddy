@@ -91,10 +91,10 @@ function getFeaturesForLocation(address, position) {
       getCouncilDistrict(DataDirectory.council, ll);
       
       //getCountWithinDays(DataDirectory.police.calls, ll, 1, 30, "police-calls").then(function() {
-      //   d3.select("#code-enforcement").html(count);
+      //   d3.select("#police-calls").html(count);
       // });
-      getCountWithinDays(DataDirectory.property.code_enforcement, ll, 1, 30, "code-enforcement").then(function() {
-        d3.select("#code-enforcement").html(count);
+      getCountWithinDays(DataDirectory.property.code_enforcement, ll, 1, 30, "code-enforcement").then(function(enforcements) {
+        d3.select("#code-enforcement").html(enforcements.length);
       });
       getPropertySales(DataDirectory.property.sales, address);
       getFloodZone(locations.UnitedStates.FIRM, ll)
