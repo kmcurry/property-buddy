@@ -111,8 +111,10 @@ $.ajax({
     url: "https://gis.data.vbgov.com/datasets/82ada480c5344220b2788154955ce5f0_1.geojson",
     success: function (data) {
 
-        getCountWithinDays(DataDirectory.property.sales, [-76.00, 36.78], 40, 30, "property-sales").then(function (sales) {
+        getCountWithinDays(DataDirectory.property.sales, [-76.00, 36.78], 30, 30, "property-sales").then(function (sales) {
             if (sales) {
+                console.log(sales.length);
+                console.log(sales);
                 $(data.features).each(function (key, data) {
                     var salesInZipCode = $(sales).filter(function(index) {
                         if(sales[index].zip_code) {
@@ -128,6 +130,10 @@ $.ajax({
                 });
                 zipCode_boundary.addTo(map);
             }
+        });
+
+        getCountWithinRange(DataDirectory.property.sales, ['2018-12-01T00:00:00.000', '2018-12-31T00:00:00.000'], "property-sales").then(function(sales) {
+            console.log(sales);
         });
     }
 });
