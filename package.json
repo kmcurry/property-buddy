@@ -7,6 +7,7 @@
   "devDependencies": {},
   "dependencies": {
     "angular-template": "^2.4.0",
+    "aws-sdk": "^2.420.0",
     "body-parser": "^1.18.3",
     "bower": "^1.8.4",
     "chai": "^4.2.0",
